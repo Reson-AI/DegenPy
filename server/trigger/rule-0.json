@@ -1,0 +1,41 @@
+{
+    "id": "rule-0",
+    "name": "Recent Data Processing",
+    "description": "Process recently added data every 2 minutes",
+    "schedule": "*/2 * * * *",
+    "data_source": {
+        "type": "api",
+        "url": "http://localhost:8000/data",
+        "params": {
+            "p": "sa"
+        }
+    },
+    "conditions": {
+        "min_items": 1,
+        "fact_check": true,
+        "token_limit": 4000,
+        "prompt_template": "Analyze the following information and identify the most important trending topics or news. Focus on factual information and discard any rumors or unverified claims: {{content}}"
+    },
+    "actions": [
+        {
+            "type": "ai_process",
+            "model": "openrouter",
+            "agent": "{{agent_id}}"
+        },
+        {
+            "type": "text2video",
+            "config": {
+                "style": "news_report",
+                "duration": 30
+            }
+        },
+        {
+            "type": "publish",
+            "platforms": ["tiktok", "twitter"]
+        },
+        {
+            "type": "webhook",
+            "url": "{{webhook_url}}"
+        }
+    ]
+}
