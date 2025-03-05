@@ -4,13 +4,25 @@
 import os
 import json
 import time
-import requests
-import schedule
-from fastapi import FastAPI, HTTPException, BackgroundTasks
-from pydantic import BaseModel
-from typing import List, Optional, Dict, Any
-import uvicorn
+import uuid
+import logging
+from typing import Dict, Any, List, Optional
 from dotenv import load_dotenv
+from fastapi import FastAPI, HTTPException, BackgroundTasks
+
+# 加载环境变量
+load_dotenv()
+
+# 导入视频生成服务
+from server.services.text2video import generate_video_from_text
+from server.services.video_pool import get_video_task, get_video_task_count, get_video_path
+
+# 配置日志
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger("api")
 
 # Load environment variables
 load_dotenv()
@@ -280,33 +292,64 @@ def process_data(items, conditions):
     return content
 
 def execute_actions(trigger_id, content, actions):
-    """Execute the specified actions"""
-    # This is a placeholder for actual action execution logic
-    # In a real implementation, this would involve:
-    # 1. AI processing with the specified agent
-    # 2. Text-to-video generation
-    # 3. Publishing to social media
-    # 4. Sending webhook notifications
+    """
+    执行动作序列
     
+    Args:
+        trigger_id: 触发器ID
+        content: 生成的内容
+        actions: 动作列表
+    
+    Returns:
+        执行结果
+    """
+    # 解析动作序列
+    action_sequence = []
     for action in actions:
         action_type = action.get("type")
-        
-        if action_type == "ai_process":
-            print(f"Would process content with AI model: {action.get('model')}")
-            
-        elif action_type == "text2video":
-            print(f"Would generate video with config: {action.get('config')}")
-            
-        elif action_type == "publish":
-            platforms = action.get("platforms", [])
-            print(f"Would publish to platforms: {platforms}")
-            
-        elif action_type == "webhook":
-            webhook_url = action.get("url")
-            print(f"Would send webhook notification to: {webhook_url}")
-            
-        else:
-            print(f"Unknown action type: {action_type}")
+        if action_type:
+            action_sequence.append(action_type)
+    
+    # 获取触发器信息
+    trigger = get_trigger(trigger_id)
+    if not trigger:
+        return {"status": "error", "message": f"Trigger not found: {trigger_id}"}
+    
+    # 获取代理信息
+    agent_id = trigger.get("agent_id")
+    if not agent_id:
+        return {"status": "error", "message": f"Agent ID not found in trigger: {trigger_id}"}
+    
+    agent = get_agent(agent_id)
+    if not agent:
+        return {"status": "error", "message": f"Agent not found: {agent_id}"}
+    
+    # 检查队列长度
+    from server.video_pool import get_video_task_count
+    pending_count = get_video_task_count("pending")
+    max_queue_length = int(os.getenv("MAX_QUEUE_LENGTH", "100"))
+    
+    if pending_count >= max_queue_length:
+        return {"status": "rejected", "reason": f"Queue full ({pending_count}/{max_queue_length})"}
+    
+    # 确定任务优先级
+    priority = 0  # 默认优先级
+    
+    # 根据触发器和代理设置优先级
+    if "priority" in trigger:
+        priority = int(trigger.get("priority", 0))
+    elif "priority" in agent:
+        priority = int(agent.get("priority", 0))
+    
+    # 生成视频
+    try:
+        from server.services.text2video import generate_video_from_text
+        task_id = generate_video_from_text(content, trigger_id, agent_id, action_sequence, priority)
+        return {"status": "success", "task_id": task_id}
+    except ValueError as e:
+        return {"status": "error", "message": str(e)}
+    except Exception as e:
+        return {"status": "error", "message": f"Error generating video: {str(e)}"}
 
 def start_scheduler():
     """Start the scheduler for all triggers"""

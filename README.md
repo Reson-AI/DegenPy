@@ -9,7 +9,7 @@ DegenPy/
 ├── warehouse/             # Data warehouse components
 │   ├── api.py             # Warehouse API implementation
 │   ├── db/                # Database connectors
-│   └── txt_storage/       # Text-based storage (created at runtime)
+│   └── text_data/         # Text-based storage (created at runtime)
 ├── server/                # Server components
 │   ├── agents/            # Agent configurations
 │   │   ├── trump-xbt.json # Trump-like cryptocurrency agent
@@ -25,8 +25,16 @@ DegenPy/
 │   │   └── twitter.py     # Twitter publishing
 │   ├── models/            # AI model connectors
 │   │   └── openrouter.py  # OpenRouter API client
+│   ├── video_pool.py      # 视频池管理服务
+│   ├── text2video.py      # 文生视频异步处理服务
+│   ├── action_dispatcher.py # 动作调度服务
+│   ├── message_broker.py  # 消息发布/订阅服务
 │   ├── api.py             # Server API
 │   └── .env               # Server environment variables
+├── plugins/               # 插件系统目录
+│   ├── example/           # 示例插件
+│   └── README.md          # 插件开发指南
+├── video_pool/            # 视频池存储目录 (created at runtime)
 ├── run.py                 # Main application runner
 ├── test_warehouse.py      # Test script for warehouse API
 ├── .env                   # Environment variables
@@ -42,6 +50,19 @@ DegenPy/
 3. **Triggers** (`server/trigger/`): Rules that determine when and how to process data.
 4. **Actions** (`server/actions/`): Implementations for text-to-video, social media publishing, etc.
 5. **Models** (`server/models/`): AI model connectors for content generation.
+6. **Video Pool** (`server/video_pool.py`): 管理文生视频任务和结果的服务。
+7. **Action Dispatcher** (`server/action_dispatcher.py`): 处理视频生成后的后续动作，如发布到社交媒体。
+8. **Message Broker** (`server/message_broker.py`): 基于 Redis 的消息发布/订阅系统，用于组件间通信。
+9. **Plugins** (`plugins/`): 插件系统，用于扩展功能。
+
+## 异步文生视频流程
+
+1. 触发器被激活并获取数据。
+2. AI 使用代理的个性处理数据。
+3. 文生视频请求被发送到 `text2video` 服务，主流程结束。
+4. 视频异步生成，结果存储在视频池中。
+5. 视频生成完成后，通过 Redis 发送通知。
+6. 动作调度服务接收通知，根据任务配置执行后续动作（如发布到社交媒体）。
 
 ## Storage Integration
 

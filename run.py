@@ -4,130 +4,157 @@
 import os
 import sys
 import time
-import subprocess
 import signal
-import threading
+import logging
+import multiprocessing
 from dotenv import load_dotenv
 
-# Load environment variables
+# 加载环境变量
 load_dotenv()
 
-# Global variables for process management
+# 配置日志
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger("run")
+
+# 导入服务组件
+from server.services.text2video import start_video_service, stop_video_service
+from server.services.action_dispatcher import start_action_dispatcher, stop_action_dispatcher
+
+# 全局变量用于进程管理
 processes = {}
-stop_event = threading.Event()
+stop_event = multiprocessing.Event()
 
 def start_process(name, command, cwd=None):
-    """Start a subprocess and return its process object"""
-    print(f"Starting {name}...")
+    """启动子进程并返回其进程对象"""
+    print(f"启动 {name}...")
     
     if cwd:
-        process = subprocess.Popen(
-            command,
-            cwd=cwd,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            text=True,
-            bufsize=1,
-            universal_newlines=True
+        process = multiprocessing.Process(
+            target=start_video_service if name == "text2video_service" else start_action_dispatcher,
+            args=(),
+            kwargs={},
+            daemon=True
         )
     else:
-        process = subprocess.Popen(
-            command,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            text=True,
-            bufsize=1,
-            universal_newlines=True
+        process = multiprocessing.Process(
+            target=start_video_service if name == "text2video_service" else start_action_dispatcher,
+            args=(),
+            kwargs={},
+            daemon=True
         )
     
     processes[name] = process
     
-    # Start threads to read output
-    threading.Thread(target=read_output, args=(process.stdout, f"{name} [OUT]"), daemon=True).start()
-    threading.Thread(target=read_output, args=(process.stderr, f"{name} [ERR]"), daemon=True).start()
+    # 启动线程读取输出
+    # threading.Thread(target=read_output, args=(process.stdout, f"{name} [OUT]"), daemon=True).start()
+    # threading.Thread(target=read_output, args=(process.stderr, f"{name} [ERR]"), daemon=True).start()
     
     return process
 
 def read_output(pipe, prefix):
-    """Read output from a pipe and print it with a prefix"""
+    """读取管道输出并打印带有前缀"""
     for line in pipe:
         print(f"{prefix}: {line.strip()}")
 
 def stop_all_processes():
-    """Stop all running processes"""
-    print("Stopping all processes...")
+    """停止所有正在运行的进程"""
+    print("停止所有进程...")
     
     for name, process in processes.items():
-        if process.poll() is None:  # Process is still running
-            print(f"Terminating {name}...")
-            process.terminate()
+        if process.is_alive():  # 进程仍在运行
+            print(f"终止 {name}...")
+            if name == "text2video_service":
+                stop_video_service()
+            elif name == "action_dispatcher":
+                stop_action_dispatcher()
     
-    # Wait for processes to terminate
+    # 等待进程终止
     time.sleep(1)
     
-    # Force kill any remaining processes
+    # 强制杀死任何剩余的进程
     for name, process in processes.items():
-        if process.poll() is None:  # Process is still running
-            print(f"Killing {name}...")
-            process.kill()
+        if process.is_alive():  # 进程仍在运行
+            print(f"杀死 {name}...")
+            process.terminate()
 
 def signal_handler(sig, frame):
-    """Handle termination signals"""
-    print(f"Received signal {sig}")
+    """处理终止信号"""
+    print(f"接收到信号 {sig}")
     stop_event.set()
     stop_all_processes()
     sys.exit(0)
 
 def main():
-    """Main function to start all components"""
-    # Register signal handlers
+    """主函数启动所有组件"""
+    # 注册信号处理器
     signal.signal(signal.SIGINT, signal_handler)
     signal.signal(signal.SIGTERM, signal_handler)
     
-    # Create necessary directories
-    os.makedirs("warehouse/txt_storage", exist_ok=True)
+    # 创建必要的目录
+    os.makedirs("warehouse/text_data", exist_ok=True)
+    os.makedirs("video_pool", exist_ok=True)
     
     try:
-        # Start the data warehouse API
-        warehouse_api = start_process(
-            "warehouse_api",
-            ["python", "api.py"],
-            cwd="warehouse"
+        # 启动数据仓库 API
+        # warehouse_api = start_process(
+        #     "warehouse_api",
+        #     ["python", "api.py"],
+        #     cwd="warehouse"
+        # )
+        
+        # 给数据仓库 API 时间启动
+        # time.sleep(2)
+        
+        # 启动服务器 API
+        # server_api = start_process(
+        #     "server_api",
+        #     ["python", "api.py"],
+        #     cwd="server"
+        # )
+        
+        # 启动文本到视频服务
+        text2video_service = start_process(
+            "text2video_service",
+            [],
+            cwd=None
         )
         
-        # Give the warehouse API time to start
-        time.sleep(2)
-        
-        # Start the server API
-        server_api = start_process(
-            "server_api",
-            ["python", "api.py"],
-            cwd="server"
+        # 启动动作调度服务
+        action_dispatcher = start_process(
+            "action_dispatcher",
+            [],
+            cwd=None
         )
         
-        print("All services started. Press Ctrl+C to stop.")
+        print("所有服务启动。按 Ctrl+C 停止。")
         
-        # Wait for processes to complete or for a termination signal
+        # 等待进程完成或终止信号
         while not stop_event.is_set():
-            # Check if any process has terminated unexpectedly
+            # 检查是否有进程意外终止
             for name, process in list(processes.items()):
-                if process.poll() is not None:
-                    exit_code = process.returncode
-                    print(f"{name} exited with code {exit_code}")
+                if not process.is_alive():
+                    print(f"{name} 退出")
                     
-                    if exit_code != 0:
-                        print(f"Restarting {name}...")
-                        if name == "warehouse_api":
-                            start_process("warehouse_api", ["python", "api.py"], cwd="warehouse")
-                        elif name == "server_api":
-                            start_process("server_api", ["python", "api.py"], cwd="server")
+                    # if exit_code != 0:
+                    #     print(f"重新启动 {name}...")
+                    #     if name == "warehouse_api":
+                    #         start_process("warehouse_api", ["python", "api.py"], cwd="warehouse")
+                    #     elif name == "server_api":
+                    #         start_process("server_api", ["python", "api.py"], cwd="server")
+                    #     elif name == "text2video_service":
+                    #         start_process("text2video_service", ["python", "-c", "from server.text2video import start_text2video_service; start_text2video_service(); import time; import signal; signal.pause()"])
+                    #     elif name == "action_dispatcher":
+                    #         start_process("action_dispatcher", ["python", "-c", "from server.action_dispatcher import start_action_dispatcher; start_action_dispatcher(); import time; import signal; signal.pause()"])
                     
                     del processes[name]
             
             time.sleep(1)
             
     except KeyboardInterrupt:
-        print("Keyboard interrupt received")
+        print("键盘中断接收")
     finally:
         stop_event.set()
         stop_all_processes()

@@ -5,7 +5,7 @@ import os
 import json
 import requests
 import time
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, Tuple
 from dotenv import load_dotenv
 
 # Load environment variables
@@ -14,28 +14,36 @@ load_dotenv()
 class Text2VideoGenerator:
     """
     Text to Video generation service
+    
+    负责与文生视频 API 交互，执行具体的视频生成操作
     """
     
     def __init__(self):
         self.api_url = os.getenv("TEXT2VIDEO_API_URL")
         if not self.api_url:
-            raise ValueError("TEXT2VIDEO_API_URL environment variable not set")
+            print("Warning: TEXT2VIDEO_API_URL environment variable not set, using mock implementation")
+            self.api_url = None
             
-    def generate(self, text: str, config: Dict[str, Any]) -> Optional[str]:
+    def generate(self, text: str, config: Dict[str, Any]) -> Tuple[bool, Optional[str], Optional[str]]:
         """
-        Generate a video from text
+        从文本生成视频
         
         Args:
-            text: The text content to convert to video
-            config: Configuration for the video generation
-                - style: Style of the video (news_report, trend_analysis, etc.)
-                - duration: Target duration in seconds
+            text: 用于生成视频的文本内容
+            config: 视频生成配置
+                - style: 视频风格 (news_report, trend_analysis 等)
+                - duration: 目标时长（秒）
+                - resolution: 分辨率
+                - format: 视频格式
                 
         Returns:
-            URL to the generated video or None if generation failed
+            (成功标志, 视频URL或本地路径, 错误信息)
         """
+        if not self.api_url:
+            return self._mock_generate(text, config)
+            
         try:
-            # Prepare the request payload
+            # 准备请求数据
             payload = {
                 "text": text,
                 "style": config.get("style", "default"),
@@ -44,7 +52,7 @@ class Text2VideoGenerator:
                 "format": config.get("format", "mp4")
             }
             
-            # Make the API request
+            # 发送 API 请求
             response = requests.post(
                 self.api_url,
                 json=payload,
@@ -52,31 +60,34 @@ class Text2VideoGenerator:
             )
             
             if response.status_code == 202:
-                # Asynchronous processing - get job ID
+                # 异步处理 - 获取任务ID并轮询状态
                 job_id = response.json().get("job_id")
                 return self._poll_job_status(job_id)
             elif response.status_code == 200:
-                # Synchronous response
-                return response.json().get("video_url")
+                # 同步响应
+                video_url = response.json().get("video_url")
+                return True, video_url, None
             else:
-                print(f"Error generating video: {response.status_code} - {response.text}")
-                return None
+                error_msg = f"Error generating video: {response.status_code} - {response.text}"
+                print(error_msg)
+                return False, None, error_msg
                 
         except Exception as e:
-            print(f"Exception in text2video generation: {str(e)}")
-            return None
+            error_msg = f"Exception in text2video generation: {str(e)}"
+            print(error_msg)
+            return False, None, error_msg
             
-    def _poll_job_status(self, job_id: str, max_attempts: int = 30, delay: int = 10) -> Optional[str]:
+    def _poll_job_status(self, job_id: str, max_attempts: int = 30, delay: int = 10) -> Tuple[bool, Optional[str], Optional[str]]:
         """
-        Poll for job completion
+        轮询任务完成状态
         
         Args:
-            job_id: The job ID to poll
-            max_attempts: Maximum number of polling attempts
-            delay: Delay between polling attempts in seconds
+            job_id: 任务ID
+            max_attempts: 最大轮询次数
+            delay: 轮询间隔（秒）
             
         Returns:
-            URL to the generated video or None if generation failed
+            (成功标志, 视频URL, 错误信息)
         """
         status_url = f"{self.api_url}/status/{job_id}"
         
@@ -89,12 +100,13 @@ class Text2VideoGenerator:
                     status = data.get("status")
                     
                     if status == "completed":
-                        return data.get("video_url")
+                        return True, data.get("video_url"), None
                     elif status == "failed":
-                        print(f"Video generation failed: {data.get('error')}")
-                        return None
+                        error_msg = f"Video generation failed: {data.get('error')}"
+                        print(error_msg)
+                        return False, None, error_msg
                     else:
-                        # Still processing
+                        # 仍在处理中
                         print(f"Video generation in progress ({attempt+1}/{max_attempts}): {status}")
                         time.sleep(delay)
                 else:
@@ -105,27 +117,67 @@ class Text2VideoGenerator:
                 print(f"Exception while polling job status: {str(e)}")
                 time.sleep(delay)
                 
-        print(f"Timed out waiting for video generation after {max_attempts} attempts")
-        return None
+        error_msg = f"Timed out waiting for video generation after {max_attempts} attempts"
+        print(error_msg)
+        return False, None, error_msg
+        
+    def _mock_generate(self, text: str, config: Dict[str, Any]) -> Tuple[bool, Optional[str], Optional[str]]:
+        """
+        模拟视频生成（用于测试）
+        
+        Args:
+            text: 文本内容
+            config: 配置
+            
+        Returns:
+            (成功标志, 模拟视频路径, 错误信息)
+        """
+        try:
+            # 创建临时视频文件
+            import tempfile
+            import uuid
+            
+            # 创建一个唯一的文件名
+            video_id = str(uuid.uuid4())
+            video_dir = os.path.join(tempfile.gettempdir(), "degenpy_videos")
+            os.makedirs(video_dir, exist_ok=True)
+            
+            video_path = os.path.join(video_dir, f"{video_id}.mp4")
+            
+            # 创建一个空的视频文件（模拟）
+            with open(video_path, "wb") as f:
+                f.write(b"MOCK_VIDEO_DATA")
+                
+            print(f"Mock video generated at: {video_path}")
+            
+            # 模拟处理延迟
+            time.sleep(2)
+            
+            return True, video_path, None
+            
+        except Exception as e:
+            error_msg = f"Error in mock video generation: {str(e)}"
+            print(error_msg)
+            return False, None, error_msg
 
-# Singleton instance
+# 单例实例
 generator = Text2VideoGenerator()
 
-def generate_video(text: str, config: Dict[str, Any]) -> Optional[str]:
+def generate_video(text: str, config: Dict[str, Any]) -> Tuple[bool, Optional[str], Optional[str]]:
     """
-    Generate a video from text content
+    从文本生成视频
     
     Args:
-        text: The text content to convert to video
-        config: Configuration for the video generation
+        text: 用于生成视频的文本内容
+        config: 视频生成配置
             
     Returns:
-        URL to the generated video or None if generation failed
+        (成功标志, 视频URL或本地路径, 错误信息)
     """
     return generator.generate(text, config)
 
 if __name__ == "__main__":
-    # Example usage
+    # 示例用法
     config = {
         "style": "news_report",
         "duration": 30
@@ -138,9 +190,9 @@ if __name__ == "__main__":
     represents a significant moment for cryptocurrency enthusiasts.
     """
     
-    video_url = generate_video(sample_text, config)
+    success, video_path, error = generate_video(sample_text, config)
     
-    if video_url:
-        print(f"Video generated successfully: {video_url}")
+    if success and video_path:
+        print(f"Video generated successfully: {video_path}")
     else:
-        print("Failed to generate video")
+        print(f"Failed to generate video: {error}")
