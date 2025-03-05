@@ -16,7 +16,7 @@ from pathlib import Path
 load_dotenv()
 
 # Create necessary directories
-os.makedirs("storage/text", exist_ok=True)
+os.makedirs("warehouse/text_data", exist_ok=True)
 
 app = FastAPI(title="DegenPy Warehouse API", description="Data warehouse API for DegenPy")
 
@@ -24,8 +24,8 @@ app = FastAPI(title="DegenPy Warehouse API", description="Data warehouse API for
 recent_uids = []
 
 class StoreRequest(BaseModel):
-    uid: str
     content: str
+    uid: Optional[str] = None  # 现在 uid 是可选的，如果不提供将自动生成 UUID
 
 class Response(BaseModel):
     status: str
@@ -35,23 +35,53 @@ class Response(BaseModel):
 class DatabaseManager:
     """Abstract database manager class"""
     
-    def process_data(self, uid: str, content: str) -> Dict[str, Any]:
-        """处理数据，返回标准化的数据结构"""
+    def process_data(self, content: str, uid: Optional[str] = None) -> Dict[str, Any]:
+        """处理数据，返回标准化的数据结构
+        
+        Args:
+            content: 内容
+            uid: 可选的 UID，如果不提供将自动生成 UUID
+            
+        Returns:
+            包含 uid, content 和 timestamp 的字典
+        """
+        # 如果没有提供 uid，则生成一个 UUID
+        if not uid:
+            uid = str(uuid.uuid4())
+            
+        # 添加时间戳
+        timestamp = time.strftime("%Y-%m-%d %H:%M:%S")
+        
+        # 组合内容和时间戳
+        content_with_time = f"{content} [时间: {timestamp}]"
+        
         return {
             "uid": uid,
-            "content": content
+            "content": content_with_time,
+            "timestamp": timestamp  # 额外存储时间戳，方便将来处理
         }
     
-    def store_data(self, uid: str, content: str) -> bool:
-        """存储数据到存储介质"""
+    def store_data(self, content: str, uid: Optional[str] = None) -> Dict[str, Any]:
+        """存储数据到存储介质
+        
+        Args:
+            content: 内容
+            uid: 可选的 UID，如果不提供将自动生成 UUID
+            
+        Returns:
+            成功时返回包含生成/使用的 uid 的字典，失败时返回 None
+        """
         try:
             # 处理数据
-            data = self.process_data(uid, content)
+            data = self.process_data(content, uid)
             # 执行实际存储操作（由子类实现）
-            return self._store_data_impl(data)
+            success = self._store_data_impl(data)
+            if success:
+                return {"uid": data["uid"]}
+            return None
         except Exception as e:
             print(f"Error storing data: {str(e)}")
-            return False
+            return None
     
     def _store_data_impl(self, data: Dict[str, Any]) -> bool:
         """实际存储操作的实现（由子类实现）"""
@@ -68,7 +98,7 @@ class DatabaseManager:
 class TextFileManager(DatabaseManager):
     def __init__(self):
         super().__init__()
-        self.data_dir = "warehouse/txt_storage"
+        self.data_dir = "warehouse/text_data"
         os.makedirs(self.data_dir, exist_ok=True)
         self.data_file = f"{self.data_dir}/data.txt"
         # 创建数据文件（如果不存在）
@@ -190,19 +220,20 @@ async def store_data(request: StoreRequest, db_type: str = "text"):
         db_manager = get_db_manager(db_type)
         
         # Store the data
-        success = db_manager.store_data(request.uid, request.content)
+        result = db_manager.store_data(request.content, request.uid)
         
-        if success:
+        if result:
             # Add to recent UIDs list (limit to 100 items)
             global recent_uids
-            recent_uids.append(request.uid)
+            uid = result["uid"]
+            recent_uids.append(uid)
             if len(recent_uids) > 100:
                 recent_uids = recent_uids[-100:]
                 
             return Response(
                 status="success",
-                message=f"Data stored successfully with UID {request.uid}",
-                data={"uid": request.uid}
+                message=f"Data stored successfully with UID {uid}",
+                data={"uid": uid}
             )
         else:
             raise HTTPException(status_code=500, detail="Failed to store data")
@@ -212,7 +243,7 @@ async def store_data(request: StoreRequest, db_type: str = "text"):
 
 @app.get("/data")
 async def get_data(
-    p: str = "sa",  # sa = since_added, last30 = last 30 items, by_uids = by specific UIDs
+    p: str = "last30",  # last30 = last 30 items, by_uids = by specific UIDs
     db_type: str = "text",
     uids: Optional[str] = None
 ):
@@ -220,50 +251,35 @@ async def get_data(
     try:
         db_manager = get_db_manager(db_type)
         
-        if p == "sa":
-            # Get data since it was added (using recent_uids list)
-            global recent_uids
+        if p == "by_uids" and uids:
+            # Get data for specific UIDs
+            uid_list = uids.split(",")
             items = []
-            for uid in recent_uids:
+            
+            for uid in uid_list:
                 data = db_manager.get_data_by_uid(uid)
                 if data:
                     items.append(data)
-                    
-            return Response(
-                status="success",
-                message=f"Retrieved {len(items)} items since added",
-                data={"items": items, "uids": recent_uids}
-            )
             
-        elif p == "last30":
-            # Get the last 30 items
-            items = db_manager.get_recent_data(limit=30)
-            uids_list = [item.get("uid") for item in items]
-            
-            return Response(
-                status="success",
-                message=f"Retrieved last {len(items)} items",
-                data={"items": items, "uids": uids_list}
-            )
-            
-        elif p == "by_uids" and uids:
-            # Get data by specific UIDs
-            uids_list = uids.split(",")
-            items = []
-            
-            for uid in uids_list:
-                data = db_manager.get_data_by_uid(uid)
-                if data:
-                    items.append(data)
-                    
             return Response(
                 status="success",
                 message=f"Retrieved {len(items)} items by UIDs",
-                data={"items": items, "uids": uids_list}
+                data={"items": items, "uids": uid_list}
             )
+        
+        elif p == "last30" or p == "sa":  # sa for backward compatibility
+            # Get the most recent data
+            limit = 30
+            items = db_manager.get_recent_data(limit)
             
+            return Response(
+                status="success",
+                message=f"Retrieved {len(items)} recent items",
+                data={"items": items}
+            )
+        
         else:
-            raise HTTPException(status_code=400, detail="Invalid parameter 'p' or missing 'uids'")
+            raise HTTPException(status_code=400, detail=f"Invalid parameter p={p}")
             
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -273,15 +289,15 @@ async def get_recent_uids(clear: bool = False):
     """Get the list of recently added UIDs"""
     global recent_uids
     
-    uids_copy = recent_uids.copy()
+    uids = recent_uids.copy()
     
     if clear:
         recent_uids = []
-        
+    
     return Response(
         status="success",
-        message=f"Retrieved {len(uids_copy)} recent UIDs",
-        data={"uids": uids_copy}
+        message=f"Retrieved {len(uids)} recent UIDs",
+        data={"uids": uids}
     )
 
 if __name__ == "__main__":
