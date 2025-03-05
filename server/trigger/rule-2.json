@@ -4,8 +4,11 @@
     "description": "Review historical content when new content is low",
     "schedule": "30 */4 * * *",
     "data_source": {
-        "type": "database",
-        "query": "SELECT * FROM content ORDER BY created_at DESC LIMIT 50"
+        "type": "warehouse",
+        "endpoint": "/recent-content",
+        "params": {
+            "limit": 50
+        }
     },
     "conditions": {
         "check_new_content": {

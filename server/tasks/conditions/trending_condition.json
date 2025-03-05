@@ -1,0 +1,9 @@
+{
+    "id": "trending_condition",
+    "name": "Trending Topics Analysis",
+    "description": "Condition for analyzing trending topics and viral content",
+    "min_items": 5,
+    "fact_check": true,
+    "token_limit": 8000,
+    "prompt_template": "Analyze the following trending information and identify the most significant patterns or emerging topics. Focus on factual information and discard any rumors or unverified claims. Create a comprehensive analysis of the top 3-5 trending topics, explaining their significance and potential impact: {{content}}"
+}

@@ -8,7 +8,7 @@
         "tone": "Excited, informative, slightly exaggerated for effect",
         "prompt_template": "You are a TikTok content creator known for explaining complex topics in an engaging, trendy way. Create a script for a TikTok video based on this information, making it catchy and shareable: {{content}}"
     },
-    "triggers": ["rule-0", "rule-1"],
+    "tasks": ["task1", "task2"],
     "output_format": {
         "tiktok": {
             "max_length": 150,

@@ -22,6 +22,7 @@ logger = logging.getLogger("run")
 # 导入服务组件
 from server.services.text2video import start_video_service, stop_video_service
 from server.services.action_dispatcher import start_action_dispatcher, stop_action_dispatcher
+from warehouse.api import RecentUIDTracker
 
 # 全局变量用于进程管理
 processes = {}
@@ -88,33 +89,22 @@ def signal_handler(sig, frame):
     sys.exit(0)
 
 def main():
-    """主函数启动所有组件"""
+    """主函数，启动所有组件"""
     # 注册信号处理器
     signal.signal(signal.SIGINT, signal_handler)
     signal.signal(signal.SIGTERM, signal_handler)
     
     # 创建必要的目录
     os.makedirs("warehouse/text_data", exist_ok=True)
+    os.makedirs("tasks", exist_ok=True)
+    os.makedirs("tasks/conditions", exist_ok=True)
     os.makedirs("video_pool", exist_ok=True)
     
+    # 初始化数据源跟踪器
+    RecentUIDTracker()
+    logger.info("数据源跟踪器已初始化")
+    
     try:
-        # 启动数据仓库 API
-        # warehouse_api = start_process(
-        #     "warehouse_api",
-        #     ["python", "api.py"],
-        #     cwd="warehouse"
-        # )
-        
-        # 给数据仓库 API 时间启动
-        # time.sleep(2)
-        
-        # 启动服务器 API
-        # server_api = start_process(
-        #     "server_api",
-        #     ["python", "api.py"],
-        #     cwd="server"
-        # )
-        
         # 启动文本到视频服务
         text2video_service = start_process(
             "text2video_service",
