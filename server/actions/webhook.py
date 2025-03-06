@@ -4,11 +4,17 @@
 import os
 import json
 import requests
+import logging
 from typing import Dict, Any, Optional
 from dotenv import load_dotenv
 
+# 配置日志
+
 # Load environment variables
 load_dotenv()
+
+# 配置日志
+logger = logging.getLogger("webhook_action")
 
 class WebhookNotifier:
     """
@@ -138,6 +144,67 @@ def notify_content_published(platform: str, content_id: str, url: str) -> bool:
     }
     
     return send_notification("content_published", data)
+
+class WebhookAction:
+    """Webhook通知动作"""
+    
+    def __init__(self, config):
+        self.config = config
+        
+    def execute(self, context):
+        """
+        执行Webhook通知
+        
+        Args:
+            context: 上下文
+            
+        Returns:
+            更新后的上下文
+        """
+        # 获取URL
+        url = self.config.get('url', '')
+        if url == '{{webhook_url}}':
+            url = os.getenv("WEBHOOK_URL", "")
+            
+        if not url:
+            logger.error("未指定webhook URL")
+            # 不终止序列，继续执行后续动作
+            return context
+            
+        # 获取内容
+        processed_content = context.get('processed_content', '')
+        video_task_id = context.get('video_task_id', '')
+        agent_id = context.get('agent_id', 'unknown')
+        trigger_id = context.get('task_id', 'unknown')
+        
+        # 准备通知数据
+        data = {
+            "agent_id": agent_id,
+            "content": processed_content,
+            "video_task_id": video_task_id,
+            "trigger_id": trigger_id,
+            "task_type": context.get('task_type', 'unknown'),
+            "timestamp": context.get('timestamp', '')
+        }
+        
+        try:
+            # 发送通知
+            success = send_notification("task_executed", data)
+            
+            # 更新上下文
+            context['webhook_sent'] = success
+            
+            if success:
+                logger.info(f"Webhook通知已发送: {url}")
+            else:
+                logger.error(f"Webhook通知发送失败: {url}")
+                
+            return context
+            
+        except Exception as e:
+            logger.error(f"发送Webhook通知时出错: {str(e)}")
+            context['webhook_sent'] = False
+            return context
 
 if __name__ == "__main__":
     # Example usage

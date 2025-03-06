@@ -23,12 +23,6 @@ def get_db_connector():
     if db_type == "mongodb":
         from warehouse.storage.mongodb.connector import get_connector
         return get_connector()
-    elif db_type == "mysql":
-        from warehouse.storage.mysql.connector import get_connector
-        return get_connector()
-    elif db_type == "pgsql":
-        from warehouse.storage.pgsql.connector import get_connector
-        return get_connector()
     else:
         # 默认使用 MongoDB
         from warehouse.storage.mongodb.connector import get_connector

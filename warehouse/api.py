@@ -15,7 +15,7 @@ from dotenv import load_dotenv
 from pathlib import Path
 
 # 导入数据库连接器
-from warehouse.storage import get_db_connector
+from warehouse.storage.mongodb.connector import MongoDBConnector
 
 # Load environment variables
 load_dotenv()
@@ -24,6 +24,10 @@ load_dotenv()
 os.makedirs("warehouse/text_data", exist_ok=True)
 
 app = FastAPI(title="DegenPy Warehouse API", description="Data warehouse API for DegenPy")
+
+class WarehouseAPI:
+    def __init__(self):
+        self.connector = MongoDBConnector()
 
 # In-memory storage for recent UIDs
 recent_uids = {
@@ -175,7 +179,7 @@ uid_tracker = RecentUIDTracker()
 
 def get_db_manager():
     """获取数据库管理器"""
-    return get_db_connector()
+    return WarehouseAPI()
 
 @app.get("/")
 async def root():
@@ -195,7 +199,7 @@ async def store_data(request: StoreRequest):
     try:
         db = get_db_manager()
         
-        result = db.store_data(
+        result = db.connector.store_data(
             content=request.content,
             author_id=request.author_id,
             source_type=request.source_type,
@@ -234,7 +238,7 @@ async def get_content(uid: str):
     """
     try:
         db = get_db_manager()
-        data = db.get_data_by_uid(uid)
+        data = db.connector.get_data_by_uid(uid)
         
         if data:
             return Response(
@@ -267,7 +271,7 @@ async def get_recent_content(source_type: Optional[str] = None, limit: int = 30)
     """
     try:
         db = get_db_manager()
-        data = db.get_recent_data(source_type, limit)
+        data = db.connector.get_recent_data(source_type, limit)
         
         return Response(
             status="success",
@@ -302,7 +306,7 @@ async def get_content_by_uids(uids: str):
                 message="未提供有效的UID列表"
             )
         
-        data = db.get_data_by_uids(uid_list)
+        data = db.connector.get_data_by_uids(uid_list)
         
         return Response(
             status="success",
@@ -375,7 +379,7 @@ async def get_data_from_source(
         
         # 获取内容
         db = get_db_manager()
-        data = db.get_data_by_uids(uids)
+        data = db.connector.get_data_by_uids(uids)
         
         return Response(
             status="success",

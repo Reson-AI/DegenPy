@@ -23,6 +23,7 @@ logger = logging.getLogger("run")
 from server.services.text2video import start_video_service, stop_video_service
 from server.services.action_dispatcher import start_action_dispatcher, stop_action_dispatcher
 from warehouse.api import RecentUIDTracker
+from server.agents.engine import agent_engine
 
 # 全局变量用于进程管理
 processes = {}
@@ -99,6 +100,10 @@ def main():
     os.makedirs("tasks", exist_ok=True)
     os.makedirs("tasks/conditions", exist_ok=True)
     os.makedirs("video_pool", exist_ok=True)
+    
+    # 加载并运行tiktok-agent
+    logger.info("加载并运行tiktok-agent...")
+    agent_engine.run_agent("tiktok-agent")
     
     # 初始化数据源跟踪器
     RecentUIDTracker()

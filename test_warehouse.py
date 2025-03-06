@@ -137,17 +137,6 @@ def main():
         print("\n--- 测试根据 UID 获取数据 ---")
         test_get_data("by_uids", "text", all_uids[:2])
     
-    # 测试 MySQL 存储（如果可用）
-    try:
-        print("\n--- 测试 MySQL 存储（如果可用）---")
-        mysql_uids = generate_sample_data(1, "mysql", use_custom_uid=False)
-        
-        if mysql_uids:
-            print("\n--- 测试 MySQL 数据获取 ---")
-            test_get_data("last30", "mysql")
-    except Exception as e:
-        print(f"\nMySQL 存储不可用: {str(e)}")
-    
     print("\n=== 测试完成 ===")
 
 if __name__ == "__main__":
