@@ -1,0 +1,19 @@
+{
+    "id": "special_attention_task",
+    "name": "特别关注信息处理",
+    "description": "实时监听特别关注的推文，生成视频内容",
+    "schedule": "realtime",
+    "data_source": {
+        "type": "redis_subscribe",
+        "channel": "special_attention",
+        "tag": 2
+    },
+    "video_config": {
+        "style": "breaking_news",
+        "duration": 45,
+        "priority": "high"
+    },
+    "platforms": ["tiktok", "twitter"],
+    "webhook": true,
+    "priority": 1
+}

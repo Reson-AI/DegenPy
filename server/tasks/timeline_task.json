@@ -1,0 +1,20 @@
+{
+    "id": "timeline_task",
+    "name": "时间线信息整理",
+    "description": "每半小时获取一次普通推文，生成视频内容",
+    "schedule": "*/30 * * * *",
+    "data_source": {
+        "type": "redis_list",
+        "key": "timeline",
+        "tag": 1,
+        "batch_size": 10
+    },
+    "video_config": {
+        "style": "news_report",
+        "duration": 45,
+        "priority": "normal"
+    },
+    "platforms": ["tiktok", "twitter"],
+    "webhook": true,
+    "priority": 2
+}
