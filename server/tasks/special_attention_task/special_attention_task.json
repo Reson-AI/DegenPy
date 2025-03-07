@@ -2,6 +2,8 @@
     "id": "special_attention_task",
     "name": "特别关注信息处理",
     "description": "实时监听特别关注的推文，生成视频内容",
+    "type": "special_attention",
+    "executor": "server.tasks.special_attention_task.special_attention_task.SpecialAttentionTask",
     "schedule": "realtime",
     "data_source": {
         "type": "redis_subscribe",
@@ -15,5 +17,16 @@
     },
     "platforms": ["tiktok", "twitter"],
     "webhook": true,
-    "priority": 1
+    "priority": 1,
+    "components": [
+        "data_fetcher",
+        "fact_checker",
+        "content_processor",
+        "video_generator"
+    ],
+    "ai_config": {
+        "model": "anthropic/claude-3-opus:beta",
+        "temperature": 0.7,
+        "max_tokens": 4000
+    }
 }

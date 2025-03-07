@@ -2,6 +2,8 @@
     "id": "timeline_task",
     "name": "时间线信息整理",
     "description": "每半小时获取一次普通推文，生成视频内容",
+    "type": "timeline",
+    "executor": "server.tasks.timeline_task.timeline_task.TimelineTask",
     "schedule": "*/30 * * * *",
     "data_source": {
         "type": "redis_list",
@@ -16,5 +18,16 @@
     },
     "platforms": ["tiktok", "twitter"],
     "webhook": true,
-    "priority": 2
+    "priority": 2,
+    "components": [
+        "data_fetcher",
+        "content_processor",
+        "summary_generator",
+        "video_generator"
+    ],
+    "ai_config": {
+        "model": "anthropic/claude-3-sonnet:beta",
+        "temperature": 0.5,
+        "max_tokens": 3000
+    }
 }
