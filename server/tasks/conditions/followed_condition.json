@@ -1,9 +1,0 @@
-{
-    "id": "followed_condition",
-    "name": "Followed Accounts Analysis",
-    "description": "Condition for analyzing content from followed accounts",
-    "min_items": 3,
-    "fact_check": true,
-    "token_limit": 6000,
-    "prompt_template": "Review the following information from accounts you follow and identify the most important updates or announcements. Focus on factual information and discard any rumors or unverified claims. Organize the information into a cohesive summary highlighting key developments: {{content}}"
-}

@@ -1,9 +1,0 @@
-{
-    "id": "historical_condition",
-    "name": "Historical Data Analysis",
-    "description": "Condition for analyzing historical data when recent activity is low",
-    "min_items": 20,
-    "fact_check": true,
-    "token_limit": 12000,
-    "prompt_template": "Review this historical content from the past and identify patterns, trends, or insights that remain relevant. Create a compelling summary that connects past events to current market conditions, highlighting key lessons and potential future implications: {{content}}"
-}
