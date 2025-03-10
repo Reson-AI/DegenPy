@@ -25,28 +25,38 @@ os.makedirs("warehouse/text_data", exist_ok=True)
 
 app = FastAPI(title="DegenPy Warehouse API", description="Data warehouse API for DegenPy")
 
+# 配置文件路径
+CONFIG_DIR = os.path.join(os.path.dirname(__file__), 'config')
+SPEAKERS_CONFIG_PATH = os.path.join(CONFIG_DIR, 'speakers.json')
+
+# 确保配置目录存在
+os.makedirs(CONFIG_DIR, exist_ok=True)
+
 class WarehouseAPI:
     def __init__(self):
         self.connector = MongoDBConnector()
 
 # In-memory storage for recent UIDs
-recent_uids = {
-    "followed": [],
-    "trending": [],
-    "other": []
-}
-MAX_RECENT_UIDS = 100  # 每种类型最多保存的最近UID数量
+recent_uids = []
+MAX_RECENT_UIDS = 100  # 最多保存的最近UID数量
+
+class ContentData(BaseModel):
+    speaker: str
+    time: str
+    text: str
 
 class StoreRequest(BaseModel):
-    content: str
+    content: Union[str, ContentData]  # 可以是JSON字符串或ContentData对象
     author_id: Optional[str] = None
-    source_type: Optional[str] = "other"  # 可以是 "followed", "trending" 或 "other"
     uid: Optional[str] = None  # 如果不提供将自动生成 UUID
 
 class Response(BaseModel):
     status: str
     message: str
     data: Optional[dict] = None
+
+class SpeakersConfig(BaseModel):
+    special_speakers: List[str]
 
 class RecentUIDTracker:
     """跟踪最近添加的UUID，按来源类型分组"""
@@ -64,31 +74,28 @@ class RecentUIDTracker:
         if self._initialized:
             return
             
-        self.followed_uids = []
-        self.trending_uids = []
-        self.other_uids = []
+        self.uids = []
         self.lock = threading.Lock()
         self.last_activity_time = datetime.now()
         self._initialized = True
     
-    def add_uid(self, uid: str, source_type: str):
+    def add_uid(self, uid: str):
         """添加一个UUID到跟踪器"""
         with self.lock:
-            if source_type == "followed":
-                self.followed_uids.append((uid, datetime.now()))
-            elif source_type == "trending":
-                self.trending_uids.append((uid, datetime.now()))
-            else:
-                self.other_uids.append((uid, datetime.now()))
+            # 添加UUID和时间戳
+            self.uids.append((uid, datetime.now()))
+            
+            # 保持列表大小在最大限制内
+            if len(self.uids) > MAX_RECENT_UIDS:
+                self.uids = self.uids[-MAX_RECENT_UIDS:]
             
             self.last_activity_time = datetime.now()
     
-    def get_uids(self, source_type: Optional[str] = None, clear: bool = False, 
-                 min_items: int = 0, max_age_hours: Optional[int] = None) -> List[str]:
-        """获取指定类型的UUID列表
+    def get_uids(self, clear: bool = False, min_items: int = 0, 
+                 max_age_hours: Optional[int] = None) -> List[str]:
+        """获取UUID列表
         
         Args:
-            source_type: 来源类型，可以是 "followed", "trending", "all" 或 None
             clear: 是否在返回后清除列表
             min_items: 最小项目数，如果不满足则返回空列表
             max_age_hours: 最大年龄（小时），只返回不超过此年龄的项目
@@ -102,49 +109,15 @@ class RecentUIDTracker:
             # 根据年龄筛选
             if max_age_hours is not None:
                 cutoff_time = current_time - timedelta(hours=max_age_hours)
-                
-                if source_type == "followed":
-                    filtered_items = [(uid, ts) for uid, ts in self.followed_uids if ts >= cutoff_time]
-                    self.followed_uids = filtered_items
-                elif source_type == "trending":
-                    filtered_items = [(uid, ts) for uid, ts in self.trending_uids if ts >= cutoff_time]
-                    self.trending_uids = filtered_items
-                else:
-                    filtered_followed = [(uid, ts) for uid, ts in self.followed_uids if ts >= cutoff_time]
-                    filtered_trending = [(uid, ts) for uid, ts in self.trending_uids if ts >= cutoff_time]
-                    filtered_other = [(uid, ts) for uid, ts in self.other_uids if ts >= cutoff_time]
-                    
-                    self.followed_uids = filtered_followed
-                    self.trending_uids = filtered_trending
-                    self.other_uids = filtered_other
+                filtered_items = [(uid, ts) for uid, ts in self.uids if ts >= cutoff_time]
+                self.uids = filtered_items
             
             # 获取UUID列表
-            if source_type == "followed":
-                items = self.followed_uids
-                uids = [uid for uid, _ in items]
-                
-                if clear:
-                    self.followed_uids = []
-            elif source_type == "trending":
-                items = self.trending_uids
-                uids = [uid for uid, _ in items]
-                
-                if clear:
-                    self.trending_uids = []
-            elif source_type == "all":
-                items = self.followed_uids + self.trending_uids + self.other_uids
-                uids = [uid for uid, _ in items]
-                
-                if clear:
-                    self.followed_uids = []
-                    self.trending_uids = []
-                    self.other_uids = []
-            else:
-                items = self.other_uids
-                uids = [uid for uid, _ in items]
-                
-                if clear:
-                    self.other_uids = []
+            items = self.uids
+            uids = [uid for uid, _ in items]
+            
+            if clear:
+                self.uids = []
             
             # 检查最小项目数
             if len(uids) < min_items:
@@ -186,12 +159,163 @@ async def root():
     """API根路径"""
     return {"status": "ok", "message": "DegenPy Warehouse API is running"}
 
+@app.get("/speakers")
+async def get_speakers():
+    """获取特别关注的发言人列表
+    
+    Returns:
+        包含状态、消息和发言人列表的响应
+    """
+    try:
+        if os.path.exists(SPEAKERS_CONFIG_PATH):
+            with open(SPEAKERS_CONFIG_PATH, 'r', encoding='utf-8') as f:
+                config = json.load(f)
+                return Response(
+                    status="success",
+                    message="获取发言人列表成功",
+                    data=config
+                )
+        else:
+            # 如果配置文件不存在，返回空列表
+            default_config = {"special_speakers": []}
+            with open(SPEAKERS_CONFIG_PATH, 'w', encoding='utf-8') as f:
+                json.dump(default_config, f, ensure_ascii=False, indent=2)
+            return Response(
+                status="success",
+                message="配置文件不存在，已创建默认配置",
+                data=default_config
+            )
+    except Exception as e:
+        return Response(
+            status="error",
+            message=f"获取发言人列表时出错: {str(e)}"
+        )
+
+@app.post("/speakers")
+async def update_speakers(config: SpeakersConfig):
+    """更新特别关注的发言人列表
+    
+    Args:
+        config: 包含发言人列表的配置
+        
+    Returns:
+        包含状态、消息和更新后的发言人列表的响应
+    """
+    try:
+        # 确保配置目录存在
+        os.makedirs(os.path.dirname(SPEAKERS_CONFIG_PATH), exist_ok=True)
+        
+        # 写入配置文件
+        with open(SPEAKERS_CONFIG_PATH, 'w', encoding='utf-8') as f:
+            json.dump({"special_speakers": config.special_speakers}, f, ensure_ascii=False, indent=2)
+        
+        return Response(
+            status="success",
+            message="发言人列表更新成功",
+            data={"special_speakers": config.special_speakers}
+        )
+    except Exception as e:
+        return Response(
+            status="error",
+            message=f"更新发言人列表时出错: {str(e)}"
+        )
+
+@app.put("/speakers/add/{speaker}")
+async def add_speaker(speaker: str):
+    """添加一个特别关注的发言人
+    
+    Args:
+        speaker: 要添加的发言人名称
+        
+    Returns:
+        包含状态、消息和更新后的发言人列表的响应
+    """
+    try:
+        # 读取当前配置
+        current_config = {"special_speakers": []}
+        if os.path.exists(SPEAKERS_CONFIG_PATH):
+            with open(SPEAKERS_CONFIG_PATH, 'r', encoding='utf-8') as f:
+                current_config = json.load(f)
+        
+        # 如果发言人已存在，返回成功但不重复添加
+        if speaker in current_config.get("special_speakers", []):
+            return Response(
+                status="success",
+                message=f"发言人 '{speaker}' 已在列表中",
+                data=current_config
+            )
+        
+        # 添加新发言人
+        current_config.setdefault("special_speakers", []).append(speaker)
+        
+        # 写入配置文件
+        with open(SPEAKERS_CONFIG_PATH, 'w', encoding='utf-8') as f:
+            json.dump(current_config, f, ensure_ascii=False, indent=2)
+        
+        return Response(
+            status="success",
+            message=f"发言人 '{speaker}' 添加成功",
+            data=current_config
+        )
+    except Exception as e:
+        return Response(
+            status="error",
+            message=f"添加发言人时出错: {str(e)}"
+        )
+
+@app.delete("/speakers/remove/{speaker}")
+async def remove_speaker(speaker: str):
+    """移除一个特别关注的发言人
+    
+    Args:
+        speaker: 要移除的发言人名称
+        
+    Returns:
+        包含状态、消息和更新后的发言人列表的响应
+    """
+    try:
+        # 读取当前配置
+        if not os.path.exists(SPEAKERS_CONFIG_PATH):
+            return Response(
+                status="error",
+                message="配置文件不存在"
+            )
+        
+        with open(SPEAKERS_CONFIG_PATH, 'r', encoding='utf-8') as f:
+            current_config = json.load(f)
+        
+        # 如果发言人不在列表中，返回成功但不执行移除
+        if speaker not in current_config.get("special_speakers", []):
+            return Response(
+                status="success",
+                message=f"发言人 '{speaker}' 不在列表中",
+                data=current_config
+            )
+        
+        # 移除发言人
+        current_config["special_speakers"].remove(speaker)
+        
+        # 写入配置文件
+        with open(SPEAKERS_CONFIG_PATH, 'w', encoding='utf-8') as f:
+            json.dump(current_config, f, ensure_ascii=False, indent=2)
+        
+        return Response(
+            status="success",
+            message=f"发言人 '{speaker}' 移除成功",
+            data=current_config
+        )
+    except Exception as e:
+        return Response(
+            status="error",
+            message=f"移除发言人时出错: {str(e)}"
+        )
+
 @app.post("/data")
 async def store_data(request: StoreRequest):
     """存储数据
     
     Args:
-        request: 包含内容、作者ID、来源类型和可选UID的请求
+        request: 包含内容（三要素JSON）、作者ID、来源类型和可选UID的请求
         
     Returns:
         包含状态、消息和数据的响应
@@ -199,16 +323,25 @@ async def store_data(request: StoreRequest):
     try:
         db = get_db_manager()
         
+        # 处理content参数，确保它是正确的格式
+        content = request.content
+        if isinstance(content, ContentData):
+            # 如果是ContentData对象，转换为字典
+            content = {
+                "speaker": content.speaker,
+                "time": content.time,
+                "text": content.text
+            }
+        
         result = db.connector.store_data(
-            content=request.content,
+            content=content,
             author_id=request.author_id,
-            source_type=request.source_type,
             uid=request.uid
         )
         
         if result:
             # 添加到最近UID跟踪器
-            uid_tracker.add_uid(result["uid"], result["source_type"])
+            uid_tracker.add_uid(result["uid"])
             
             return Response(
                 status="success",
@@ -294,79 +427,6 @@ async def get_content_by_uids(uids: str):
             message=f"获取内容时出错: {str(e)}"
         )
 
-@app.get("/recent-uids")
-async def get_recent_uids(source_type: Optional[str] = None):
-    """获取最近添加的UID列表
-    
-    Args:
-        source_type: 来源类型，可以是 "followed", "trending", "other" 或 "all"
-        
-    Returns:
-        包含状态、消息和数据的响应
-    """
-    try:
-        uids = uid_tracker.get_uids(source_type)
-        
-        return Response(
-            status="success",
-            message=f"获取到 {len(uids)} 个最近UID",
-            data={"uids": uids}
-        )
-    except Exception as e:
-        return Response(
-            status="error",
-            message=f"获取最近UID时出错: {str(e)}"
-        )
-
-@app.get("/data-source")
-async def get_data_from_source(
-    source_type: str,
-    min_items: int = 0,
-    max_age_hours: Optional[int] = None,
-    clear: bool = False
-):
-    """从指定的数据源获取数据
-    
-    Args:
-        source_type: 来源类型，可以是 "followed", "trending", "other" 或 "all"
-        min_items: 最小项目数，如果不满足则返回空列表
-        max_age_hours: 最大年龄（小时），只返回不超过此年龄的项目
-        clear: 是否在返回后清除列表
-        
-    Returns:
-        包含状态、消息和数据的响应
-    """
-    try:
-        # 获取UID列表
-        uids = uid_tracker.get_uids(
-            source_type=source_type,
-            min_items=min_items,
-            max_age_hours=max_age_hours,
-            clear=clear
-        )
-        
-        if not uids:
-            return Response(
-                status="success",
-                message="没有符合条件的数据",
-                data={"content": []}
-            )
-        
-        # 获取内容
-        db = get_db_manager()
-        data = db.connector.get_data_by_uids(uids)
-        
-        return Response(
-            status="success",
-            message=f"获取到 {len(data)} 条内容",
-            data={"content": data}
-        )
-    except Exception as e:
-        return Response(
-            status="error",
-            message=f"获取数据时出错: {str(e)}"
-        )
-
 @app.get("/check-activity")
 async def check_recent_activity(threshold: int = 10, timeframe_hours: int = 1):
     """检查最近的活动是否低于阈值
@@ -390,48 +450,6 @@ async def check_recent_activity(threshold: int = 10, timeframe_hours: int = 1):
         return Response(
             status="error",
             message=f"检查活动时出错: {str(e)}"
-        )
-
-@app.post("/apply-condition")
-async def apply_condition(content: str, token_limit: Optional[int] = None, prompt_template: Optional[str] = None):
-    """应用条件到内容
-    
-    Args:
-        content: 原始内容
-        token_limit: 令牌限制
-        prompt_template: 提示模板
-        
-    Returns:
-        包含状态、消息和数据的响应
-    """
-    try:
-        if not content:
-            return Response(
-                status="error",
-                message="内容不能为空"
-            )
-        
-        result = content
-        
-        # 应用令牌限制
-        if token_limit:
-            # 简单实现：假设1个字符约等于1个token
-            if len(result) > token_limit:
-                result = result[:token_limit]
-        
-        # 应用提示模板
-        if prompt_template:
-            result = prompt_template.replace("{{content}}", result)
-        
-        return Response(
-            status="success",
-            message="条件应用成功",
-            data={"content": result}
-        )
-    except Exception as e:
-        return Response(
-            status="error",
-            message=f"应用条件时出错: {str(e)}"
         )
 
 # 导出函数，用于其他模块直接导入

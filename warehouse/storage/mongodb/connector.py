@@ -42,15 +42,24 @@ class MongoDBConnector:
     
     def __init__(self, db_name=None, collection_name=None):
         """初始化 MongoDB 连接器"""
-        # 使用环境变量中的连接字符串
-        connection_string = os.getenv('MONGODB_CONNECTION_STRING', 'mongodb://localhost:27017')
+        # 使用环境变量中的连接字符串，不提供默认值
+        connection_string = os.getenv('MONGODB_CONNECTION_STRING')
+        if not connection_string:
+            raise ValueError("环境变量MONGODB_CONNECTION_STRING未设置，请在.env文件中配置")
         self.client = MongoClient(connection_string)
         
-        # 使用环境变量中的数据库名和集合名
-        db_name = db_name or os.getenv('MONGODB_DATABASE', 'degenpy')
-        collection_name = collection_name or os.getenv('MONGODB_COLLECTION', 'content')
+        # 使用环境变量中的数据库名和集合名，不提供默认值
+        db_name = db_name or os.getenv('MONGODB_DATABASE')
+        if not db_name:
+            raise ValueError("环境变量MONGODB_DATABASE未设置，请在.env文件中配置")
+            
+        collection_name = collection_name or os.getenv('MONGODB_COLLECTION')
+        if not collection_name:
+            raise ValueError("环境变量MONGODB_COLLECTION未设置，请在.env文件中配置")
         
+        # 直接使用指定的数据库名称，不进行大小写处理
         self.db = self.client[db_name]
+                
         self.collection = self.db[collection_name]
         
         # 初始化消息队列
@@ -87,13 +96,28 @@ class MongoDBConnector:
         
         logger.info(f"MongoDB 连接器初始化: {db_name}, Collection: {collection_name}")
         
-    def store_data(self, content, author_id=None, source_type="other", uid=None):
+    def _load_special_speakers(self):
+        """从配置文件加载特别关注的发言人列表"""
+        try:
+            config_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'config', 'speakers.json')
+            if os.path.exists(config_path):
+                with open(config_path, 'r', encoding='utf-8') as f:
+                    config = json.load(f)
+                    # 将列表转换为字典，便于快速查找
+                    return {speaker: True for speaker in config.get('special_speakers', [])}
+            else:
+                logger.warning(f"特别关注的发言人配置文件不存在: {config_path}")
+                return {}
+        except Exception as e:
+            logger.error(f"加载特别关注的发言人配置时出错: {str(e)}")
+            return {}
+    
+    def store_data(self, content, author_id=None, uid=None):
         """存储数据到 MongoDB
         
         Args:
-            content: 内容
+            content: 内容（JSON格式字符串或字典，包含发言人、时间、文本内容）
             author_id: 作者ID（可选）
-            source_type: 来源类型，可以是 "followed", "trending" 或 "other"
             uid: 内容UUID（可选，如果不提供将自动生成）
             
         Returns:
@@ -103,17 +127,49 @@ class MongoDBConnector:
             # 如果没有提供UID，自动生成
             if not uid:
                 uid = str(uuid.uuid4())
-                
-            # 根据来源类型确定tag
-            # "followed" 和 "trending" 是特别关注的数据 (tag=2)
-            # "other" 是普通时间线数据 (tag=1)
-            tag = 2 if source_type in ["followed", "trending"] else 1
+            
+            # 解析内容（如果是字符串，则尝试解析为JSON）
+            if isinstance(content, str):
+                try:
+                    content_data = json.loads(content)
+                except json.JSONDecodeError:
+                    # 如果不是有效的JSON，则创建默认结构
+                    content_data = {
+                        "speaker": "未知",
+                        "time": datetime.utcnow().isoformat(),
+                        "text": content
+                    }
+            else:
+                content_data = content
+            
+            # 确保内容包含所需的三个要素
+            if not isinstance(content_data, dict):
+                content_data = {
+                    "speaker": "未知",
+                    "time": datetime.utcnow().isoformat(),
+                    "text": str(content_data)
+                }
+            
+            # 确保三个要素都存在
+            if "speaker" not in content_data:
+                content_data["speaker"] = "未知"
+            if "time" not in content_data:
+                content_data["time"] = datetime.utcnow().isoformat()
+            if "text" not in content_data:
+                content_data["text"] = ""
+            
+            # 加载特别关注的发言人列表
+            special_speakers = self._load_special_speakers()
+            
+            # 根据发言人确定tag
+            # 特别关注的发言人标记为2，其他标记为1
+            speaker = content_data.get("speaker", "")
+            tag = 2 if speaker in special_speakers else 1
             
             document = {
                 'uuid': uid,
-                'content': content,
+                'content': content_data,
                 'author_id': author_id,
-                'source_type': source_type,
                 'createdAt': datetime.utcnow(),
                 'tag': tag
             }
@@ -141,7 +197,6 @@ class MongoDBConnector:
                 'uuid': uid,
                 'content': content,
                 'author_id': author_id,
-                'source_type': source_type,
                 'tag': tag,
                 'createdAt': datetime.utcnow()
             }

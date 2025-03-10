@@ -28,13 +28,17 @@ def init_db_env():
     set_key(env_file, "DB_TYPE", "mongodb")
     logger.info("已设置数据库类型为: mongodb")
     
-    # MongoDB 环境变量
+    # 从根目录下的.env文件读取MongoDB环境变量
+    # 不再设置默认值，完全依赖.env文件中的配置
+    logger.info("从.env文件读取MongoDB配置")
+    
+    # 检查必要的环境变量是否存在
     if not os.getenv("MONGODB_CONNECTION_STRING"):
-        set_key(env_file, "MONGODB_CONNECTION_STRING", "mongodb://localhost:27017")
+        logger.warning("未设置MONGODB_CONNECTION_STRING环境变量，请在.env文件中配置")
     if not os.getenv("MONGODB_DATABASE"):
-        set_key(env_file, "MONGODB_DATABASE", "degenpy")
+        logger.warning("未设置MONGODB_DATABASE环境变量，请在.env文件中配置")
     if not os.getenv("MONGODB_COLLECTION"):
-        set_key(env_file, "MONGODB_COLLECTION", "content")
+        logger.warning("未设置MONGODB_COLLECTION环境变量，请在.env文件中配置")
         
     logger.info("已设置 MongoDB 环境变量")
 

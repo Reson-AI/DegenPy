@@ -152,50 +152,6 @@ async def get_task(task_id: str):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@app.post("/data")
-async def receive_data(data: Dict):
-    """接收数据并存储到数据库"""
-    try:
-        content = data.get("content")
-        if not content:
-            raise HTTPException(status_code=400, detail="内容不能为空")
-            
-        author_id = data.get("author_id")
-        source_type = data.get("source_type", "other")  # 默认为other
-        
-        # 验证source_type
-        if source_type not in ["followed", "trending", "other"]:
-            source_type = "other"
-        
-        # 准备请求数据
-        request_data = {
-            "content": content,
-            "author_id": author_id,
-            "source_type": source_type
-        }
-        
-        # 调用warehouse API存储数据
-        response = requests.post(f"{WAREHOUSE_API_URL}/data", json=request_data)
-        response.raise_for_status()
-        result = response.json()
-        
-        # 获取生成的UID
-        content_id = result.get("data", {}).get("uid")
-        
-        # 将UUID添加到最近处理队列
-        # 使用 warehouse API 添加 UID
-        requests.post(f"{WAREHOUSE_API_URL}/data", json={
-            "content": "Placeholder content",
-            "author_id": "system",
-            "source_type": source_type,
-            "uid": content_id
-        })
-        
-        return Response(status="success", message="数据接收成功", data={"id": content_id})
-    except Exception as e:
-        logger.error(f"接收数据时出错: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"接收数据时出错: {str(e)}")
-
 @app.get("/content/{content_id}")
 async def get_content(content_id: str):
     """获取指定ID的内容"""

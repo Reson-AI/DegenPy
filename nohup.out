@@ -1,0 +1,582 @@
+2025-03-10 16:14:05,662 - run - INFO - 由server/api服务管理agent启动...
+2025-03-10 16:14:05,662 - run - INFO - 启动 warehouse_api...
+2025-03-10 16:14:05,664 - run - INFO - 启动 server_api...
+2025-03-10 16:14:05,664 - run - INFO - 所有服务启动完成。按 Ctrl+C 停止。
+2025-03-10 16:14:06,020 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 16:14:07,414 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 16:14:07,414 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 16:14:07,434 - message_broker - INFO - Connected to Redis server
+2025-03-10 16:14:07,496 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 16:14:08,239 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 16:14:08,239 - mongodb_connector - INFO - MongoDB 连接器初始化: degenpy, Collection: content
+INFO:     Started server process [15344]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+ERROR:    [Errno 48] error while attempting to bind on address ('0.0.0.0', 8000): address already in use
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+2025-03-10 16:14:08,874 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 16:14:08,874 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 16:14:09,677 - run - WARNING - warehouse_api 意外退出，尝试重新启动...
+2025-03-10 16:14:09,677 - run - INFO - 启动 warehouse_api...
+2025-03-10 16:14:09,975 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 16:14:10,177 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 16:14:10,177 - mongodb_connector - INFO - MongoDB 连接器初始化: degenpy, Collection: content
+INFO:     Started server process [15345]
+INFO:     Waiting for application startup.
+2025-03-10 16:14:10,197 - api - INFO - 自动启动TikTok-agent...
+2025-03-10 16:14:10,198 - agent_engine - INFO - 已加载Agent配置: tiktok-agent
+2025-03-10 16:14:10,198 - agent_engine - INFO - 开始运行agent: tiktok-agent
+2025-03-10 16:14:10,201 - special_attention_task - INFO - 特别关注任务 special_attention_task 使用组件: data_fetcher, fact_checker, content_processor, video_generator
+2025-03-10 16:14:10,201 - special_attention_task - INFO - 启动特别关注任务: special_attention_task
+2025-03-10 16:14:10,201 - special_attention_task - INFO - 启动实时监听: special_attention
+2025-03-10 16:14:11,176 - agent_engine - INFO - 任务已启动: tiktok-agent:special_attention_task (原始ID: special_attention_task)
+2025-03-10 16:14:11,179 - timeline_task - INFO - 时间线任务 timeline_task 使用组件: data_fetcher, content_processor, summary_generator, video_generator
+2025-03-10 16:14:11,179 - timeline_task - INFO - 启动时间线任务: timeline_task
+2025-03-10 16:14:11,179 - timeline_task - INFO - 启动定时执行: */30 * * * *
+2025-03-10 16:14:11,179 - agent_engine - INFO - 任务已启动: tiktok-agent:timeline_task (原始ID: timeline_task)
+2025-03-10 16:14:11,179 - api - INFO - TikTok-agent (tiktok-agent) 启动成功
+INFO:     Application startup complete.
+ERROR:    [Errno 48] error while attempting to bind on address ('0.0.0.0', 8001): address already in use
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+2025-03-10 16:14:11,686 - run - WARNING - server_api 意外退出，尝试重新启动...
+2025-03-10 16:14:11,686 - run - INFO - 启动 server_api...
+2025-03-10 16:14:11,993 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 16:14:11,993 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 16:14:13,290 - message_broker - INFO - Connected to Redis server
+2025-03-10 16:14:13,323 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 16:14:13,341 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 16:14:13,341 - mongodb_connector - INFO - MongoDB 连接器初始化: degenpy, Collection: content
+INFO:     Started server process [15356]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+ERROR:    [Errno 48] error while attempting to bind on address ('0.0.0.0', 8000): address already in use
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+2025-03-10 16:14:14,637 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 16:14:14,637 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 16:14:15,894 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 16:14:15,894 - mongodb_connector - INFO - MongoDB 连接器初始化: degenpy, Collection: content
+INFO:     Started server process [15358]
+INFO:     Waiting for application startup.
+2025-03-10 16:14:15,911 - api - INFO - 自动启动TikTok-agent...
+2025-03-10 16:14:15,911 - agent_engine - INFO - 已加载Agent配置: tiktok-agent
+2025-03-10 16:14:15,911 - agent_engine - INFO - 开始运行agent: tiktok-agent
+2025-03-10 16:14:15,913 - special_attention_task - INFO - 特别关注任务 special_attention_task 使用组件: data_fetcher, fact_checker, content_processor, video_generator
+2025-03-10 16:14:15,913 - special_attention_task - INFO - 启动特别关注任务: special_attention_task
+2025-03-10 16:14:15,913 - special_attention_task - INFO - 启动实时监听: special_attention
+2025-03-10 16:14:23,134 - agent_engine - INFO - 任务已启动: tiktok-agent:special_attention_task (原始ID: special_attention_task)
+2025-03-10 16:14:23,138 - timeline_task - INFO - 时间线任务 timeline_task 使用组件: data_fetcher, content_processor, summary_generator, video_generator
+2025-03-10 16:14:23,138 - timeline_task - INFO - 启动时间线任务: timeline_task
+2025-03-10 16:14:23,139 - timeline_task - INFO - 启动定时执行: */30 * * * *
+2025-03-10 16:14:23,139 - agent_engine - INFO - 任务已启动: tiktok-agent:timeline_task (原始ID: timeline_task)
+2025-03-10 16:14:23,139 - api - INFO - TikTok-agent (tiktok-agent) 启动成功
+INFO:     Application startup complete.
+ERROR:    [Errno 48] error while attempting to bind on address ('0.0.0.0', 8001): address already in use
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+2025-03-10 16:15:21,414 - run - INFO - 接收到信号 15
+2025-03-10 16:15:21,415 - run - INFO - 停止所有进程...
+2025-03-10 16:15:22,419 - run - INFO - 停止所有进程...
+2025-03-10 16:16:54,994 - run - INFO - 由server/api服务管理agent启动...
+2025-03-10 16:16:54,994 - run - INFO - 启动 warehouse_api...
+2025-03-10 16:16:54,996 - run - INFO - 启动 server_api...
+2025-03-10 16:16:54,997 - run - INFO - 所有服务启动完成。按 Ctrl+C 停止。
+2025-03-10 16:16:55,409 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 16:16:56,748 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 16:16:56,748 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 16:16:58,855 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 16:16:58,855 - mongodb_connector - INFO - MongoDB 连接器初始化: degenpy, Collection: content
+INFO:     Started server process [15504]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+2025-03-10 16:17:00,449 - message_broker - INFO - Connected to Redis server
+2025-03-10 16:17:00,510 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 16:17:06,393 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 16:17:06,393 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 16:17:07,788 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 16:17:07,788 - mongodb_connector - INFO - MongoDB 连接器初始化: degenpy, Collection: content
+INFO:     Started server process [15505]
+INFO:     Waiting for application startup.
+2025-03-10 16:17:07,828 - api - INFO - 自动启动TikTok-agent...
+2025-03-10 16:17:07,828 - agent_engine - INFO - 已加载Agent配置: tiktok-agent
+2025-03-10 16:17:07,828 - agent_engine - INFO - 开始运行agent: tiktok-agent
+2025-03-10 16:17:07,832 - special_attention_task - INFO - 特别关注任务 special_attention_task 使用组件: data_fetcher, fact_checker, content_processor, video_generator
+2025-03-10 16:17:07,832 - special_attention_task - INFO - 启动特别关注任务: special_attention_task
+2025-03-10 16:17:07,832 - special_attention_task - INFO - 启动实时监听: special_attention
+2025-03-10 16:17:09,073 - agent_engine - INFO - 任务已启动: tiktok-agent:special_attention_task (原始ID: special_attention_task)
+2025-03-10 16:17:09,076 - timeline_task - INFO - 时间线任务 timeline_task 使用组件: data_fetcher, content_processor, summary_generator, video_generator
+2025-03-10 16:17:09,076 - timeline_task - INFO - 启动时间线任务: timeline_task
+2025-03-10 16:17:09,076 - timeline_task - INFO - 启动定时执行: */30 * * * *
+2025-03-10 16:17:09,077 - agent_engine - INFO - 任务已启动: tiktok-agent:timeline_task (原始ID: timeline_task)
+2025-03-10 16:17:09,077 - api - INFO - TikTok-agent (tiktok-agent) 启动成功
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
+2025-03-10 16:17:59,736 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 16:18:18,593 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 16:18:18,593 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 16:18:42,513 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 16:18:42,515 - mongodb_connector - INFO - MongoDB 连接器初始化: degenpy, Collection: content
+2025-03-10 16:18:43,568 - mongodb_connector - ERROR - 存储数据时出错: db already exists with different case already have: [degenPy] trying to create [degenpy], full error: {'index': 0, 'code': 13297, 'errmsg': 'db already exists with different case already have: [degenPy] trying to create [degenpy]'}
+INFO:     127.0.0.1:49793 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 16:19:49,326 - run - INFO - 接收到信号 15
+2025-03-10 16:19:49,329 - run - INFO - 停止所有进程...
+2025-03-10 16:19:49,329 - run - INFO - 终止 warehouse_api...
+2025-03-10 16:19:49,329 - run - INFO - 终止 server_api...
+INFO:     Shutting down
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [15505]
+INFO:     Finished server process [15504]
+2025-03-10 16:19:50,331 - run - INFO - 停止所有进程...
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/multiprocessing/resource_tracker.py:224: UserWarning: resource_tracker: There appear to be 10 leaked semaphore objects to clean up at shutdown
+  warnings.warn('resource_tracker: There appear to be %d '
+2025-03-10 16:20:20,379 - run - INFO - 由server/api服务管理agent启动...
+2025-03-10 16:20:20,379 - run - INFO - 启动 warehouse_api...
+2025-03-10 16:20:20,381 - run - INFO - 启动 server_api...
+2025-03-10 16:20:20,382 - run - INFO - 所有服务启动完成。按 Ctrl+C 停止。
+2025-03-10 16:20:20,753 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 16:20:21,905 - message_broker - INFO - Connected to Redis server
+2025-03-10 16:20:21,946 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 16:20:22,056 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 16:20:22,056 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 16:20:23,381 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 16:20:23,381 - mongodb_connector - INFO - MongoDB 连接器初始化: degenpy, Collection: content
+INFO:     Started server process [15847]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+2025-03-10 16:20:36,207 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 16:20:36,207 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 16:20:37,455 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 16:20:37,455 - mongodb_connector - INFO - MongoDB 连接器初始化: degenpy, Collection: content
+INFO:     Started server process [15848]
+INFO:     Waiting for application startup.
+2025-03-10 16:20:37,498 - api - INFO - 自动启动TikTok-agent...
+2025-03-10 16:20:37,499 - agent_engine - INFO - 已加载Agent配置: tiktok-agent
+2025-03-10 16:20:37,499 - agent_engine - INFO - 开始运行agent: tiktok-agent
+2025-03-10 16:20:37,503 - special_attention_task - INFO - 特别关注任务 special_attention_task 使用组件: data_fetcher, fact_checker, content_processor, video_generator
+2025-03-10 16:20:37,504 - special_attention_task - INFO - 启动特别关注任务: special_attention_task
+2025-03-10 16:20:37,504 - special_attention_task - INFO - 启动实时监听: special_attention
+2025-03-10 16:20:38,469 - agent_engine - INFO - 任务已启动: tiktok-agent:special_attention_task (原始ID: special_attention_task)
+2025-03-10 16:20:38,472 - timeline_task - INFO - 时间线任务 timeline_task 使用组件: data_fetcher, content_processor, summary_generator, video_generator
+2025-03-10 16:20:38,472 - timeline_task - INFO - 启动时间线任务: timeline_task
+2025-03-10 16:20:38,472 - timeline_task - INFO - 启动定时执行: */30 * * * *
+2025-03-10 16:20:38,472 - agent_engine - INFO - 任务已启动: tiktok-agent:timeline_task (原始ID: timeline_task)
+2025-03-10 16:20:38,472 - api - INFO - TikTok-agent (tiktok-agent) 启动成功
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
+2025-03-10 16:20:41,482 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 16:20:44,057 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 16:20:44,058 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 16:20:46,811 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 16:20:46,811 - mongodb_connector - INFO - MongoDB 连接器初始化: degenpy, Collection: content
+2025-03-10 16:20:48,000 - mongodb_connector - ERROR - 存储数据时出错: db already exists with different case already have: [degenPy] trying to create [degenpy], full error: {'index': 0, 'code': 13297, 'errmsg': 'db already exists with different case already have: [degenPy] trying to create [degenpy]'}
+INFO:     127.0.0.1:50391 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 16:21:48,019 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 16:21:49,303 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 16:21:49,303 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 16:21:50,743 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 16:21:50,743 - mongodb_connector - INFO - MongoDB 连接器初始化: degenpy, Collection: content
+2025-03-10 16:21:51,763 - mongodb_connector - ERROR - 存储数据时出错: db already exists with different case already have: [degenPy] trying to create [degenpy], full error: {'index': 0, 'code': 13297, 'errmsg': 'db already exists with different case already have: [degenPy] trying to create [degenpy]'}
+INFO:     127.0.0.1:50662 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 16:22:17,406 - run - INFO - 接收到信号 15
+2025-03-10 16:22:17,408 - run - INFO - 停止所有进程...
+2025-03-10 16:22:17,408 - run - INFO - 终止 warehouse_api...
+2025-03-10 16:22:17,408 - run - INFO - 终止 server_api...
+INFO:     Shutting down
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [15848]
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [15847]
+2025-03-10 16:22:18,410 - run - INFO - 停止所有进程...
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/multiprocessing/resource_tracker.py:224: UserWarning: resource_tracker: There appear to be 10 leaked semaphore objects to clean up at shutdown
+  warnings.warn('resource_tracker: There appear to be %d '
+2025-03-10 16:39:59,789 - run - INFO - 由server/api服务管理agent启动...
+2025-03-10 16:39:59,789 - run - INFO - 启动 warehouse_api...
+2025-03-10 16:39:59,791 - run - INFO - 启动 server_api...
+2025-03-10 16:39:59,793 - run - INFO - 所有服务启动完成。按 Ctrl+C 停止。
+Process Process-1:
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/multiprocessing/process.py", line 314, in _bootstrap
+    self.run()
+  File "/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/Users/yezi/DegenPy/run.py", line 74, in start_warehouse_api
+    from warehouse.api import app
+  File "/Users/yezi/DegenPy/warehouse/api.py", line 18, in <module>
+    from warehouse.storage.mongodb.connector import MongoDBConnector
+  File "/Users/yezi/DegenPy/warehouse/storage/mongodb/connector.py", line 252, in <module>
+    mongodb_connector = MongoDBConnector()
+                        ^^^^^^^^^^^^^^^^^^
+  File "/Users/yezi/DegenPy/warehouse/storage/mongodb/connector.py", line 54, in __init__
+    raise ValueError("环境变量MONGODB_DATABASE未设置，请在.env文件中配置")
+ValueError: 环境变量MONGODB_DATABASE未设置，请在.env文件中配置
+2025-03-10 16:40:01,804 - run - WARNING - warehouse_api 意外退出，尝试重新启动...
+2025-03-10 16:40:01,804 - run - INFO - 启动 warehouse_api...
+Process Process-3:
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/multiprocessing/process.py", line 314, in _bootstrap
+    self.run()
+  File "/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/Users/yezi/DegenPy/run.py", line 74, in start_warehouse_api
+    from warehouse.api import app
+  File "/Users/yezi/DegenPy/warehouse/api.py", line 18, in <module>
+    from warehouse.storage.mongodb.connector import MongoDBConnector
+  File "/Users/yezi/DegenPy/warehouse/storage/mongodb/connector.py", line 252, in <module>
+    mongodb_connector = MongoDBConnector()
+                        ^^^^^^^^^^^^^^^^^^
+  File "/Users/yezi/DegenPy/warehouse/storage/mongodb/connector.py", line 54, in __init__
+    raise ValueError("环境变量MONGODB_DATABASE未设置，请在.env文件中配置")
+ValueError: 环境变量MONGODB_DATABASE未设置，请在.env文件中配置
+2025-03-10 16:40:02,378 - message_broker - INFO - Connected to Redis server
+Process Process-2:
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/multiprocessing/process.py", line 314, in _bootstrap
+    self.run()
+  File "/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/Users/yezi/DegenPy/run.py", line 66, in start_server_api
+    from server.api import app
+  File "/Users/yezi/DegenPy/server/api.py", line 22, in <module>
+    from warehouse.api import app as warehouse_app
+  File "/Users/yezi/DegenPy/warehouse/api.py", line 18, in <module>
+    from warehouse.storage.mongodb.connector import MongoDBConnector
+  File "/Users/yezi/DegenPy/warehouse/storage/mongodb/connector.py", line 252, in <module>
+    mongodb_connector = MongoDBConnector()
+                        ^^^^^^^^^^^^^^^^^^
+  File "/Users/yezi/DegenPy/warehouse/storage/mongodb/connector.py", line 54, in __init__
+    raise ValueError("环境变量MONGODB_DATABASE未设置，请在.env文件中配置")
+ValueError: 环境变量MONGODB_DATABASE未设置，请在.env文件中配置
+2025-03-10 16:40:03,813 - run - WARNING - server_api 意外退出，尝试重新启动...
+2025-03-10 16:40:03,813 - run - INFO - 启动 server_api...
+2025-03-10 16:40:11,579 - message_broker - INFO - Connected to Redis server
+2025-03-10 16:40:11,608 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 16:40:14,928 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 16:40:14,929 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 16:40:16,303 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 16:40:16,303 - mongodb_connector - INFO - MongoDB 连接器初始化: degenpy, Collection: content
+INFO:     Started server process [17561]
+INFO:     Waiting for application startup.
+2025-03-10 16:40:16,344 - api - INFO - 自动启动TikTok-agent...
+2025-03-10 16:40:16,344 - agent_engine - INFO - 已加载Agent配置: tiktok-agent
+2025-03-10 16:40:16,344 - agent_engine - INFO - 开始运行agent: tiktok-agent
+2025-03-10 16:40:16,347 - special_attention_task - INFO - 特别关注任务 special_attention_task 使用组件: data_fetcher, fact_checker, content_processor, video_generator
+2025-03-10 16:40:16,347 - special_attention_task - INFO - 启动特别关注任务: special_attention_task
+2025-03-10 16:40:16,347 - special_attention_task - INFO - 启动实时监听: special_attention
+2025-03-10 16:40:25,263 - agent_engine - INFO - 任务已启动: tiktok-agent:special_attention_task (原始ID: special_attention_task)
+2025-03-10 16:40:25,267 - timeline_task - INFO - 时间线任务 timeline_task 使用组件: data_fetcher, content_processor, summary_generator, video_generator
+2025-03-10 16:40:25,268 - timeline_task - INFO - 启动时间线任务: timeline_task
+2025-03-10 16:40:25,268 - timeline_task - INFO - 启动定时执行: */30 * * * *
+2025-03-10 16:40:25,268 - agent_engine - INFO - 任务已启动: tiktok-agent:timeline_task (原始ID: timeline_task)
+2025-03-10 16:40:25,268 - api - INFO - TikTok-agent (tiktok-agent) 启动成功
+INFO:     Application startup complete.
+ERROR:    [Errno 48] error while attempting to bind on address ('0.0.0.0', 8001): address already in use
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+2025-03-10 16:41:23,075 - run - INFO - 接收到信号 15
+2025-03-10 16:41:23,077 - run - INFO - 停止所有进程...
+2025-03-10 16:41:24,082 - run - INFO - 停止所有进程...
+2025-03-10 16:41:44,915 - run - INFO - 由server/api服务管理agent启动...
+2025-03-10 16:41:44,915 - run - INFO - 启动 warehouse_api...
+2025-03-10 16:41:44,917 - run - INFO - 启动 server_api...
+2025-03-10 16:41:44,918 - run - INFO - 所有服务启动完成。按 Ctrl+C 停止。
+2025-03-10 16:41:45,321 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 16:41:46,651 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 16:41:46,651 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 16:41:46,655 - message_broker - INFO - Connected to Redis server
+2025-03-10 16:41:46,688 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 16:41:48,062 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 16:41:48,062 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 16:41:48,082 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 16:41:48,082 - mongodb_connector - INFO - MongoDB 连接器初始化: degenpy, Collection: content
+INFO:     Started server process [17710]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+2025-03-10 16:41:49,482 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 16:41:49,482 - mongodb_connector - INFO - MongoDB 连接器初始化: degenpy, Collection: content
+INFO:     Started server process [17711]
+INFO:     Waiting for application startup.
+2025-03-10 16:41:49,511 - api - INFO - 自动启动TikTok-agent...
+2025-03-10 16:41:49,512 - agent_engine - INFO - 已加载Agent配置: tiktok-agent
+2025-03-10 16:41:49,512 - agent_engine - INFO - 开始运行agent: tiktok-agent
+2025-03-10 16:41:49,514 - special_attention_task - INFO - 特别关注任务 special_attention_task 使用组件: data_fetcher, fact_checker, content_processor, video_generator
+2025-03-10 16:41:49,514 - special_attention_task - INFO - 启动特别关注任务: special_attention_task
+2025-03-10 16:41:49,514 - special_attention_task - INFO - 启动实时监听: special_attention
+2025-03-10 16:41:51,578 - agent_engine - INFO - 任务已启动: tiktok-agent:special_attention_task (原始ID: special_attention_task)
+2025-03-10 16:41:51,581 - timeline_task - INFO - 时间线任务 timeline_task 使用组件: data_fetcher, content_processor, summary_generator, video_generator
+2025-03-10 16:41:51,581 - timeline_task - INFO - 启动时间线任务: timeline_task
+2025-03-10 16:41:51,581 - timeline_task - INFO - 启动定时执行: */30 * * * *
+2025-03-10 16:41:51,581 - agent_engine - INFO - 任务已启动: tiktok-agent:timeline_task (原始ID: timeline_task)
+2025-03-10 16:41:51,581 - api - INFO - TikTok-agent (tiktok-agent) 启动成功
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
+2025-03-10 16:42:07,999 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 16:42:09,450 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 16:42:09,450 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 16:42:10,807 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 16:42:10,807 - mongodb_connector - INFO - MongoDB 连接器初始化: degenpy, Collection: content
+2025-03-10 16:42:11,962 - mongodb_connector - ERROR - 存储数据时出错: db already exists with different case already have: [degenPy] trying to create [degenpy], full error: {'index': 0, 'code': 13297, 'errmsg': 'db already exists with different case already have: [degenPy] trying to create [degenpy]'}
+INFO:     127.0.0.1:54801 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 16:43:05,821 - run - INFO - 接收到信号 15
+2025-03-10 16:43:05,823 - run - INFO - 停止所有进程...
+2025-03-10 16:43:05,823 - run - INFO - 终止 warehouse_api...
+2025-03-10 16:43:05,823 - run - INFO - 终止 server_api...
+INFO:     Shutting down
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [17710]
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [17711]
+2025-03-10 16:43:06,826 - run - INFO - 停止所有进程...
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/multiprocessing/resource_tracker.py:224: UserWarning: resource_tracker: There appear to be 10 leaked semaphore objects to clean up at shutdown
+  warnings.warn('resource_tracker: There appear to be %d '
+2025-03-10 16:47:25,400 - run - INFO - 由server/api服务管理agent启动...
+2025-03-10 16:47:25,400 - run - INFO - 启动 warehouse_api...
+2025-03-10 16:47:25,401 - run - INFO - 启动 server_api...
+2025-03-10 16:47:25,402 - run - INFO - 所有服务启动完成。按 Ctrl+C 停止。
+2025-03-10 16:47:25,779 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 16:47:29,181 - message_broker - INFO - Connected to Redis server
+2025-03-10 16:47:29,232 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 16:47:30,121 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 16:47:30,121 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 16:47:31,885 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 16:47:31,885 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 16:47:32,288 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 16:47:32,289 - mongodb_connector - INFO - MongoDB 连接器初始化: degenpy, Collection: content
+INFO:     Started server process [18135]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+2025-03-10 16:47:33,181 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 16:47:33,182 - mongodb_connector - INFO - MongoDB 连接器初始化: degenpy, Collection: content
+INFO:     Started server process [18136]
+INFO:     Waiting for application startup.
+2025-03-10 16:47:33,206 - api - INFO - 自动启动TikTok-agent...
+2025-03-10 16:47:33,206 - agent_engine - INFO - 已加载Agent配置: tiktok-agent
+2025-03-10 16:47:33,206 - agent_engine - INFO - 开始运行agent: tiktok-agent
+2025-03-10 16:47:33,209 - special_attention_task - INFO - 特别关注任务 special_attention_task 使用组件: data_fetcher, fact_checker, content_processor, video_generator
+2025-03-10 16:47:33,209 - special_attention_task - INFO - 启动特别关注任务: special_attention_task
+2025-03-10 16:47:33,209 - special_attention_task - INFO - 启动实时监听: special_attention
+2025-03-10 16:47:34,291 - agent_engine - INFO - 任务已启动: tiktok-agent:special_attention_task (原始ID: special_attention_task)
+2025-03-10 16:47:34,296 - timeline_task - INFO - 时间线任务 timeline_task 使用组件: data_fetcher, content_processor, summary_generator, video_generator
+2025-03-10 16:47:34,296 - timeline_task - INFO - 启动时间线任务: timeline_task
+2025-03-10 16:47:34,296 - timeline_task - INFO - 启动定时执行: */30 * * * *
+2025-03-10 16:47:34,297 - agent_engine - INFO - 任务已启动: tiktok-agent:timeline_task (原始ID: timeline_task)
+2025-03-10 16:47:34,297 - api - INFO - TikTok-agent (tiktok-agent) 启动成功
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
+2025-03-10 16:47:40,713 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 16:47:42,886 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 16:47:42,886 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 16:47:44,208 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 16:47:44,208 - mongodb_connector - INFO - MongoDB 连接器初始化: degenpy, Collection: content
+2025-03-10 16:47:45,792 - mongodb_connector - ERROR - 存储数据时出错: db already exists with different case already have: [degenPy] trying to create [degenpy], full error: {'index': 0, 'code': 13297, 'errmsg': 'db already exists with different case already have: [degenPy] trying to create [degenpy]'}
+INFO:     127.0.0.1:55921 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 16:48:45,813 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 16:48:47,920 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 16:48:47,920 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 16:48:49,486 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 16:48:49,487 - mongodb_connector - INFO - MongoDB 连接器初始化: degenpy, Collection: content
+2025-03-10 16:48:50,226 - mongodb_connector - ERROR - 存储数据时出错: db already exists with different case already have: [degenPy] trying to create [degenpy], full error: {'index': 0, 'code': 13297, 'errmsg': 'db already exists with different case already have: [degenPy] trying to create [degenpy]'}
+INFO:     127.0.0.1:56133 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 16:49:03,364 - run - INFO - 接收到信号 15
+2025-03-10 16:49:03,366 - run - INFO - 停止所有进程...
+2025-03-10 16:49:03,367 - run - INFO - 终止 warehouse_api...
+2025-03-10 16:49:03,367 - run - INFO - 终止 server_api...
+INFO:     Shutting down
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [18135]
+INFO:     Application shutdown complete.
+INFO:     Finished server process [18136]
+2025-03-10 16:49:04,369 - run - INFO - 停止所有进程...
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/multiprocessing/resource_tracker.py:224: UserWarning: resource_tracker: There appear to be 10 leaked semaphore objects to clean up at shutdown
+  warnings.warn('resource_tracker: There appear to be %d '
+2025-03-10 16:51:03,381 - run - INFO - 由server/api服务管理agent启动...
+2025-03-10 16:51:03,382 - run - INFO - 启动 warehouse_api...
+2025-03-10 16:51:03,383 - run - INFO - 启动 server_api...
+2025-03-10 16:51:03,384 - run - INFO - 所有服务启动完成。按 Ctrl+C 停止。
+2025-03-10 16:51:03,735 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 16:51:04,921 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 16:51:04,922 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 16:51:06,416 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 16:51:06,416 - mongodb_connector - INFO - MongoDB 连接器初始化: degenpy, Collection: content
+INFO:     Started server process [18580]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+2025-03-10 16:51:08,155 - message_broker - INFO - Connected to Redis server
+2025-03-10 16:51:08,190 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 16:51:12,523 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 16:51:12,524 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 16:51:14,891 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 16:51:15,713 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 16:51:15,713 - mongodb_connector - INFO - MongoDB 连接器初始化: degenpy, Collection: content
+INFO:     Started server process [18581]
+INFO:     Waiting for application startup.
+2025-03-10 16:51:15,740 - api - INFO - 自动启动TikTok-agent...
+2025-03-10 16:51:15,741 - agent_engine - INFO - 已加载Agent配置: tiktok-agent
+2025-03-10 16:51:15,741 - agent_engine - INFO - 开始运行agent: tiktok-agent
+2025-03-10 16:51:15,743 - special_attention_task - INFO - 特别关注任务 special_attention_task 使用组件: data_fetcher, fact_checker, content_processor, video_generator
+2025-03-10 16:51:15,743 - special_attention_task - INFO - 启动特别关注任务: special_attention_task
+2025-03-10 16:51:15,743 - special_attention_task - INFO - 启动实时监听: special_attention
+2025-03-10 16:51:25,346 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 16:51:25,347 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 16:51:26,650 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 16:51:26,650 - mongodb_connector - INFO - MongoDB 连接器初始化: degenpy, Collection: content
+2025-03-10 16:51:27,712 - mongodb_connector - ERROR - 存储数据时出错: db already exists with different case already have: [degenPy] trying to create [degenpy], full error: {'index': 0, 'code': 13297, 'errmsg': 'db already exists with different case already have: [degenPy] trying to create [degenpy]'}
+INFO:     127.0.0.1:56687 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 16:51:35,907 - agent_engine - INFO - 任务已启动: tiktok-agent:special_attention_task (原始ID: special_attention_task)
+2025-03-10 16:51:35,911 - timeline_task - INFO - 时间线任务 timeline_task 使用组件: data_fetcher, content_processor, summary_generator, video_generator
+2025-03-10 16:51:35,911 - timeline_task - INFO - 启动时间线任务: timeline_task
+2025-03-10 16:51:35,911 - timeline_task - INFO - 启动定时执行: */30 * * * *
+2025-03-10 16:51:35,911 - agent_engine - INFO - 任务已启动: tiktok-agent:timeline_task (原始ID: timeline_task)
+2025-03-10 16:51:35,911 - api - INFO - TikTok-agent (tiktok-agent) 启动成功
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
+2025-03-10 16:52:27,732 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 16:52:29,003 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 16:52:29,003 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 16:52:30,360 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 16:52:30,360 - mongodb_connector - INFO - MongoDB 连接器初始化: degenpy, Collection: content
+2025-03-10 16:52:32,920 - mongodb_connector - ERROR - 存储数据时出错: db already exists with different case already have: [degenPy] trying to create [degenpy], full error: {'index': 0, 'code': 13297, 'errmsg': 'db already exists with different case already have: [degenPy] trying to create [degenpy]'}
+INFO:     127.0.0.1:56933 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 16:53:32,945 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 16:53:35,615 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 16:53:35,615 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 16:53:37,025 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 16:53:37,025 - mongodb_connector - INFO - MongoDB 连接器初始化: degenpy, Collection: content
+2025-03-10 16:53:38,110 - mongodb_connector - ERROR - 存储数据时出错: db already exists with different case already have: [degenPy] trying to create [degenpy], full error: {'index': 0, 'code': 13297, 'errmsg': 'db already exists with different case already have: [degenPy] trying to create [degenpy]'}
+INFO:     127.0.0.1:57210 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 16:54:45,682 - run - INFO - 接收到信号 15
+2025-03-10 16:54:45,684 - run - INFO - 停止所有进程...
+2025-03-10 16:54:45,684 - run - INFO - 终止 warehouse_api...
+2025-03-10 16:54:45,684 - run - INFO - 终止 server_api...
+INFO:     Shutting down
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [18581]
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [18580]
+2025-03-10 16:54:46,687 - run - INFO - 停止所有进程...
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/multiprocessing/resource_tracker.py:224: UserWarning: resource_tracker: There appear to be 10 leaked semaphore objects to clean up at shutdown
+  warnings.warn('resource_tracker: There appear to be %d '
+2025-03-10 16:55:01,049 - run - INFO - 由server/api服务管理agent启动...
+2025-03-10 16:55:01,049 - run - INFO - 启动 warehouse_api...
+2025-03-10 16:55:01,052 - run - INFO - 启动 server_api...
+2025-03-10 16:55:01,055 - run - INFO - 所有服务启动完成。按 Ctrl+C 停止。
+2025-03-10 16:55:01,429 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 16:55:02,860 - message_queue - ERROR - 初始化消息队列时出错: name 'redis_prefix' is not defined
+2025-03-10 16:55:02,860 - message_broker - INFO - Connected to Redis server
+2025-03-10 16:55:02,861 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 16:55:02,914 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 16:55:04,344 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 16:55:04,345 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: content
+INFO:     Started server process [19226]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+2025-03-10 16:55:04,888 - message_queue - ERROR - 初始化消息队列时出错: name 'redis_prefix' is not defined
+2025-03-10 16:55:04,889 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 16:55:07,788 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 16:55:07,788 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: content
+INFO:     Started server process [19227]
+INFO:     Waiting for application startup.
+2025-03-10 16:55:07,825 - api - INFO - 自动启动TikTok-agent...
+2025-03-10 16:55:07,826 - agent_engine - INFO - 已加载Agent配置: tiktok-agent
+2025-03-10 16:55:07,826 - agent_engine - INFO - 开始运行agent: tiktok-agent
+2025-03-10 16:55:07,830 - special_attention_task - INFO - 特别关注任务 special_attention_task 使用组件: data_fetcher, fact_checker, content_processor, video_generator
+2025-03-10 16:55:07,831 - special_attention_task - INFO - 启动特别关注任务: special_attention_task
+2025-03-10 16:55:07,831 - special_attention_task - INFO - 启动实时监听: special_attention
+2025-03-10 16:55:08,978 - agent_engine - INFO - 任务已启动: tiktok-agent:special_attention_task (原始ID: special_attention_task)
+2025-03-10 16:55:08,982 - timeline_task - INFO - 时间线任务 timeline_task 使用组件: data_fetcher, content_processor, summary_generator, video_generator
+2025-03-10 16:55:08,982 - timeline_task - INFO - 启动时间线任务: timeline_task
+2025-03-10 16:55:08,982 - timeline_task - INFO - 启动定时执行: */30 * * * *
+2025-03-10 16:55:08,985 - agent_engine - INFO - 任务已启动: tiktok-agent:timeline_task (原始ID: timeline_task)
+2025-03-10 16:55:08,985 - api - INFO - TikTok-agent (tiktok-agent) 启动成功
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
+2025-03-10 16:55:11,762 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 16:55:14,465 - message_queue - ERROR - 初始化消息队列时出错: name 'redis_prefix' is not defined
+2025-03-10 16:55:14,466 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 16:55:15,754 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 16:55:15,755 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: content
+2025-03-10 16:55:16,992 - message_queue - WARNING - 消息队列未连接，无法发布消息
+2025-03-10 16:55:16,992 - mongodb_connector - INFO - 将UUID 4e6ba885-04be-451d-ad1a-23178576c74a 发送到消息队列 special_attention
+INFO:     127.0.0.1:57626 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 16:56:17,021 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 16:56:18,709 - message_queue - ERROR - 初始化消息队列时出错: name 'redis_prefix' is not defined
+2025-03-10 16:56:18,709 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 16:56:24,945 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 16:56:24,945 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: content
+2025-03-10 16:56:26,720 - mongodb_connector - INFO - 将UUID 11eeae0d-ab04-4821-90f8-ab5115015f4a 发送到Redis列表 timeline
+INFO:     127.0.0.1:57809 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 16:57:26,747 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 16:57:31,117 - message_queue - ERROR - 初始化消息队列时出错: name 'redis_prefix' is not defined
+2025-03-10 16:57:31,117 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 16:57:33,286 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 16:57:33,286 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: content
+2025-03-10 16:57:34,340 - message_queue - WARNING - 消息队列未连接，无法发布消息
+2025-03-10 16:57:34,341 - mongodb_connector - INFO - 将UUID 364e54ca-1c16-456a-8ffa-eed9661c9252 发送到消息队列 special_attention
+INFO:     127.0.0.1:58085 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 16:58:34,366 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 16:58:35,563 - message_queue - ERROR - 初始化消息队列时出错: name 'redis_prefix' is not defined
+2025-03-10 16:58:35,564 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 16:58:37,088 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 16:58:37,089 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: content
+2025-03-10 16:58:38,626 - mongodb_connector - INFO - 将UUID 76ebe2e9-79a5-43c2-8d09-a04fd3776277 发送到Redis列表 timeline
+INFO:     127.0.0.1:58325 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 16:59:38,650 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 16:59:40,765 - message_queue - ERROR - 初始化消息队列时出错: name 'redis_prefix' is not defined
+2025-03-10 16:59:40,765 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 16:59:59,585 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 16:59:59,587 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: content
+2025-03-10 17:00:07,172 - mongodb_connector - INFO - 将UUID f4299291-ec9a-426d-8369-8e3f409ecda8 发送到Redis列表 timeline
+INFO:     127.0.0.1:58578 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 17:04:41,663 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 17:04:47,108 - message_queue - ERROR - 初始化消息队列时出错: name 'redis_prefix' is not defined
+2025-03-10 17:04:47,108 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 17:04:50,720 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 17:04:50,720 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: content
+2025-03-10 17:04:51,776 - message_queue - WARNING - 消息队列未连接，无法发布消息
+2025-03-10 17:04:51,777 - mongodb_connector - INFO - 将UUID 18c404ca-04ec-40b2-80cb-bc0a6cd53893 发送到消息队列 special_attention
+INFO:     127.0.0.1:59788 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 17:05:51,790 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 17:05:53,172 - message_queue - ERROR - 初始化消息队列时出错: name 'redis_prefix' is not defined
+2025-03-10 17:05:53,173 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 17:05:56,470 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 17:05:56,470 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: content
+2025-03-10 17:05:57,827 - mongodb_connector - INFO - 将UUID 3d45180f-257b-4c3a-92a8-95cbf41aa061 发送到Redis列表 timeline
+INFO:     127.0.0.1:60034 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 17:06:49,553 - run - INFO - 接收到信号 15
+2025-03-10 17:06:49,556 - run - INFO - 停止所有进程...
+2025-03-10 17:06:49,556 - run - INFO - 终止 warehouse_api...
+2025-03-10 17:06:49,556 - run - INFO - 终止 server_api...
+INFO:     Shutting down
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [19226]
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [19227]
+2025-03-10 17:06:50,559 - run - INFO - 停止所有进程...
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/multiprocessing/resource_tracker.py:224: UserWarning: resource_tracker: There appear to be 10 leaked semaphore objects to clean up at shutdown
+  warnings.warn('resource_tracker: There appear to be %d '
