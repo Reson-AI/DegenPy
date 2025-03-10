@@ -20,7 +20,7 @@ logging.basicConfig(
 logger = logging.getLogger("timeline_task")
 
 # 导入数据库连接器
-from warehouse.api import get_data_by_uid, get_recent_data
+from warehouse.api import get_data_by_uid
 
 # 导入视频生成服务
 from server.services.text2video import generate_video_from_text
@@ -192,26 +192,9 @@ class TimelineTask:
             source_type = source_config.get('source_type')
             min_items = source_config.get('min_items', 3)
             
-            # 获取最近数据
-            recent_data = get_recent_data(source_type=source_type, limit=min_items)
-            
-            if recent_data and len(recent_data) >= min_items:
-                return recent_data
-                
-            # 如果数据不足，使用备用数据源
-            fallback = source_config.get('fallback')
-            if fallback:
-                fallback_type = fallback.get('type')
-                
-                if fallback_type == 'warehouse':
-                    endpoint = fallback.get('endpoint')
-                    params = fallback.get('params', {})
-                    
-                    # 使用get_recent_data获取数据
-                    return get_recent_data(
-                        source_type=params.get('source_type'),
-                        limit=params.get('limit', 20)
-                    )
+            # 不再使用get_recent_data获取数据
+            logger.info(f"跳过recent_uids数据源处理，因为get_recent_data功能已禁用")
+            return None
                     
         return None
             

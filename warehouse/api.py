@@ -459,5 +459,29 @@ async def apply_condition(content: str, token_limit: Optional[int] = None, promp
             message=f"应用条件时出错: {str(e)}"
         )
 
+# 导出函数，用于其他模块直接导入
+def get_data_by_uid(uid: str) -> Dict[str, Any]:
+    """
+    根据UID获取数据
+    
+    Args:
+        uid: 数据UID
+        
+    Returns:
+        数据字典，如果不存在则返回空字典
+    """
+    db = get_db_manager()
+    try:
+        result = db.connector.get_data_by_uid(uid)
+        if result:
+            return result
+        else:
+            return {}
+    except Exception as e:
+        print(f"Error in get_data_by_uid: {str(e)}")
+        return {}
+
+# get_recent_data function has been removed as it's no longer needed
+
 if __name__ == "__main__":
     uvicorn.run("warehouse.api:app", host="0.0.0.0", port=8000, reload=True)

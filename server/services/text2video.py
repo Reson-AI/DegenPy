@@ -25,7 +25,7 @@ from server.services.video_pool import (
     get_processing_video_tasks,
     get_video_task_count
 )
-from server.infrastructure.message_broker import publish_video_task_update
+from server.infrastructure.message_broker import publish_video_task
 
 # 配置日志
 logging.basicConfig(
@@ -128,7 +128,7 @@ class Text2VideoGenerator:
         logger.info(f"Created video generation task: {task_id}")
         
         # 发布任务状态更新
-        publish_video_task_update(task_id, "pending")
+        publish_video_task(task_id, "pending", {})
         
         return task_id
         
@@ -157,7 +157,7 @@ class Text2VideoGenerator:
                 update_video_task(task_id, "processing")
                 
                 # 发布任务状态更新
-                publish_video_task_update(task_id, "processing")
+                publish_video_task(task_id, "processing", {})
                 
                 # 启动视频生成线程
                 thread = threading.Thread(
@@ -214,14 +214,15 @@ class Text2VideoGenerator:
                         )
                         
                         # 发布任务状态更新
-                        publish_video_task_update(task_id, "failed")
+                        publish_video_task(task_id, "failed", {})
                         
                         # 从活动任务中移除
                         del self.active_tasks[task_id]
                         
                 # 检查队列状态并记录
-                pending_count = get_video_task_count("pending")
-                processing_count = get_video_task_count("processing")
+                task_counts = get_video_task_count()
+                pending_count = task_counts["pending"]
+                processing_count = task_counts["processing"]
                 
                 if pending_count > 0 or processing_count > 0:
                     logger.info(f"Queue status: {pending_count} pending, {processing_count} processing")
@@ -260,7 +261,7 @@ class Text2VideoGenerator:
                 update_video_task(task_id, "completed", video_path=video_path)
                 
                 # 发布任务状态更新
-                publish_video_task_update(task_id, "completed")
+                publish_video_task(task_id, "completed", {})
                 
                 logger.info(f"Video generation completed for task: {task_id}")
                 
@@ -279,7 +280,7 @@ class Text2VideoGenerator:
                 )
                 
                 # 发布任务状态更新
-                publish_video_task_update(task_id, "failed")
+                publish_video_task(task_id, "failed", {})
                 
                 logger.error(f"Video generation failed for task: {task_id} - {error}")
                 
@@ -289,7 +290,7 @@ class Text2VideoGenerator:
             update_video_task(task_id, "failed", error=error_message)
             
             # 发布任务状态更新
-            publish_video_task_update(task_id, "failed")
+            publish_video_task(task_id, "failed", {})
             
             logger.exception(f"Exception in video generation thread for task: {task_id}")
             

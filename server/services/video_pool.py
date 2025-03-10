@@ -292,6 +292,20 @@ def get_completed_video_tasks() -> List[Dict[str, Any]]:
     """获取已完成的视频任务"""
     return video_pool.get_completed_tasks()
 
+def get_video_task_count() -> Dict[str, int]:
+    """获取各状态的视频任务数量
+    
+    Returns:
+        包含各状态任务数量的字典
+    """
+    return {
+        "pending": len(video_pool.get_pending_tasks()),
+        "processing": len(video_pool.get_processing_tasks()),
+        "completed": len(video_pool.get_completed_tasks()),
+        "failed": len(video_pool.get_failed_tasks()),
+        "total": len(video_pool.get_all_tasks())
+    }
+
 if __name__ == "__main__":
     # 测试代码
     task_id = create_video_task(
