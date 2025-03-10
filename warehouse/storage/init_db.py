@@ -15,8 +15,8 @@ logger = logging.getLogger("db_init")
 
 def init_db_env():
     """初始化数据库环境变量"""
-    # 加载当前环境变量
-    load_dotenv()
+    # 加载当前环境变量，强制覆盖现有环境变量
+    load_dotenv(override=True)
     
     # 确保 .env 文件存在
     env_file = ".env"

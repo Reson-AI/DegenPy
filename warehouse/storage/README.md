@@ -64,7 +64,7 @@ data = db.get_data_by_uid(result["uid"])
 DB_TYPE=mongodb
 MONGODB_CONNECTION_STRING=mongodb://localhost:27017
 MONGODB_DATABASE=degenpy
-MONGODB_COLLECTION=content
+MONGODB_COLLECTION=twitterTweets
 ```
 
 ### MySQL

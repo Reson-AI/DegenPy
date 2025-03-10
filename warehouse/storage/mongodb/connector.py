@@ -35,7 +35,8 @@ logging.basicConfig(
 logger = logging.getLogger("mongodb_connector")
 
 # 加载环境变量
-load_dotenv()
+# 强制重新加载.env文件，确保使用最新的配置
+load_dotenv(override=True)
 
 class MongoDBConnector:
     """MongoDB 连接器"""
@@ -61,6 +62,14 @@ class MongoDBConnector:
         self.db = self.client[db_name]
                 
         self.collection = self.db[collection_name]
+        
+        # 输出详细的环境变量信息
+        logger.info(f"MongoDB 连接器初始化环境变量详情:")
+        logger.info(f"MONGODB_CONNECTION_STRING: {os.getenv('MONGODB_CONNECTION_STRING', '[未设置]')[:10]}...")
+        logger.info(f"MONGODB_DATABASE: {os.getenv('MONGODB_DATABASE', '[未设置]')}")
+        logger.info(f"MONGODB_COLLECTION: {os.getenv('MONGODB_COLLECTION', '[未设置]')}")
+        logger.info(f"MongoDB 连接器实际使用的配置:")
+        logger.info(f"Database: {db_name}, Collection: {collection_name}")
         
         # 初始化消息队列
         if MQ_AVAILABLE:
@@ -167,10 +176,10 @@ class MongoDBConnector:
             tag = 2 if speaker in special_speakers else 1
             
             document = {
-                'uuid': uid,
-                'content': content_data,
-                'author_id': author_id,
-                'createdAt': datetime.utcnow(),
+                '_id': uid,  # 使用UUID作为MongoDB的_id字段
+                'content': content_data["text"],
+                'speaker': speaker,
+                'createdAt': content_data["time"],
                 'tag': tag
             }
             result = self.collection.insert_one(document)
@@ -195,10 +204,10 @@ class MongoDBConnector:
             # 返回完整的文档
             return {
                 'uuid': uid,
-                'content': content,
-                'author_id': author_id,
-                'tag': tag,
-                'createdAt': datetime.utcnow()
+                'content': content_data["text"],
+                'speaker': speaker,
+                'createdAt': content_data["time"],
+                'tag': tag
             }
         except Exception as e:
             logger.error(f"存储数据时出错: {str(e)}")

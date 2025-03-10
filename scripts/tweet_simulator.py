@@ -219,7 +219,7 @@ def main():
         test_db_service(args.count, args.interval)
     else:
         # 正常模式
-        print("开始模拟推文发送，每分钟发送一条...")
+        print("开始模拟推文发送，每十秒发送一条...")
         while True:
             try:
                 # 生成随机推文
@@ -228,9 +228,9 @@ def main():
                 # 发送到API
                 send_tweet_to_api(tweet)
                 
-                # 等待一分钟
-                print(f"等待60秒后发送下一条推文...")
-                time.sleep(60)
+                # 等待10秒
+                print(f"等待10秒后发送下一条推文...")
+                time.sleep(10)
             except KeyboardInterrupt:
                 print("程序被用户中断")
                 break

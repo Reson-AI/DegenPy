@@ -64,7 +64,9 @@ class MessageQueue:
             self.redis.ping()
             
             # 设置队列前缀
-            self.queue_prefix = redis_prefix + 'queue:'
+            self.use_prefix = os.getenv('REDIS_USE_PREFIX', 'true').lower() == 'true'
+            self.queue_prefix = redis_prefix + 'queue:' if self.use_prefix else ''
+            logger.info(f"队列前缀设置为: {self.queue_prefix if self.use_prefix else '[无前缀]'}")
             self.subscribers = {}
             self.running = True
             

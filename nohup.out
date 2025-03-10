@@ -580,3 +580,391 @@ INFO:     Finished server process [19227]
 2025-03-10 17:06:50,559 - run - INFO - 停止所有进程...
 /Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/multiprocessing/resource_tracker.py:224: UserWarning: resource_tracker: There appear to be 10 leaked semaphore objects to clean up at shutdown
   warnings.warn('resource_tracker: There appear to be %d '
+2025-03-10 17:09:57,166 - run - INFO - 由server/api服务管理agent启动...
+2025-03-10 17:09:57,166 - run - INFO - 启动 warehouse_api...
+2025-03-10 17:09:57,168 - run - INFO - 启动 server_api...
+2025-03-10 17:09:57,169 - run - INFO - 所有服务启动完成。按 Ctrl+C 停止。
+2025-03-10 17:09:57,538 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 17:09:58,731 - message_broker - INFO - Connected to Redis server
+2025-03-10 17:09:58,792 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 17:09:58,798 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 17:09:58,798 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 17:10:00,085 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 17:10:00,086 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 17:10:00,185 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 17:10:00,185 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: content
+INFO:     Started server process [21196]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+2025-03-10 17:10:02,226 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 17:10:02,227 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: content
+INFO:     Started server process [21197]
+INFO:     Waiting for application startup.
+2025-03-10 17:10:02,267 - api - INFO - 自动启动TikTok-agent...
+2025-03-10 17:10:02,267 - agent_engine - INFO - 已加载Agent配置: tiktok-agent
+2025-03-10 17:10:02,268 - agent_engine - INFO - 开始运行agent: tiktok-agent
+2025-03-10 17:10:02,272 - special_attention_task - INFO - 特别关注任务 special_attention_task 使用组件: data_fetcher, fact_checker, content_processor, video_generator
+2025-03-10 17:10:02,272 - special_attention_task - INFO - 启动特别关注任务: special_attention_task
+2025-03-10 17:10:02,272 - special_attention_task - INFO - 启动实时监听: special_attention
+2025-03-10 17:10:03,460 - agent_engine - INFO - 任务已启动: tiktok-agent:special_attention_task (原始ID: special_attention_task)
+2025-03-10 17:10:03,464 - timeline_task - INFO - 时间线任务 timeline_task 使用组件: data_fetcher, content_processor, summary_generator, video_generator
+2025-03-10 17:10:03,464 - timeline_task - INFO - 启动时间线任务: timeline_task
+2025-03-10 17:10:03,464 - timeline_task - INFO - 启动定时执行: */30 * * * *
+2025-03-10 17:10:03,464 - agent_engine - INFO - 任务已启动: tiktok-agent:timeline_task (原始ID: timeline_task)
+2025-03-10 17:10:03,464 - api - INFO - TikTok-agent (tiktok-agent) 启动成功
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
+2025-03-10 17:10:07,739 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 17:10:09,291 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 17:10:09,292 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 17:10:10,520 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 17:10:10,521 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: content
+2025-03-10 17:10:11,982 - mongodb_connector - INFO - 将UUID afa71960-5201-47c0-a001-7052ef95c20d 发送到Redis列表 timeline
+INFO:     127.0.0.1:60812 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 17:11:11,998 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 17:11:14,788 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 17:11:14,788 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 17:11:16,086 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 17:11:16,086 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: content
+2025-03-10 17:11:17,911 - mongodb_connector - INFO - 将UUID c043e6af-b315-4159-802e-5f260d632866 发送到消息队列 special_attention
+INFO:     127.0.0.1:61024 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 17:12:17,930 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 17:12:18,744 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 17:12:18,744 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 17:12:21,703 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 17:12:21,704 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: content
+2025-03-10 17:12:23,717 - mongodb_connector - INFO - 将UUID 1f3669a3-ddab-400e-bfea-15b8588fcdf1 发送到消息队列 special_attention
+INFO:     127.0.0.1:61240 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 17:12:26,185 - run - INFO - 接收到信号 15
+2025-03-10 17:12:26,187 - run - INFO - 停止所有进程...
+2025-03-10 17:12:26,187 - run - INFO - 终止 warehouse_api...
+2025-03-10 17:12:26,187 - run - INFO - 终止 server_api...
+INFO:     Shutting down
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [21197]
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [21196]
+2025-03-10 17:12:27,191 - run - INFO - 停止所有进程...
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/multiprocessing/resource_tracker.py:224: UserWarning: resource_tracker: There appear to be 10 leaked semaphore objects to clean up at shutdown
+  warnings.warn('resource_tracker: There appear to be %d '
+2025-03-10 17:23:07,238 - run - INFO - 由server/api服务管理agent启动...
+2025-03-10 17:23:07,238 - run - INFO - 启动 warehouse_api...
+2025-03-10 17:23:07,239 - run - INFO - 启动 server_api...
+2025-03-10 17:23:07,241 - run - INFO - 所有服务启动完成。按 Ctrl+C 停止。
+2025-03-10 17:23:07,617 - mongodb_connector - INFO - MongoDB 连接器初始化环境变量详情:
+2025-03-10 17:23:07,617 - mongodb_connector - INFO - MONGODB_CONNECTION_STRING: mongodb://...
+2025-03-10 17:23:07,617 - mongodb_connector - INFO - MONGODB_DATABASE: degenPy
+2025-03-10 17:23:07,617 - mongodb_connector - INFO - MONGODB_COLLECTION: twitterTweets
+2025-03-10 17:23:07,617 - mongodb_connector - INFO - MongoDB 连接器实际使用的配置:
+2025-03-10 17:23:07,617 - mongodb_connector - INFO - Database: degenPy, Collection: twitterTweets
+2025-03-10 17:23:07,617 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 17:23:08,784 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 17:23:08,784 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 17:23:08,862 - message_broker - INFO - Connected to Redis server
+2025-03-10 17:23:08,899 - mongodb_connector - INFO - MongoDB 连接器初始化环境变量详情:
+2025-03-10 17:23:08,899 - mongodb_connector - INFO - MONGODB_CONNECTION_STRING: mongodb://...
+2025-03-10 17:23:08,899 - mongodb_connector - INFO - MONGODB_DATABASE: degenPy
+2025-03-10 17:23:08,899 - mongodb_connector - INFO - MONGODB_COLLECTION: twitterTweets
+2025-03-10 17:23:08,899 - mongodb_connector - INFO - MongoDB 连接器实际使用的配置:
+2025-03-10 17:23:08,899 - mongodb_connector - INFO - Database: degenPy, Collection: twitterTweets
+2025-03-10 17:23:08,899 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 17:23:10,160 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 17:23:10,160 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 17:23:10,185 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 17:23:10,186 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+INFO:     Started server process [23141]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+2025-03-10 17:23:11,478 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 17:23:11,478 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+INFO:     Started server process [23142]
+INFO:     Waiting for application startup.
+2025-03-10 17:23:11,500 - api - INFO - 自动启动TikTok-agent...
+2025-03-10 17:23:11,501 - agent_engine - INFO - 已加载Agent配置: tiktok-agent
+2025-03-10 17:23:11,501 - agent_engine - INFO - 开始运行agent: tiktok-agent
+2025-03-10 17:23:11,504 - special_attention_task - INFO - 特别关注任务 special_attention_task 使用组件: data_fetcher, fact_checker, content_processor, video_generator
+2025-03-10 17:23:11,504 - special_attention_task - INFO - 启动特别关注任务: special_attention_task
+2025-03-10 17:23:11,504 - special_attention_task - INFO - 启动实时监听: special_attention
+2025-03-10 17:23:12,441 - agent_engine - INFO - 任务已启动: tiktok-agent:special_attention_task (原始ID: special_attention_task)
+2025-03-10 17:23:12,443 - timeline_task - INFO - 时间线任务 timeline_task 使用组件: data_fetcher, content_processor, summary_generator, video_generator
+2025-03-10 17:23:12,443 - timeline_task - INFO - 启动时间线任务: timeline_task
+2025-03-10 17:23:12,443 - timeline_task - INFO - 启动定时执行: */30 * * * *
+2025-03-10 17:23:12,443 - agent_engine - INFO - 任务已启动: tiktok-agent:timeline_task (原始ID: timeline_task)
+2025-03-10 17:23:12,443 - api - INFO - TikTok-agent (tiktok-agent) 启动成功
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
+2025-03-10 17:23:13,031 - mongodb_connector - INFO - MongoDB 连接器初始化环境变量详情:
+2025-03-10 17:23:13,034 - mongodb_connector - INFO - MONGODB_CONNECTION_STRING: mongodb://...
+2025-03-10 17:23:13,034 - mongodb_connector - INFO - MONGODB_DATABASE: degenPy
+2025-03-10 17:23:13,034 - mongodb_connector - INFO - MONGODB_COLLECTION: twitterTweets
+2025-03-10 17:23:13,034 - mongodb_connector - INFO - MongoDB 连接器实际使用的配置:
+2025-03-10 17:23:13,034 - mongodb_connector - INFO - Database: degenPy, Collection: twitterTweets
+2025-03-10 17:23:13,034 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 17:23:15,080 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 17:23:15,080 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 17:23:16,339 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 17:23:16,339 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 17:23:17,634 - mongodb_connector - INFO - 将UUID 0b88cccb-ad09-4bc0-8d40-f0cc9b338e64 发送到Redis列表 timeline
+INFO:     127.0.0.1:63720 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 17:24:17,672 - mongodb_connector - INFO - MongoDB 连接器初始化环境变量详情:
+2025-03-10 17:24:17,673 - mongodb_connector - INFO - MONGODB_CONNECTION_STRING: mongodb://...
+2025-03-10 17:24:17,673 - mongodb_connector - INFO - MONGODB_DATABASE: degenPy
+2025-03-10 17:24:17,673 - mongodb_connector - INFO - MONGODB_COLLECTION: twitterTweets
+2025-03-10 17:24:17,673 - mongodb_connector - INFO - MongoDB 连接器实际使用的配置:
+2025-03-10 17:24:17,673 - mongodb_connector - INFO - Database: degenPy, Collection: twitterTweets
+2025-03-10 17:24:17,673 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 17:24:19,644 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 17:24:19,648 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 17:24:21,170 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 17:24:21,170 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 17:25:11,840 - mongodb_connector - INFO - 将UUID 29c9ee63-78bd-4338-af7b-b00dbd63de5f 发送到消息队列 special_attention
+INFO:     127.0.0.1:63926 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 17:26:11,900 - mongodb_connector - INFO - MongoDB 连接器初始化环境变量详情:
+2025-03-10 17:26:11,901 - mongodb_connector - INFO - MONGODB_CONNECTION_STRING: mongodb://...
+2025-03-10 17:26:11,901 - mongodb_connector - INFO - MONGODB_DATABASE: degenPy
+2025-03-10 17:26:11,901 - mongodb_connector - INFO - MONGODB_COLLECTION: twitterTweets
+2025-03-10 17:26:11,901 - mongodb_connector - INFO - MongoDB 连接器实际使用的配置:
+2025-03-10 17:26:11,901 - mongodb_connector - INFO - Database: degenPy, Collection: twitterTweets
+2025-03-10 17:26:11,902 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 17:26:25,293 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 17:26:25,294 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 17:27:42,759 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 17:27:42,761 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 17:27:44,156 - mongodb_connector - INFO - 将UUID 7090b43a-4e83-4622-8177-d2d2e79c5874 发送到消息队列 special_attention
+INFO:     127.0.0.1:64257 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 17:28:44,205 - mongodb_connector - INFO - MongoDB 连接器初始化环境变量详情:
+2025-03-10 17:28:44,206 - mongodb_connector - INFO - MONGODB_CONNECTION_STRING: mongodb://...
+2025-03-10 17:28:44,207 - mongodb_connector - INFO - MONGODB_DATABASE: degenPy
+2025-03-10 17:28:44,207 - mongodb_connector - INFO - MONGODB_COLLECTION: twitterTweets
+2025-03-10 17:28:44,207 - mongodb_connector - INFO - MongoDB 连接器实际使用的配置:
+2025-03-10 17:28:44,207 - mongodb_connector - INFO - Database: degenPy, Collection: twitterTweets
+2025-03-10 17:28:44,207 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 17:28:45,635 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 17:28:45,636 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 17:28:46,926 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 17:28:46,927 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 17:28:51,877 - mongodb_connector - INFO - 将UUID 088ad81e-6129-4460-904c-aeba1959b316 发送到消息队列 special_attention
+INFO:     127.0.0.1:64717 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 17:29:00,006 - run - INFO - 接收到信号 15
+2025-03-10 17:29:00,007 - run - INFO - 停止所有进程...
+2025-03-10 17:29:00,007 - run - INFO - 终止 warehouse_api...
+2025-03-10 17:29:00,007 - run - INFO - 终止 server_api...
+INFO:     Shutting down
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [23141]
+INFO:     Application shutdown complete.
+INFO:     Finished server process [23142]
+2025-03-10 17:29:01,012 - run - INFO - 停止所有进程...
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/multiprocessing/resource_tracker.py:224: UserWarning: resource_tracker: There appear to be 10 leaked semaphore objects to clean up at shutdown
+  warnings.warn('resource_tracker: There appear to be %d '
+2025-03-10 17:38:16,462 - run - INFO - 由server/api服务管理agent启动...
+2025-03-10 17:38:16,462 - run - INFO - 启动 warehouse_api...
+2025-03-10 17:38:16,464 - run - INFO - 启动 server_api...
+2025-03-10 17:38:16,466 - run - INFO - 所有服务启动完成。按 Ctrl+C 停止。
+2025-03-10 17:38:16,857 - mongodb_connector - INFO - MongoDB 连接器初始化环境变量详情:
+2025-03-10 17:38:16,857 - mongodb_connector - INFO - MONGODB_CONNECTION_STRING: mongodb://...
+2025-03-10 17:38:16,857 - mongodb_connector - INFO - MONGODB_DATABASE: degenPy
+2025-03-10 17:38:16,857 - mongodb_connector - INFO - MONGODB_COLLECTION: twitterTweets
+2025-03-10 17:38:16,857 - mongodb_connector - INFO - MongoDB 连接器实际使用的配置:
+2025-03-10 17:38:16,857 - mongodb_connector - INFO - Database: degenPy, Collection: twitterTweets
+2025-03-10 17:38:16,857 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 17:38:18,185 - message_broker - INFO - Connected to Redis server
+2025-03-10 17:38:18,218 - mongodb_connector - INFO - MongoDB 连接器初始化环境变量详情:
+2025-03-10 17:38:18,218 - mongodb_connector - INFO - MONGODB_CONNECTION_STRING: mongodb://...
+2025-03-10 17:38:18,218 - mongodb_connector - INFO - MONGODB_DATABASE: degenPy
+2025-03-10 17:38:18,218 - mongodb_connector - INFO - MONGODB_COLLECTION: twitterTweets
+2025-03-10 17:38:18,218 - mongodb_connector - INFO - MongoDB 连接器实际使用的配置:
+2025-03-10 17:38:18,218 - mongodb_connector - INFO - Database: degenPy, Collection: twitterTweets
+2025-03-10 17:38:18,218 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 17:38:19,554 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 17:38:19,554 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 17:38:19,554 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 17:38:20,889 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 17:38:20,889 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+INFO:     Started server process [24440]
+INFO:     Waiting for application startup.
+2025-03-10 17:38:20,913 - api - INFO - 自动启动TikTok-agent...
+2025-03-10 17:38:20,914 - agent_engine - INFO - 已加载Agent配置: tiktok-agent
+2025-03-10 17:38:20,914 - agent_engine - INFO - 开始运行agent: tiktok-agent
+2025-03-10 17:38:20,916 - special_attention_task - INFO - 特别关注任务 special_attention_task 使用组件: data_fetcher, fact_checker, content_processor, video_generator
+2025-03-10 17:38:20,917 - special_attention_task - INFO - 启动特别关注任务: special_attention_task
+2025-03-10 17:38:20,917 - special_attention_task - INFO - 启动实时监听: special_attention
+2025-03-10 17:38:21,219 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 17:38:21,219 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 17:38:21,219 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 17:38:22,617 - agent_engine - INFO - 任务已启动: tiktok-agent:special_attention_task (原始ID: special_attention_task)
+2025-03-10 17:38:22,620 - timeline_task - INFO - 时间线任务 timeline_task 使用组件: data_fetcher, content_processor, summary_generator, video_generator
+2025-03-10 17:38:22,620 - timeline_task - INFO - 启动时间线任务: timeline_task
+2025-03-10 17:38:22,620 - timeline_task - INFO - 启动定时执行: */30 * * * *
+2025-03-10 17:38:22,621 - agent_engine - INFO - 任务已启动: tiktok-agent:timeline_task (原始ID: timeline_task)
+2025-03-10 17:38:22,621 - api - INFO - TikTok-agent (tiktok-agent) 启动成功
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
+2025-03-10 17:38:22,658 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 17:38:22,658 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+INFO:     Started server process [24439]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+2025-03-10 17:38:24,278 - mongodb_connector - INFO - MongoDB 连接器初始化环境变量详情:
+2025-03-10 17:38:24,278 - mongodb_connector - INFO - MONGODB_CONNECTION_STRING: mongodb://...
+2025-03-10 17:38:24,278 - mongodb_connector - INFO - MONGODB_DATABASE: degenPy
+2025-03-10 17:38:24,278 - mongodb_connector - INFO - MONGODB_COLLECTION: twitterTweets
+2025-03-10 17:38:24,278 - mongodb_connector - INFO - MongoDB 连接器实际使用的配置:
+2025-03-10 17:38:24,278 - mongodb_connector - INFO - Database: degenPy, Collection: twitterTweets
+2025-03-10 17:38:24,278 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 17:38:25,541 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 17:38:25,541 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 17:38:25,541 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 17:38:26,712 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 17:38:26,712 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 17:38:28,063 - mongodb_connector - INFO - 将UUID bc228546-d3e1-4269-9621-49110c8f350b 发送到Redis列表 timeline
+INFO:     127.0.0.1:50416 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 17:39:18,833 - mongodb_connector - INFO - MongoDB 连接器初始化环境变量详情:
+2025-03-10 17:39:18,834 - mongodb_connector - INFO - MONGODB_CONNECTION_STRING: mongodb://...
+2025-03-10 17:39:18,834 - mongodb_connector - INFO - MONGODB_DATABASE: degenPy
+2025-03-10 17:39:18,834 - mongodb_connector - INFO - MONGODB_COLLECTION: twitterTweets
+2025-03-10 17:39:18,834 - mongodb_connector - INFO - MongoDB 连接器实际使用的配置:
+2025-03-10 17:39:18,834 - mongodb_connector - INFO - Database: degenPy, Collection: twitterTweets
+2025-03-10 17:39:18,834 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 17:39:26,958 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 17:39:26,959 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 17:39:26,959 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 17:39:28,237 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 17:39:28,237 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 17:39:29,693 - mongodb_connector - INFO - 将UUID 532139d5-12f3-4371-af71-9b2e0555971d 发送到Redis列表 timeline
+INFO:     127.0.0.1:50766 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 17:39:39,779 - mongodb_connector - INFO - MongoDB 连接器初始化环境变量详情:
+2025-03-10 17:39:39,780 - mongodb_connector - INFO - MONGODB_CONNECTION_STRING: mongodb://...
+2025-03-10 17:39:39,780 - mongodb_connector - INFO - MONGODB_DATABASE: degenPy
+2025-03-10 17:39:39,780 - mongodb_connector - INFO - MONGODB_COLLECTION: twitterTweets
+2025-03-10 17:39:39,780 - mongodb_connector - INFO - MongoDB 连接器实际使用的配置:
+2025-03-10 17:39:39,780 - mongodb_connector - INFO - Database: degenPy, Collection: twitterTweets
+2025-03-10 17:39:39,780 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 17:39:41,115 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 17:39:41,115 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 17:39:41,115 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 17:39:43,333 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 17:39:43,333 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 17:39:44,887 - mongodb_connector - INFO - 将UUID 2606f08e-9213-407a-aea7-c8239b5f364b 发送到消息队列 special_attention
+INFO:     127.0.0.1:50847 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 17:39:54,907 - mongodb_connector - INFO - MongoDB 连接器初始化环境变量详情:
+2025-03-10 17:39:54,908 - mongodb_connector - INFO - MONGODB_CONNECTION_STRING: mongodb://...
+2025-03-10 17:39:54,908 - mongodb_connector - INFO - MONGODB_DATABASE: degenPy
+2025-03-10 17:39:54,908 - mongodb_connector - INFO - MONGODB_COLLECTION: twitterTweets
+2025-03-10 17:39:54,908 - mongodb_connector - INFO - MongoDB 连接器实际使用的配置:
+2025-03-10 17:39:54,908 - mongodb_connector - INFO - Database: degenPy, Collection: twitterTweets
+2025-03-10 17:39:54,908 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 17:39:56,256 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 17:39:56,256 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 17:39:56,256 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 17:40:01,659 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 17:40:01,659 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 17:40:11,868 - mongodb_connector - INFO - 将UUID 69a46a7a-fd51-4b54-92ad-ec77d8a5af5e 发送到Redis列表 timeline
+INFO:     127.0.0.1:50895 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 17:40:21,900 - mongodb_connector - INFO - MongoDB 连接器初始化环境变量详情:
+2025-03-10 17:40:21,900 - mongodb_connector - INFO - MONGODB_CONNECTION_STRING: mongodb://...
+2025-03-10 17:40:21,900 - mongodb_connector - INFO - MONGODB_DATABASE: degenPy
+2025-03-10 17:40:21,900 - mongodb_connector - INFO - MONGODB_COLLECTION: twitterTweets
+2025-03-10 17:40:21,900 - mongodb_connector - INFO - MongoDB 连接器实际使用的配置:
+2025-03-10 17:40:21,900 - mongodb_connector - INFO - Database: degenPy, Collection: twitterTweets
+2025-03-10 17:40:21,900 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 17:40:23,254 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 17:40:23,254 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 17:40:23,254 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 17:40:24,556 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 17:40:24,558 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 17:40:25,892 - mongodb_connector - INFO - 将UUID 4443e0b8-2223-4696-b1b6-984d6afcaba0 发送到Redis列表 timeline
+INFO:     127.0.0.1:50967 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 17:40:35,907 - mongodb_connector - INFO - MongoDB 连接器初始化环境变量详情:
+2025-03-10 17:40:35,907 - mongodb_connector - INFO - MONGODB_CONNECTION_STRING: mongodb://...
+2025-03-10 17:40:35,907 - mongodb_connector - INFO - MONGODB_DATABASE: degenPy
+2025-03-10 17:40:35,907 - mongodb_connector - INFO - MONGODB_COLLECTION: twitterTweets
+2025-03-10 17:40:35,907 - mongodb_connector - INFO - MongoDB 连接器实际使用的配置:
+2025-03-10 17:40:35,907 - mongodb_connector - INFO - Database: degenPy, Collection: twitterTweets
+2025-03-10 17:40:35,907 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 17:40:37,907 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 17:40:37,908 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 17:40:37,908 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 17:40:40,134 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 17:40:40,136 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 17:40:42,044 - mongodb_connector - INFO - 将UUID 855f7569-8959-4e7c-bfe1-d10110790577 发送到Redis列表 timeline
+INFO:     127.0.0.1:51032 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 17:40:52,070 - mongodb_connector - INFO - MongoDB 连接器初始化环境变量详情:
+2025-03-10 17:40:52,070 - mongodb_connector - INFO - MONGODB_CONNECTION_STRING: mongodb://...
+2025-03-10 17:40:52,070 - mongodb_connector - INFO - MONGODB_DATABASE: degenPy
+2025-03-10 17:40:52,070 - mongodb_connector - INFO - MONGODB_COLLECTION: twitterTweets
+2025-03-10 17:40:52,070 - mongodb_connector - INFO - MongoDB 连接器实际使用的配置:
+2025-03-10 17:40:52,070 - mongodb_connector - INFO - Database: degenPy, Collection: twitterTweets
+2025-03-10 17:40:52,070 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 17:40:53,411 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 17:40:53,411 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 17:40:53,411 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 17:40:54,949 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 17:40:54,950 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 17:40:56,430 - mongodb_connector - INFO - 将UUID 37b0e83c-1e0f-4e0d-8ec1-1956ee6dbb7f 发送到消息队列 special_attention
+INFO:     127.0.0.1:51086 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 17:41:06,447 - mongodb_connector - INFO - MongoDB 连接器初始化环境变量详情:
+2025-03-10 17:41:06,448 - mongodb_connector - INFO - MONGODB_CONNECTION_STRING: mongodb://...
+2025-03-10 17:41:06,448 - mongodb_connector - INFO - MONGODB_DATABASE: degenPy
+2025-03-10 17:41:06,448 - mongodb_connector - INFO - MONGODB_COLLECTION: twitterTweets
+2025-03-10 17:41:06,448 - mongodb_connector - INFO - MongoDB 连接器实际使用的配置:
+2025-03-10 17:41:06,448 - mongodb_connector - INFO - Database: degenPy, Collection: twitterTweets
+2025-03-10 17:41:06,448 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 17:41:15,814 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 17:41:15,814 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 17:41:15,815 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 17:41:47,406 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 17:41:47,407 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 17:41:51,945 - mongodb_connector - INFO - 将UUID b6857b46-469d-4cf7-b877-3c986254d53f 发送到Redis列表 timeline
+INFO:     127.0.0.1:51139 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 17:42:01,974 - mongodb_connector - INFO - MongoDB 连接器初始化环境变量详情:
+2025-03-10 17:42:01,974 - mongodb_connector - INFO - MONGODB_CONNECTION_STRING: mongodb://...
+2025-03-10 17:42:01,974 - mongodb_connector - INFO - MONGODB_DATABASE: degenPy
+2025-03-10 17:42:01,974 - mongodb_connector - INFO - MONGODB_COLLECTION: twitterTweets
+2025-03-10 17:42:01,974 - mongodb_connector - INFO - MongoDB 连接器实际使用的配置:
+2025-03-10 17:42:01,974 - mongodb_connector - INFO - Database: degenPy, Collection: twitterTweets
+2025-03-10 17:42:01,974 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 17:42:03,277 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 17:42:03,277 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 17:42:03,277 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 17:42:04,541 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 17:42:04,541 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 17:42:05,938 - mongodb_connector - INFO - 将UUID e5d822d3-5ec3-49fd-9fdc-77068dd8edfb 发送到Redis列表 timeline
+INFO:     127.0.0.1:51323 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 17:42:15,956 - mongodb_connector - INFO - MongoDB 连接器初始化环境变量详情:
+2025-03-10 17:42:15,956 - mongodb_connector - INFO - MONGODB_CONNECTION_STRING: mongodb://...
+2025-03-10 17:42:15,956 - mongodb_connector - INFO - MONGODB_DATABASE: degenPy
+2025-03-10 17:42:15,956 - mongodb_connector - INFO - MONGODB_COLLECTION: twitterTweets
+2025-03-10 17:42:15,956 - mongodb_connector - INFO - MongoDB 连接器实际使用的配置:
+2025-03-10 17:42:15,956 - mongodb_connector - INFO - Database: degenPy, Collection: twitterTweets
+2025-03-10 17:42:15,956 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 17:42:17,195 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 17:42:17,195 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 17:42:17,195 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 17:42:24,757 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 17:42:24,758 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 17:42:26,393 - mongodb_connector - INFO - 将UUID ca2bfed4-84dc-4575-9ca1-44e72674d77b 发送到消息队列 special_attention
+INFO:     127.0.0.1:51365 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 17:42:36,415 - mongodb_connector - INFO - MongoDB 连接器初始化环境变量详情:
+2025-03-10 17:42:36,415 - mongodb_connector - INFO - MONGODB_CONNECTION_STRING: mongodb://...
+2025-03-10 17:42:36,415 - mongodb_connector - INFO - MONGODB_DATABASE: degenPy
+2025-03-10 17:42:36,415 - mongodb_connector - INFO - MONGODB_COLLECTION: twitterTweets
+2025-03-10 17:42:36,415 - mongodb_connector - INFO - MongoDB 连接器实际使用的配置:
+2025-03-10 17:42:36,415 - mongodb_connector - INFO - Database: degenPy, Collection: twitterTweets
+2025-03-10 17:42:36,415 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 17:42:37,768 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 17:42:37,769 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 17:42:37,769 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 17:42:38,945 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 17:42:38,945 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 17:42:40,179 - mongodb_connector - INFO - 将UUID 0e8ea1a9-de65-42cd-ab8d-059289b91002 发送到Redis列表 timeline
+INFO:     127.0.0.1:51443 - "POST /data HTTP/1.1" 200 OK
