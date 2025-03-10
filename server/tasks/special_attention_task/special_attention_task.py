@@ -19,7 +19,7 @@ logging.basicConfig(
 logger = logging.getLogger("special_attention_task")
 
 # 导入数据库连接器
-from warehouse.api import get_data_by_uid, get_recent_data
+from warehouse.api import get_data_by_uid
 
 # 导入视频生成服务
 from server.services.text2video import generate_video_from_text
@@ -44,9 +44,11 @@ class SpecialAttentionTask:
         self.running = False
         
         # 初始化Redis连接
+        redis_password = os.getenv('REDIS_PASSWORD', '')
         self.redis = redis.Redis(
             host=os.getenv('REDIS_HOST', 'localhost'),
             port=int(os.getenv('REDIS_PORT', 6379)),
+            password=redis_password,  # 添加密码认证
             db=int(os.getenv('REDIS_DB', 0)),
             decode_responses=True
         )
