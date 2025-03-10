@@ -968,3 +968,52 @@ INFO:     127.0.0.1:51365 - "POST /data HTTP/1.1" 200 OK
 2025-03-10 17:42:38,945 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
 2025-03-10 17:42:40,179 - mongodb_connector - INFO - 将UUID 0e8ea1a9-de65-42cd-ab8d-059289b91002 发送到Redis列表 timeline
 INFO:     127.0.0.1:51443 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 18:10:59,344 - timeline_task - INFO - 执行时间线任务: timeline_task
+Exception in thread Schedule-timeline_task:
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/threading.py", line 1038, in _bootstrap_inner
+    self.run()
+  File "/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/threading.py", line 975, in run
+    self._target(*self._args, **self._kwargs)
+  File "/Users/yezi/DegenPy/server/tasks/timeline_task/timeline_task.py", line 96, in schedule_thread
+    schedule.run_pending()
+  File "/Users/yezi/DegenPy/.venv/lib/python3.11/site-packages/schedule/__init__.py", line 854, in run_pending
+    default_scheduler.run_pending()
+  File "/Users/yezi/DegenPy/.venv/lib/python3.11/site-packages/schedule/__init__.py", line 101, in run_pending
+    self._run_job(job)
+  File "/Users/yezi/DegenPy/.venv/lib/python3.11/site-packages/schedule/__init__.py", line 173, in _run_job
+    ret = job.run()
+          ^^^^^^^^^
+  File "/Users/yezi/DegenPy/.venv/lib/python3.11/site-packages/schedule/__init__.py", line 691, in run
+    ret = self.job_func()
+          ^^^^^^^^^^^^^^^
+  File "/Users/yezi/DegenPy/server/tasks/timeline_task/timeline_task.py", line 119, in execute
+    data = self._get_data(trigger_data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/yezi/DegenPy/server/tasks/timeline_task/timeline_task.py", line 180, in _get_data
+    message = self.redis.lpop(key)
+              ^^^^^^^^^^^^^^^^^^^^
+  File "/Users/yezi/DegenPy/.venv/lib/python3.11/site-packages/redis/commands/core.py", line 2720, in lpop
+    return self.execute_command("LPOP", name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/yezi/DegenPy/.venv/lib/python3.11/site-packages/redis/client.py", line 559, in execute_command
+    return self._execute_command(*args, **options)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/yezi/DegenPy/.venv/lib/python3.11/site-packages/redis/client.py", line 565, in _execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/yezi/DegenPy/.venv/lib/python3.11/site-packages/redis/connection.py", line 1422, in get_connection
+    connection.connect()
+  File "/Users/yezi/DegenPy/.venv/lib/python3.11/site-packages/redis/connection.py", line 369, in connect
+    self.on_connect()
+  File "/Users/yezi/DegenPy/.venv/lib/python3.11/site-packages/redis/connection.py", line 471, in on_connect
+    self.read_response()
+  File "/Users/yezi/DegenPy/.venv/lib/python3.11/site-packages/redis/connection.py", line 592, in read_response
+    response = self._parser.read_response(disable_decoding=disable_decoding)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/yezi/DegenPy/.venv/lib/python3.11/site-packages/redis/_parsers/resp2.py", line 15, in read_response
+    result = self._read_response(disable_decoding=disable_decoding)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/yezi/DegenPy/.venv/lib/python3.11/site-packages/redis/_parsers/resp2.py", line 38, in _read_response
+    raise error
+redis.exceptions.AuthenticationError: Authentication required.
