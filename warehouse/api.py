@@ -258,31 +258,6 @@ async def get_content(uid: str):
             message=f"获取内容时出错: {str(e)}"
         )
 
-@app.get("/recent-content")
-async def get_recent_content(source_type: Optional[str] = None, limit: int = 30):
-    """获取最近的内容
-    
-    Args:
-        source_type: 来源类型，可以是 "followed", "trending" 或 "other"
-        limit: 最大返回数量
-        
-    Returns:
-        包含状态、消息和数据的响应
-    """
-    try:
-        db = get_db_manager()
-        data = db.connector.get_recent_data(source_type, limit)
-        
-        return Response(
-            status="success",
-            message=f"获取到 {len(data)} 条最近内容",
-            data={"content": data}
-        )
-    except Exception as e:
-        return Response(
-            status="error",
-            message=f"获取最近内容时出错: {str(e)}"
-        )
 
 @app.get("/content-by-uids")
 async def get_content_by_uids(uids: str):
@@ -480,8 +455,6 @@ def get_data_by_uid(uid: str) -> Dict[str, Any]:
     except Exception as e:
         print(f"Error in get_data_by_uid: {str(e)}")
         return {}
-
-# get_recent_data function has been removed as it's no longer needed
 
 if __name__ == "__main__":
     uvicorn.run("warehouse.api:app", host="0.0.0.0", port=8000, reload=True)

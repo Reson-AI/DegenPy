@@ -164,7 +164,6 @@ class MongoDBConnector:
             logger.error(f"获取数据时出错: {str(e)}")
             return None
             
-    # get_recent_data method has been removed as it's no longer needed
             
     def get_data_by_uids(self, uuids):
         """根据多个UUID获取数据

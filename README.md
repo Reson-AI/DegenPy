@@ -169,7 +169,6 @@ DegenPy/
 
 2. **数据检索接口**：
    - `get_data_by_uid`: 根据UID获取数据
-   - `get_recent_data`: 获取最近的数据
    - `get_data_by_uids`: 根据多个UID获取数据
    - `execute_query`: 执行自定义查询
 

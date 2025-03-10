@@ -95,6 +95,5 @@ PGSQL_DATABASE=degenpy
 
 - `store_data(content, author_id, source_type, uid)`: 存储数据
 - `get_data_by_uid(uid)`: 根据UID获取数据
-- `get_recent_data(source_type, limit)`: 获取最近的数据
 - `get_data_by_uids(uids)`: 根据多个UID获取数据
 - `execute_query(query)`: 执行查询

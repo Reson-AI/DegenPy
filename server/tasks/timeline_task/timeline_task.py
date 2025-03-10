@@ -192,8 +192,6 @@ class TimelineTask:
             source_type = source_config.get('source_type')
             min_items = source_config.get('min_items', 3)
             
-            # 不再使用get_recent_data获取数据
-            logger.info(f"跳过recent_uids数据源处理，因为get_recent_data功能已禁用")
             return None
                     
         return None
