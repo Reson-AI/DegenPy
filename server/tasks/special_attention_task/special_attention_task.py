@@ -29,9 +29,6 @@ from server.services.text2video import generate_video_from_text
 # 导入OpenRouter API
 from server.models.openrouter import generate_content
 
-# 导入事实检查服务
-from server.services.fact_check import fact_check
-
 class SpecialAttentionTask:
     """特别关注任务执行器，负责监控特别关注标签的内容，生成视频内容"""
     
@@ -106,7 +103,7 @@ class SpecialAttentionTask:
             
             interval_seconds = seconds + minutes * 60 + hours * 3600
             if interval_seconds <= 0:
-                interval_seconds = 300  # 默认5分钟
+                interval_seconds = 60  # 默认1分钟
             
             logger.info(f"特别关注任务 {self.task_id} 启动轮询，间隔 {interval_seconds} 秒")
             
@@ -299,7 +296,6 @@ class SpecialAttentionTask:
 
 ## 输出格式
 如果内容可信：直接输出整理后的新闻报道
-如果内容存在可疑点：以"[警告: 具体警告内容]"开头，然后是整理后的报道
 
 ## 特别关注新闻报道：
 """

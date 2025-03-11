@@ -33,9 +33,11 @@ class WarehouseAPI:
     def __init__(self):
         self.connector = MongoDBConnector()
 
-# In-memory storage for recent UIDs
-recent_uids = []
-MAX_RECENT_UIDS = 100  # 最多保存的最近UID数量
+# 导入UID跟踪器
+from warehouse.utils.uid_tracker import uid_tracker
+
+# 用于API服务的任务ID
+API_TASK_ID = "warehouse_api"
 
 class ContentData(BaseModel):
     content: Dict[str, Any]
@@ -54,62 +56,6 @@ class Response(BaseModel):
 class TagsConfig(BaseModel):
     special_tags: List[str]
 
-class RecentUIDTracker:
-    """跟踪最近添加的UUID，按来源类型分组"""
-    _instance = None
-    _lock = threading.Lock()
-    
-    def __new__(cls):
-        with cls._lock:
-            if cls._instance is None:
-                cls._instance = super(RecentUIDTracker, cls).__new__(cls)
-                cls._instance._initialized = False
-            return cls._instance
-    
-    def __init__(self):
-        if self._initialized:
-            return
-            
-        self.uids = []
-        self.lock = threading.Lock()
-        self.last_activity_time = datetime.now()
-        self._initialized = True
-    
-    def add_uid(self, uid: str):
-        """添加一个UUID到跟踪器"""
-        with self.lock:
-            # 添加UUID和时间戳
-            self.uids.append((uid, datetime.now()))
-            
-            # 保持列表大小在最大限制内
-            if len(self.uids) > MAX_RECENT_UIDS:
-                self.uids = self.uids[-MAX_RECENT_UIDS:]
-            
-            self.last_activity_time = datetime.now()
-    
-    def check_recent_activity(self, threshold: int, timeframe_hours: int) -> bool:
-        """检查最近的活动是否低于阈值
-        
-        Args:
-            threshold: 阈值，如果最近活动数量低于此值，则返回True
-            timeframe_hours: 时间范围（小时）
-            
-        Returns:
-            如果最近活动低于阈值，则返回True，否则返回False
-        """
-        with self.lock:
-            cutoff_time = datetime.now() - timedelta(hours=timeframe_hours)
-            
-            # 计算最近时间范围内的活动数量
-            recent_activity = sum(1 for _, ts in self.uids if ts >= cutoff_time)
-            
-            total_recent = recent_activity
-            
-            return total_recent < threshold
-
-# 全局实例
-uid_tracker = RecentUIDTracker()
-
 def get_db_manager():
     """获取数据库管理器"""
     return WarehouseAPI()
@@ -121,35 +67,30 @@ async def root():
 
 @app.get("/tags")
 async def get_tags():
-    """获取或更新特别关注的标签列表
+    """获取特别关注的标签列表
     
     Returns:
         包含状态、消息和标签列表的响应
     """
     try:
-        # 确保配置目录存在
-        os.makedirs(os.path.dirname(TAGS_CONFIG_PATH), exist_ok=True)
-        
-        # 如果配置文件不存在，创建默认配置
-        if not os.path.exists(TAGS_CONFIG_PATH):
+        if os.path.exists(TAGS_CONFIG_PATH):
+            with open(TAGS_CONFIG_PATH, 'r', encoding='utf-8') as f:
+                config = json.load(f)
+                return Response(
+                    status="success",
+                    message="获取标签列表成功",
+                    data=config
+                )
+        else:
+            # 如果配置文件不存在，返回空列表
             default_config = {"special_tags": []}
             with open(TAGS_CONFIG_PATH, 'w', encoding='utf-8') as f:
                 json.dump(default_config, f, ensure_ascii=False, indent=2)
             return Response(
                 status="success",
-                message="创建默认标签配置",
+                message="配置文件不存在，已创建默认配置",
                 data=default_config
             )
-        
-        # 读取配置
-        with open(TAGS_CONFIG_PATH, 'r', encoding='utf-8') as f:
-            config = json.load(f)
-        
-        return Response(
-            status="success",
-            message="获取标签列表成功",
-            data=config
-        )
     except Exception as e:
         return Response(
             status="error",
@@ -206,8 +147,8 @@ async def store_data(request: StoreRequest):
         )
         
         if result:
-            # 添加到最近UID跟踪器
-            uid_tracker.add_uid(result["uid"])
+            # 添加到UID跟踪器
+            uid_tracker.add_uid(result["uid"], API_TASK_ID)
             
             return Response(
                 status="success",

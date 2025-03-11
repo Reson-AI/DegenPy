@@ -94,7 +94,8 @@ class MongoDBConnector:
             document = {
                 '_id': uid,  # 使用UUID作为MongoDB的_id字段
                 'content': content,  # 存储完整的内容字典
-                'tags': tags  # 存储标签数组
+                'tags': tags,
+                'createdAt': datetime.now()  # 存储标签数组
             }
             result = self.collection.insert_one(document)
             

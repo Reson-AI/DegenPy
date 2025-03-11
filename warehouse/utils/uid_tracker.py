@@ -46,7 +46,7 @@ class DBUIDTracker:
         try:
             # 使用upsert确保不会重复添加
             self.db.db[self.collection_name].update_one(
-                {"uid": uid, "task_id": task_id},
+                {"_id": uid, "task_id": task_id},
                 {"$set": {"processed_at": datetime.now()}},
                 upsert=True
             )
