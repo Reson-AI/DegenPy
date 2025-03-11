@@ -250,44 +250,23 @@ class SpecialAttentionTask:
     
     def _extract_raw_content(self, data):
         """
-        从数据中提取原始内容
+        从数据中提取原始内容，直接返回整个字典数据，确保多条资讯被打包成列表
         
         Args:
             data: 数据
             
         Returns:
-            提取的原始内容
+            原始数据列表
         """
         if not data:
-            return None
+            return []
             
-        # 如果是列表，取第一项
+        # 确保数据是列表形式
         if isinstance(data, list):
-            if not data:
-                return None
-            data = data[0]
-            
-        # 从字典中提取内容
-        if isinstance(data, dict):
-            # 优先使用content字段
-            if 'content' in data:
-                content = data['content']
-                # 如果content是字典，尝试提取text字段
-                if isinstance(content, dict) and 'text' in content:
-                    return content['text']
-                # 如果content是字符串，直接返回
-                elif isinstance(content, str):
-                    return content
-            
-            # 如果没有content字段或提取失败，返回整个数据的字符串表示
-            return json.dumps(data, ensure_ascii=False, indent=2)
-        
-        # 如果是字符串，直接返回
-        if isinstance(data, str):
             return data
-            
-        # 其他类型，转换为字符串
-        return str(data)
+        else:
+            # 非列表数据，包装成列表
+            return [data]
     
     def _process_and_verify_content(self, data):
         """
@@ -299,11 +278,11 @@ class SpecialAttentionTask:
         Returns:
             处理后的内容
         """
-        # 提取原始内容
-        raw_content = self._extract_raw_content(data)
+        # 获取原始数据列表
+        raw_data_list = self._extract_raw_content(data)
         
-        if not raw_content:
-            return raw_content
+        if not raw_data_list:
+            return "没有找到有效内容"
             
         try:
             # 获取AI配置
@@ -313,6 +292,9 @@ class SpecialAttentionTask:
             max_tokens = ai_config.get('max_tokens', 4000)
             task_name = self.task_config.get('name', '特别关注')
             
+            # 将原始数据转换为JSON字符串
+            raw_content_json = json.dumps(raw_data_list, ensure_ascii=False, indent=2)
+            
             # 准备融合了验证和整理功能的高级提示词
             prompt = f"""# 任务：特别关注新闻验证与整理
 
@@ -320,7 +302,7 @@ class SpecialAttentionTask:
 你是一位专业的新闻编辑和事实核查专家，负责处理标记为"{task_name}"的特别关注新闻。
 
 ## 步骤
-1. **事实核查**：仔细分析以下内容，评估其真实性和可信度
+1. **事实核查**：仔细分析以下JSON格式的内容，评估其真实性和可信度
 2. **新闻整理**：将内容重新组织为简洁、清晰的特别关注新闻报道
 
 ## 要求
@@ -330,9 +312,10 @@ class SpecialAttentionTask:
 - 确保最终报道具有专业新闻风格，适合紧急播报
 - 报道应包含标题和正文，标题要简洁有力，能够吸引读者注意
 - 如果内容涉及数据或统计，请确保准确呈现
+- 不要输出原始JSON数据，只输出整理后的报道
 
-## 原始内容
-{raw_content}
+## 原始内容（JSON格式）
+{raw_content_json}
 
 ## 输出格式
 如果内容可信：直接输出整理后的新闻报道
@@ -354,11 +337,16 @@ class SpecialAttentionTask:
                 return processed_content
             else:
                 logger.warning(f"AI处理内容失败，使用原始内容: {self.task_id}")
-                return raw_content
+                # 如果AI处理失败，返回原始数据的JSON字符串
+                return raw_content_json
                 
         except Exception as e:
             logger.error(f"新闻验证和整理异常: {str(e)}", exc_info=True)
-            return raw_content
+            # 发生异常时，尝试返回原始数据的JSON字符串
+            try:
+                return json.dumps(raw_data_list, ensure_ascii=False, indent=2)
+            except:
+                return "处理数据时发生错误"
     
     def _generate_video(self, content):
         """

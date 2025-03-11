@@ -179,35 +179,16 @@ class TimelineTask:
             logger.warning(f"没有可处理的数据项: {self.task_id}")
             return
             
-        # 收集原始数据项
-        raw_items = []
-        for item in items_list:
-            if isinstance(item, dict):
-                # 直接使用字典项
-                raw_items.append(item)
-            else:
-                # 非字典项转换为字典
-                raw_items.append({"content": str(item)})
+        # 直接使用原始数据项列表
+        raw_items = items_list
         
         # 内容处理和汇总生成
         if "content_processor" in self.components and raw_items:
+            # 直接将整个字典列表传递给处理方法
             summary_content = self._process_all_items(raw_items)
         else:
-            # 如果没有内容处理组件或没有原始数据项，直接使用原始数据
-            summary_parts = []
-            
-            for item in items_list:
-                if isinstance(item, dict):
-                    # 尝试从字典中提取可读内容
-                    if 'content' in item and isinstance(item['content'], str):
-                        summary_parts.append(item['content'])
-                    else:
-                        # 将字典转为格式化的字符串
-                        summary_parts.append(json.dumps(item, ensure_ascii=False, indent=2))
-                else:
-                    summary_parts.append(str(item))
-                    
-            summary_content = "\n\n---\n\n".join(summary_parts)
+            # 如果没有内容处理组件，将原始数据转换为JSON字符串
+            summary_content = json.dumps(raw_items, ensure_ascii=False, indent=2)
             
         # 生成视频
         if "video_generator" in self.components:
@@ -276,9 +257,10 @@ class TimelineTask:
             # 准备提示词
             task_name = self.task_config.get('name', '时间线汇总')
             
-            # 为每个项目添加ID
+            # 为每个项目添加ID（如果没有）
             for i, item in enumerate(raw_items):
-                item["id"] = i + 1
+                if "id" not in item:
+                    item["id"] = i + 1
                 
             # 将字典列表转换为JSON字符串
             content_json = json.dumps(raw_items, ensure_ascii=False, indent=2)
@@ -289,6 +271,7 @@ class TimelineTask:
                         3. 保留所有关键细节和数据点
                         4. 使用清晰、专业的语言
                         5. 适合作为{task_name}的内容
+                        6. 不要输出原始JSON数据，只输出整理后的报告
 
                         原始信息（JSON格式）：
                         {content_json}
@@ -306,26 +289,17 @@ class TimelineTask:
                 logger.info(f"使用AI成功生成时间线汇总: {self.task_id}")
                 return summary_content
             else:
-                logger.warning(f"AI生成汇总失败，使用原始内容: {self.task_id}")
-                # 如果失败，返回原始数据项的格式化输出
-                formatted_items = []
-                for item in raw_items:
-                    if isinstance(item, dict) and 'content' in item and isinstance(item['content'], str):
-                        formatted_items.append(item['content'])
-                    else:
-                        formatted_items.append(json.dumps(item, ensure_ascii=False, indent=2))
-                return "\n\n---\n\n".join(formatted_items)
+                logger.warning(f"AI生成汇总失败，返回原始JSON: {self.task_id}")
+                # 如果失败，直接返回原始数据的JSON字符串
+                return content_json
                 
         except Exception as e:
             logger.error(f"AI生成汇总异常: {str(e)}")
-            # 如果发生异常，返回原始数据项的格式化输出
-            formatted_items = []
-            for item in raw_items:
-                if isinstance(item, dict) and 'content' in item and isinstance(item['content'], str):
-                    formatted_items.append(item['content'])
-                else:
-                    formatted_items.append(json.dumps(item, ensure_ascii=False, indent=2))
-            return "\n\n---\n\n".join(formatted_items)
+            # 如果发生异常，尝试返回原始数据的JSON字符串
+            try:
+                return json.dumps(raw_items, ensure_ascii=False, indent=2)
+            except:
+                return "处理数据时发生错误"
             
     def _generate_video(self, content, item_count=1):
         """
