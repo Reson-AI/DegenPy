@@ -63,14 +63,6 @@ class MongoDBConnector:
                 
         self.collection = self.db[collection_name]
         
-        # 输出详细的环境变量信息
-        logger.info(f"MongoDB 连接器初始化环境变量详情:")
-        logger.info(f"MONGODB_CONNECTION_STRING: {os.getenv('MONGODB_CONNECTION_STRING', '[未设置]')[:10]}...")
-        logger.info(f"MONGODB_DATABASE: {os.getenv('MONGODB_DATABASE', '[未设置]')}")
-        logger.info(f"MONGODB_COLLECTION: {os.getenv('MONGODB_COLLECTION', '[未设置]')}")
-        logger.info(f"MongoDB 连接器实际使用的配置:")
-        logger.info(f"Database: {db_name}, Collection: {collection_name}")
-        
         # 初始化消息队列
         if MQ_AVAILABLE:
             try:
@@ -196,8 +188,14 @@ class MongoDBConnector:
             elif tag == 2 and self.message_queue is not None:
                 try:
                     # 特别关注数据，发送到消息队列
+                    # 发送UID到消息队列
                     self.message_queue.publish('special_attention', uid)
                     logger.info(f"将UUID {uid} 发送到消息队列 special_attention")
+                    
+                    # 直接使用Redis发布消息到订阅通道
+                    if self.redis is not None:
+                        self.redis.publish('special_attention', uid)
+                        logger.info(f"将UUID {uid} 直接发布到Redis通道 special_attention")
                 except Exception as mq_error:
                     logger.error(f"消息队列操作失败: {str(mq_error)}")
             

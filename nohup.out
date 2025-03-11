@@ -1017,3 +1017,1814 @@ Traceback (most recent call last):
   File "/Users/yezi/DegenPy/.venv/lib/python3.11/site-packages/redis/_parsers/resp2.py", line 38, in _read_response
     raise error
 redis.exceptions.AuthenticationError: Authentication required.
+2025-03-10 18:36:49,988 - run - INFO - 接收到信号 15
+2025-03-10 18:36:49,989 - run - INFO - 停止所有进程...
+2025-03-10 18:36:49,990 - run - INFO - 终止 warehouse_api...
+2025-03-10 18:36:49,990 - run - INFO - 终止 server_api...
+INFO:     Shutting down
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Waiting for application shutdown.
+INFO:     Finished server process [24440]
+INFO:     Application shutdown complete.
+INFO:     Finished server process [24439]
+2025-03-10 18:36:50,992 - run - INFO - 停止所有进程...
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/multiprocessing/resource_tracker.py:224: UserWarning: resource_tracker: There appear to be 10 leaked semaphore objects to clean up at shutdown
+  warnings.warn('resource_tracker: There appear to be %d '
+2025-03-10 19:41:09,408 - run - INFO - 由server/api服务管理agent启动...
+2025-03-10 19:41:09,408 - run - INFO - 启动 warehouse_api...
+2025-03-10 19:41:09,410 - run - INFO - 启动 server_api...
+2025-03-10 19:41:09,411 - run - INFO - 所有服务启动完成。按 Ctrl+C 停止。
+2025-03-10 19:41:09,780 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 19:41:11,397 - message_broker - INFO - Connected to Redis server
+2025-03-10 19:41:11,448 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 19:41:11,631 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 19:41:11,631 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 19:41:11,631 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 19:41:13,116 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 19:41:13,116 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 19:41:13,116 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 19:41:13,292 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 19:41:13,293 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+INFO:     Started server process [29036]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+2025-03-10 19:41:14,786 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 19:41:14,787 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+INFO:     Started server process [29037]
+INFO:     Waiting for application startup.
+2025-03-10 19:41:14,819 - api - INFO - 自动启动TikTok-agent...
+2025-03-10 19:41:14,819 - agent_engine - INFO - 已加载Agent配置: tiktok-agent
+2025-03-10 19:41:14,819 - agent_engine - INFO - 开始运行agent: tiktok-agent
+2025-03-10 19:41:14,822 - special_attention_task - INFO - 特别关注任务 special_attention_task 使用组件: data_fetcher, fact_checker, content_processor, video_generator
+2025-03-10 19:41:14,822 - special_attention_task - INFO - 启动特别关注任务: special_attention_task
+2025-03-10 19:41:14,822 - special_attention_task - INFO - 启动实时监听: special_attention
+2025-03-10 19:41:16,146 - agent_engine - INFO - 任务已启动: tiktok-agent:special_attention_task (原始ID: special_attention_task)
+2025-03-10 19:41:16,149 - timeline_task - INFO - 时间线任务 timeline_task 使用组件: data_fetcher, content_processor, summary_generator, video_generator
+2025-03-10 19:41:16,149 - timeline_task - INFO - 启动时间线任务: timeline_task
+2025-03-10 19:41:16,149 - timeline_task - INFO - 启动定时执行: */30 * * * *
+2025-03-10 19:41:16,149 - agent_engine - INFO - 任务已启动: tiktok-agent:timeline_task (原始ID: timeline_task)
+2025-03-10 19:41:16,149 - api - INFO - TikTok-agent (tiktok-agent) 启动成功
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
+2025-03-10 19:42:12,038 - run - INFO - 接收到信号 15
+2025-03-10 19:42:12,040 - run - INFO - 停止所有进程...
+2025-03-10 19:42:12,041 - run - INFO - 终止 warehouse_api...
+2025-03-10 19:42:12,041 - run - INFO - 终止 server_api...
+INFO:     Shutting down
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [29037]
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [29036]
+2025-03-10 19:42:13,046 - run - INFO - 停止所有进程...
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/multiprocessing/resource_tracker.py:224: UserWarning: resource_tracker: There appear to be 10 leaked semaphore objects to clean up at shutdown
+  warnings.warn('resource_tracker: There appear to be %d '
+2025-03-10 19:42:24,529 - run - INFO - 由server/api服务管理agent启动...
+2025-03-10 19:42:24,529 - run - INFO - 启动 warehouse_api...
+2025-03-10 19:42:24,530 - run - INFO - 启动 server_api...
+2025-03-10 19:42:24,531 - run - INFO - 所有服务启动完成。按 Ctrl+C 停止。
+2025-03-10 19:42:24,921 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 19:42:26,577 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 19:42:26,577 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 19:42:26,577 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 19:42:26,634 - message_broker - INFO - Connected to Redis server
+2025-03-10 19:42:26,670 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 19:42:28,292 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 19:42:28,292 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 19:42:28,292 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 19:42:28,334 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 19:42:28,335 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+INFO:     Started server process [29299]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+2025-03-10 19:42:29,953 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 19:42:29,953 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+INFO:     Started server process [29300]
+INFO:     Waiting for application startup.
+2025-03-10 19:42:29,990 - api - INFO - 自动启动TikTok-agent...
+2025-03-10 19:42:29,991 - agent_engine - INFO - 已加载Agent配置: tiktok-agent
+2025-03-10 19:42:29,991 - agent_engine - INFO - 开始运行agent: tiktok-agent
+2025-03-10 19:42:29,998 - special_attention_task - INFO - 特别关注任务 special_attention_task 使用组件: data_fetcher, fact_checker, content_processor, video_generator
+2025-03-10 19:42:29,999 - special_attention_task - INFO - 启动特别关注任务: special_attention_task
+2025-03-10 19:42:29,999 - special_attention_task - INFO - 启动实时监听: special_attention
+2025-03-10 19:42:31,479 - agent_engine - INFO - 任务已启动: tiktok-agent:special_attention_task (原始ID: special_attention_task)
+2025-03-10 19:42:31,489 - timeline_task - INFO - 时间线任务 timeline_task 使用组件: data_fetcher, content_processor, summary_generator, video_generator
+2025-03-10 19:42:31,489 - timeline_task - INFO - 启动时间线任务: timeline_task
+2025-03-10 19:42:31,489 - timeline_task - INFO - 启动定时执行: */30 * * * *
+2025-03-10 19:42:31,490 - agent_engine - INFO - 任务已启动: tiktok-agent:timeline_task (原始ID: timeline_task)
+2025-03-10 19:42:31,490 - api - INFO - TikTok-agent (tiktok-agent) 启动成功
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
+2025-03-10 19:42:36,045 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 19:42:37,665 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 19:42:37,665 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 19:42:37,665 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 19:42:39,456 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 19:42:39,456 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 19:42:41,139 - mongodb_connector - INFO - 将UUID 6f79ee73-fda3-45b7-930b-010ee4468619 发送到Redis列表 timeline
+INFO:     127.0.0.1:55530 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 19:42:51,161 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 19:42:53,021 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 19:42:53,021 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 19:42:53,021 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 19:42:54,707 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 19:42:54,707 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 19:42:56,873 - mongodb_connector - INFO - 将UUID 59ee4bf5-db31-41f1-aa26-ecfd502b7a18 发送到消息队列 special_attention
+INFO:     127.0.0.1:55586 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 19:43:06,900 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 19:43:08,672 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 19:43:08,672 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 19:43:08,672 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 19:43:10,388 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 19:43:10,388 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 19:43:12,283 - mongodb_connector - INFO - 将UUID cca8571d-dbba-49bc-be73-b5eb16489b5a 发送到Redis列表 timeline
+INFO:     127.0.0.1:55638 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 19:43:22,300 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 19:43:24,043 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 19:43:24,043 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 19:43:24,043 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 19:43:25,784 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 19:43:25,784 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 19:43:27,563 - mongodb_connector - INFO - 将UUID c38f60ca-33a7-4902-84ee-866c097398e5 发送到Redis列表 timeline
+INFO:     127.0.0.1:55716 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 19:43:37,585 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 19:43:39,317 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 19:43:39,317 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 19:43:39,317 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 19:43:41,037 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 19:43:41,037 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 19:43:42,743 - mongodb_connector - INFO - 将UUID 74ace43e-bf5f-471b-a71b-08f3a24aa72f 发送到Redis列表 timeline
+INFO:     127.0.0.1:55819 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 19:43:52,815 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 19:43:54,649 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 19:43:54,649 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 19:43:54,649 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 19:43:56,616 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 19:43:56,618 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 19:43:58,393 - mongodb_connector - INFO - 将UUID b0ce9dba-a525-4565-907a-c63f4db546aa 发送到Redis列表 timeline
+INFO:     127.0.0.1:55901 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 19:44:08,412 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 19:44:10,216 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 19:44:10,216 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 19:44:10,217 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 19:44:11,869 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 19:44:11,869 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 19:44:14,080 - mongodb_connector - INFO - 将UUID 9fb01068-bc44-453a-a7f2-778315be106d 发送到消息队列 special_attention
+INFO:     127.0.0.1:55965 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 19:44:24,099 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 19:44:24,896 - run - INFO - 接收到信号 15
+2025-03-10 19:44:24,898 - run - INFO - 停止所有进程...
+2025-03-10 19:44:24,898 - run - INFO - 终止 warehouse_api...
+2025-03-10 19:44:24,898 - run - INFO - 终止 server_api...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [29300]
+2025-03-10 19:44:25,858 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 19:44:25,858 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 19:44:25,859 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 19:44:25,904 - run - INFO - 停止所有进程...
+2025-03-10 19:44:25,904 - run - INFO - 终止 warehouse_api...
+2025-03-10 19:44:27,511 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 19:44:27,513 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 19:44:29,206 - mongodb_connector - INFO - 将UUID 1ac45630-d1fa-4dfe-8af0-004e40ab2dfc 发送到Redis列表 timeline
+INFO:     127.0.0.1:56015 - "POST /data HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [29299]
+/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/multiprocessing/resource_tracker.py:224: UserWarning: resource_tracker: There appear to be 10 leaked semaphore objects to clean up at shutdown
+  warnings.warn('resource_tracker: There appear to be %d '
+2025-03-10 19:57:30,427 - run - INFO - 由server/api服务管理agent启动...
+2025-03-10 19:57:30,428 - run - INFO - 启动 warehouse_api...
+2025-03-10 19:57:30,429 - run - INFO - 启动 server_api...
+2025-03-10 19:57:30,430 - run - INFO - 所有服务启动完成。按 Ctrl+C 停止。
+2025-03-10 19:57:30,843 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 19:57:32,452 - message_broker - INFO - Connected to Redis server
+2025-03-10 19:57:32,489 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 19:57:32,671 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 19:57:32,672 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 19:57:32,672 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 19:57:34,134 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 19:57:34,134 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 19:57:34,134 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 19:57:34,312 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 19:57:34,312 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+INFO:     Started server process [30540]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+2025-03-10 19:57:35,783 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 19:57:35,783 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+INFO:     Started server process [30541]
+INFO:     Waiting for application startup.
+2025-03-10 19:57:35,824 - api - INFO - 自动启动TikTok-agent...
+2025-03-10 19:57:35,825 - agent_engine - INFO - 已加载Agent配置: tiktok-agent
+2025-03-10 19:57:35,825 - agent_engine - INFO - 开始运行agent: tiktok-agent
+2025-03-10 19:57:35,831 - special_attention_task - INFO - 特别关注任务 special_attention_task 使用组件: data_fetcher, fact_checker, content_processor, video_generator
+2025-03-10 19:57:35,831 - special_attention_task - INFO - 启动特别关注任务: special_attention_task
+2025-03-10 19:57:35,831 - special_attention_task - INFO - 启动实时监听: special_attention
+2025-03-10 19:57:37,204 - special_attention_task - INFO - 开始监听Redis通道: special_attention
+2025-03-10 19:57:37,204 - agent_engine - INFO - 任务已启动: tiktok-agent:special_attention_task (原始ID: special_attention_task)
+2025-03-10 19:57:37,208 - timeline_task - INFO - 时间线任务 timeline_task 使用组件: data_fetcher, content_processor, summary_generator, video_generator
+2025-03-10 19:57:37,209 - timeline_task - INFO - 启动时间线任务: timeline_task
+2025-03-10 19:57:37,209 - timeline_task - INFO - 启动定时执行: */30 * * * *
+2025-03-10 19:57:37,209 - agent_engine - INFO - 任务已启动: tiktok-agent:timeline_task (原始ID: timeline_task)
+2025-03-10 19:57:37,209 - api - INFO - TikTok-agent (tiktok-agent) 启动成功
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
+2025-03-10 19:57:42,582 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 19:57:44,249 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 19:57:44,249 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 19:57:44,249 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 19:57:46,017 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 19:57:46,017 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 19:57:47,675 - mongodb_connector - INFO - 将UUID 0cb403c1-5002-4326-b915-3bb17b98beca 发送到Redis列表 timeline
+INFO:     127.0.0.1:58832 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 19:57:57,695 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 19:57:59,402 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 19:57:59,402 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 19:57:59,402 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 19:58:01,165 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 19:58:01,165 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 19:58:03,232 - mongodb_connector - INFO - 将UUID bff1ef02-821f-4bb8-951e-ec92fc31ed27 发送到消息队列 special_attention
+2025-03-10 19:58:03,577 - special_attention_task - INFO - 从Redis通道 special_attention 收到消息: bff1ef02-821f-4bb8-951e-ec92fc31ed27
+2025-03-10 19:58:03,577 - special_attention_task - INFO - 执行特别关注任务: special_attention_task
+2025-03-10 19:58:03,577 - special_attention_task - INFO - 开始验证特别关注新闻真实性: special_attention_task
+2025-03-10 19:58:03,577 - special_attention_task - ERROR - 新闻真实性验证异常: fact_check() got an unexpected keyword argument 'model'
+2025-03-10 19:58:03,577 - special_attention_task - ERROR - AI整理内容异常: generate_content() got an unexpected keyword argument 'temperature'
+2025-03-10 19:58:03,577 - special_attention_task - ERROR - 创建特别关注视频生成任务失败: generate_video_from_text() got an unexpected keyword argument 'style'
+2025-03-10 19:58:03,585 - mongodb_connector - INFO - 将UUID bff1ef02-821f-4bb8-951e-ec92fc31ed27 直接发布到Redis通道 special_attention
+INFO:     127.0.0.1:58887 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 19:58:13,608 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 19:58:15,333 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 19:58:15,333 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 19:58:15,333 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 19:58:16,980 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 19:58:16,980 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 19:58:18,644 - mongodb_connector - INFO - 将UUID 82dec993-0603-4e1d-b078-b4cc4be8524b 发送到Redis列表 timeline
+INFO:     127.0.0.1:58948 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 19:58:28,661 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 19:58:30,431 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 19:58:30,432 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 19:58:30,432 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 19:58:32,183 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 19:58:32,184 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 19:58:33,867 - mongodb_connector - INFO - 将UUID 411412b0-b860-460d-82e6-668b2d9610d2 发送到Redis列表 timeline
+INFO:     127.0.0.1:58996 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 19:58:43,884 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 19:58:45,732 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 19:58:45,732 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 19:58:45,732 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 19:58:47,463 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 19:58:47,463 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 19:58:49,222 - mongodb_connector - INFO - 将UUID 0755c073-f623-4ab9-a52d-8c6251eb894a 发送到Redis列表 timeline
+INFO:     127.0.0.1:59039 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 19:58:59,248 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 19:59:01,029 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 19:59:01,030 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 19:59:01,030 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 19:59:02,872 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 19:59:02,872 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 19:59:04,554 - mongodb_connector - INFO - 将UUID bc20076a-338f-48e0-869a-f83f65b8a23f 发送到Redis列表 timeline
+INFO:     127.0.0.1:59081 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 19:59:14,569 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 19:59:16,222 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 19:59:16,222 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 19:59:16,222 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 19:59:18,047 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 19:59:18,047 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 19:59:19,692 - mongodb_connector - INFO - 将UUID bedba84c-9f6e-4e23-b21d-f9457f18ad4c 发送到Redis列表 timeline
+INFO:     127.0.0.1:59132 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 19:59:29,712 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 19:59:31,474 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 19:59:31,474 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 19:59:31,474 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 19:59:33,258 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 19:59:33,259 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 19:59:35,015 - mongodb_connector - INFO - 将UUID 88979578-9289-40ab-a965-97ae632dd039 发送到Redis列表 timeline
+INFO:     127.0.0.1:59190 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 19:59:45,029 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 19:59:46,791 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 19:59:46,791 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 19:59:46,791 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 19:59:48,567 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 19:59:48,567 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 19:59:50,821 - mongodb_connector - INFO - 将UUID f8561020-3b5a-4e89-b0cc-5acd9385e72c 发送到消息队列 special_attention
+2025-03-10 19:59:51,169 - special_attention_task - INFO - 从Redis通道 special_attention 收到消息: f8561020-3b5a-4e89-b0cc-5acd9385e72c
+2025-03-10 19:59:51,170 - special_attention_task - INFO - 执行特别关注任务: special_attention_task
+2025-03-10 19:59:51,171 - special_attention_task - INFO - 开始验证特别关注新闻真实性: special_attention_task
+2025-03-10 19:59:51,171 - special_attention_task - ERROR - 新闻真实性验证异常: fact_check() got an unexpected keyword argument 'model'
+2025-03-10 19:59:51,171 - special_attention_task - ERROR - AI整理内容异常: generate_content() got an unexpected keyword argument 'temperature'
+2025-03-10 19:59:51,171 - special_attention_task - ERROR - 创建特别关注视频生成任务失败: generate_video_from_text() got an unexpected keyword argument 'style'
+2025-03-10 19:59:51,176 - mongodb_connector - INFO - 将UUID f8561020-3b5a-4e89-b0cc-5acd9385e72c 直接发布到Redis通道 special_attention
+INFO:     127.0.0.1:59239 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:00:01,192 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:00:02,909 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:00:02,909 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:00:02,909 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:00:04,652 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:00:04,652 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:00:06,322 - mongodb_connector - INFO - 将UUID f28487fc-4216-40a3-9b55-f1e4557b5006 发送到Redis列表 timeline
+INFO:     127.0.0.1:59301 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:00:16,342 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:00:17,994 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:00:17,994 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:00:17,994 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:00:19,885 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:00:19,885 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:00:22,007 - mongodb_connector - INFO - 将UUID 8c0b5635-1aa0-4e1b-a9ef-877ee36364fb 发送到消息队列 special_attention
+2025-03-10 20:00:22,353 - special_attention_task - INFO - 从Redis通道 special_attention 收到消息: 8c0b5635-1aa0-4e1b-a9ef-877ee36364fb
+2025-03-10 20:00:22,353 - special_attention_task - INFO - 执行特别关注任务: special_attention_task
+2025-03-10 20:00:22,354 - special_attention_task - INFO - 开始验证特别关注新闻真实性: special_attention_task
+2025-03-10 20:00:22,354 - special_attention_task - ERROR - 新闻真实性验证异常: fact_check() got an unexpected keyword argument 'model'
+2025-03-10 20:00:22,354 - special_attention_task - ERROR - AI整理内容异常: generate_content() got an unexpected keyword argument 'temperature'
+2025-03-10 20:00:22,354 - special_attention_task - ERROR - 创建特别关注视频生成任务失败: generate_video_from_text() got an unexpected keyword argument 'style'
+2025-03-10 20:00:22,376 - mongodb_connector - INFO - 将UUID 8c0b5635-1aa0-4e1b-a9ef-877ee36364fb 直接发布到Redis通道 special_attention
+INFO:     127.0.0.1:59348 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:00:32,394 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:00:34,049 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:00:34,049 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:00:34,049 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:00:35,817 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:00:35,817 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:00:37,903 - mongodb_connector - INFO - 将UUID 39f0bf15-8418-46c3-a341-a87a9cb1ef06 发送到消息队列 special_attention
+2025-03-10 20:00:38,249 - special_attention_task - INFO - 从Redis通道 special_attention 收到消息: 39f0bf15-8418-46c3-a341-a87a9cb1ef06
+2025-03-10 20:00:38,249 - special_attention_task - INFO - 执行特别关注任务: special_attention_task
+2025-03-10 20:00:38,249 - special_attention_task - INFO - 开始验证特别关注新闻真实性: special_attention_task
+2025-03-10 20:00:38,249 - special_attention_task - ERROR - 新闻真实性验证异常: fact_check() got an unexpected keyword argument 'model'
+2025-03-10 20:00:38,249 - special_attention_task - ERROR - AI整理内容异常: generate_content() got an unexpected keyword argument 'temperature'
+2025-03-10 20:00:38,249 - special_attention_task - ERROR - 创建特别关注视频生成任务失败: generate_video_from_text() got an unexpected keyword argument 'style'
+2025-03-10 20:00:38,258 - mongodb_connector - INFO - 将UUID 39f0bf15-8418-46c3-a341-a87a9cb1ef06 直接发布到Redis通道 special_attention
+INFO:     127.0.0.1:59384 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:00:48,277 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:00:50,060 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:00:50,060 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:00:50,060 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:00:51,708 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:00:51,708 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:00:53,367 - mongodb_connector - INFO - 将UUID cb53fe74-c328-411b-8e93-ef177984aef5 发送到Redis列表 timeline
+INFO:     127.0.0.1:59435 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:01:03,387 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:01:05,008 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:01:05,008 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:01:05,008 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:01:06,740 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:01:06,740 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:01:08,418 - mongodb_connector - INFO - 将UUID 34e909f3-0f23-4634-bc71-f59ec75217e6 发送到Redis列表 timeline
+INFO:     127.0.0.1:59470 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:01:18,436 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:01:20,183 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:01:20,183 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:01:20,183 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:01:21,953 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:01:21,953 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:01:23,700 - mongodb_connector - INFO - 将UUID cb967903-cc7f-451f-944e-6bc2bfd4f5f3 发送到Redis列表 timeline
+INFO:     127.0.0.1:59524 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:01:33,714 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:01:35,485 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:01:35,486 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:01:35,486 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:01:37,100 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:01:37,100 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:01:38,827 - mongodb_connector - INFO - 将UUID c7faa1ae-19a0-4d7d-b21a-1fb65f3398f8 发送到Redis列表 timeline
+INFO:     127.0.0.1:59560 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:01:48,844 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:01:50,587 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:01:50,587 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:01:50,587 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:01:52,221 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:01:52,222 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:01:53,957 - mongodb_connector - INFO - 将UUID c3b896b2-e1a8-45f4-a036-78a5d143be59 发送到Redis列表 timeline
+INFO:     127.0.0.1:59601 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:02:03,969 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:02:05,581 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:02:05,581 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:02:05,581 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:02:07,334 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:02:07,336 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:02:09,013 - mongodb_connector - INFO - 将UUID 2c28e942-faca-4b09-9709-84bae1cf7bed 发送到Redis列表 timeline
+INFO:     127.0.0.1:59657 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:02:19,030 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:02:20,813 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:02:20,815 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:02:20,815 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:02:22,419 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:02:22,419 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:02:24,207 - mongodb_connector - INFO - 将UUID aaca4091-2ce7-425b-a6d2-cb8e7c306538 发送到Redis列表 timeline
+INFO:     127.0.0.1:59708 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:02:34,227 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:02:35,838 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:02:35,838 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:02:35,838 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:02:37,486 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:02:37,486 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:02:39,146 - mongodb_connector - INFO - 将UUID 052e63f2-2ec9-49e5-8ff1-ea6df8871792 发送到Redis列表 timeline
+INFO:     127.0.0.1:59745 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:02:49,160 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:02:50,816 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:02:50,816 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:02:50,816 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:02:52,590 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:02:52,590 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:02:54,587 - mongodb_connector - INFO - 将UUID cbd63f81-39ee-452d-8ce2-81c712d12470 发送到消息队列 special_attention
+2025-03-10 20:02:54,934 - special_attention_task - INFO - 从Redis通道 special_attention 收到消息: cbd63f81-39ee-452d-8ce2-81c712d12470
+2025-03-10 20:02:54,935 - special_attention_task - INFO - 执行特别关注任务: special_attention_task
+2025-03-10 20:02:54,935 - special_attention_task - INFO - 开始验证特别关注新闻真实性: special_attention_task
+2025-03-10 20:02:54,935 - special_attention_task - ERROR - 新闻真实性验证异常: fact_check() got an unexpected keyword argument 'model'
+2025-03-10 20:02:54,935 - special_attention_task - ERROR - AI整理内容异常: generate_content() got an unexpected keyword argument 'temperature'
+2025-03-10 20:02:54,935 - special_attention_task - ERROR - 创建特别关注视频生成任务失败: generate_video_from_text() got an unexpected keyword argument 'style'
+2025-03-10 20:02:54,941 - mongodb_connector - INFO - 将UUID cbd63f81-39ee-452d-8ce2-81c712d12470 直接发布到Redis通道 special_attention
+INFO:     127.0.0.1:59781 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:03:04,959 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:03:06,632 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:03:06,632 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:03:06,632 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:03:08,281 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:03:08,281 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:03:10,050 - mongodb_connector - INFO - 将UUID 4b53c6bb-ab79-46fb-ad96-45d92b778f88 发送到Redis列表 timeline
+INFO:     127.0.0.1:59827 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:03:20,060 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:03:21,819 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:03:21,819 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:03:21,819 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:03:23,573 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:03:23,573 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:03:25,690 - mongodb_connector - INFO - 将UUID 58cb3ab7-0469-4cc2-a52e-0851abb6f4f3 发送到消息队列 special_attention
+2025-03-10 20:03:26,034 - special_attention_task - INFO - 从Redis通道 special_attention 收到消息: 58cb3ab7-0469-4cc2-a52e-0851abb6f4f3
+2025-03-10 20:03:26,035 - special_attention_task - INFO - 执行特别关注任务: special_attention_task
+2025-03-10 20:03:26,035 - special_attention_task - INFO - 开始验证特别关注新闻真实性: special_attention_task
+2025-03-10 20:03:26,035 - special_attention_task - ERROR - 新闻真实性验证异常: fact_check() got an unexpected keyword argument 'model'
+2025-03-10 20:03:26,035 - special_attention_task - ERROR - AI整理内容异常: generate_content() got an unexpected keyword argument 'temperature'
+2025-03-10 20:03:26,035 - special_attention_task - ERROR - 创建特别关注视频生成任务失败: generate_video_from_text() got an unexpected keyword argument 'style'
+2025-03-10 20:03:26,039 - mongodb_connector - INFO - 将UUID 58cb3ab7-0469-4cc2-a52e-0851abb6f4f3 直接发布到Redis通道 special_attention
+INFO:     127.0.0.1:59881 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:03:36,055 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:03:37,825 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:03:37,826 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:03:37,826 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:03:39,468 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:03:39,468 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:03:41,129 - mongodb_connector - INFO - 将UUID 0cbaafbb-a875-47b1-972d-32e9670f03c3 发送到Redis列表 timeline
+INFO:     127.0.0.1:59919 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:03:51,151 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:03:52,803 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:03:52,803 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:03:52,803 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:03:54,545 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:03:54,546 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:03:56,632 - mongodb_connector - INFO - 将UUID ac99aa99-bbf5-45f6-860f-6c50487d6ee9 发送到消息队列 special_attention
+2025-03-10 20:03:56,976 - special_attention_task - INFO - 从Redis通道 special_attention 收到消息: ac99aa99-bbf5-45f6-860f-6c50487d6ee9
+2025-03-10 20:03:56,977 - special_attention_task - INFO - 执行特别关注任务: special_attention_task
+2025-03-10 20:03:56,977 - special_attention_task - INFO - 开始验证特别关注新闻真实性: special_attention_task
+2025-03-10 20:03:56,977 - special_attention_task - ERROR - 新闻真实性验证异常: fact_check() got an unexpected keyword argument 'model'
+2025-03-10 20:03:56,977 - special_attention_task - ERROR - AI整理内容异常: generate_content() got an unexpected keyword argument 'temperature'
+2025-03-10 20:03:56,977 - special_attention_task - ERROR - 创建特别关注视频生成任务失败: generate_video_from_text() got an unexpected keyword argument 'style'
+2025-03-10 20:03:56,979 - mongodb_connector - INFO - 将UUID ac99aa99-bbf5-45f6-860f-6c50487d6ee9 直接发布到Redis通道 special_attention
+INFO:     127.0.0.1:59963 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:04:07,005 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:04:08,756 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:04:08,756 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:04:08,756 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:04:10,398 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:04:10,399 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:04:12,095 - mongodb_connector - INFO - 将UUID c08f5f28-1c9a-492c-8136-eca815af2c75 发送到Redis列表 timeline
+INFO:     127.0.0.1:60025 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:04:22,108 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:04:23,857 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:04:23,857 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:04:23,857 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:04:25,469 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:04:25,470 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:04:27,114 - mongodb_connector - INFO - 将UUID 6f6286bd-a875-46ef-b6b6-1ea35be7ccec 发送到Redis列表 timeline
+INFO:     127.0.0.1:60070 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:04:37,132 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:04:38,890 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:04:38,890 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:04:38,891 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:04:40,630 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:04:40,630 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:04:42,453 - mongodb_connector - INFO - 将UUID 907eb48a-49d7-43c6-98fd-9f96aa4c0719 发送到Redis列表 timeline
+INFO:     127.0.0.1:60103 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:04:52,472 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:04:54,245 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:04:54,245 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:04:54,245 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:04:56,001 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:04:56,001 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:04:58,091 - mongodb_connector - INFO - 将UUID 67faa820-f162-4e64-8148-34c277d0255c 发送到消息队列 special_attention
+2025-03-10 20:04:58,438 - special_attention_task - INFO - 从Redis通道 special_attention 收到消息: 67faa820-f162-4e64-8148-34c277d0255c
+2025-03-10 20:04:58,439 - special_attention_task - INFO - 执行特别关注任务: special_attention_task
+2025-03-10 20:04:58,439 - special_attention_task - INFO - 开始验证特别关注新闻真实性: special_attention_task
+2025-03-10 20:04:58,439 - special_attention_task - ERROR - 新闻真实性验证异常: fact_check() got an unexpected keyword argument 'model'
+2025-03-10 20:04:58,439 - special_attention_task - ERROR - AI整理内容异常: generate_content() got an unexpected keyword argument 'temperature'
+2025-03-10 20:04:58,439 - special_attention_task - ERROR - 创建特别关注视频生成任务失败: generate_video_from_text() got an unexpected keyword argument 'style'
+2025-03-10 20:04:58,444 - mongodb_connector - INFO - 将UUID 67faa820-f162-4e64-8148-34c277d0255c 直接发布到Redis通道 special_attention
+INFO:     127.0.0.1:60153 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:05:08,458 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:05:10,108 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:05:10,108 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:05:10,108 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:05:11,797 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:05:11,797 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:05:13,432 - mongodb_connector - INFO - 将UUID 3d6803bb-6eb2-4ce1-bf7f-3f1f52cb85b7 发送到Redis列表 timeline
+INFO:     127.0.0.1:60194 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:05:23,447 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:05:25,282 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:05:25,282 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:05:25,282 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:05:27,047 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:05:27,047 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:05:29,210 - mongodb_connector - INFO - 将UUID b1c11c6b-3198-4ac2-82f9-d23e4f445952 发送到消息队列 special_attention
+2025-03-10 20:05:29,553 - special_attention_task - INFO - 从Redis通道 special_attention 收到消息: b1c11c6b-3198-4ac2-82f9-d23e4f445952
+2025-03-10 20:05:29,553 - special_attention_task - INFO - 执行特别关注任务: special_attention_task
+2025-03-10 20:05:29,553 - special_attention_task - INFO - 开始验证特别关注新闻真实性: special_attention_task
+2025-03-10 20:05:29,553 - special_attention_task - ERROR - 新闻真实性验证异常: fact_check() got an unexpected keyword argument 'model'
+2025-03-10 20:05:29,553 - special_attention_task - ERROR - AI整理内容异常: generate_content() got an unexpected keyword argument 'temperature'
+2025-03-10 20:05:29,554 - special_attention_task - ERROR - 创建特别关注视频生成任务失败: generate_video_from_text() got an unexpected keyword argument 'style'
+2025-03-10 20:05:29,562 - mongodb_connector - INFO - 将UUID b1c11c6b-3198-4ac2-82f9-d23e4f445952 直接发布到Redis通道 special_attention
+INFO:     127.0.0.1:60242 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:05:39,580 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:05:41,348 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:05:41,348 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:05:41,348 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:05:42,989 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:05:42,989 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:05:44,630 - mongodb_connector - INFO - 将UUID 61c8b1b4-2f14-42d4-968b-efbaee2fffc6 发送到Redis列表 timeline
+INFO:     127.0.0.1:60286 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:05:54,652 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:05:56,392 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:05:56,393 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:05:56,393 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:05:58,155 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:05:58,155 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:06:00,231 - mongodb_connector - INFO - 将UUID 1842a03e-5ebf-427a-84fd-a5d779a87040 发送到消息队列 special_attention
+2025-03-10 20:06:00,576 - special_attention_task - INFO - 从Redis通道 special_attention 收到消息: 1842a03e-5ebf-427a-84fd-a5d779a87040
+2025-03-10 20:06:00,577 - special_attention_task - INFO - 执行特别关注任务: special_attention_task
+2025-03-10 20:06:00,577 - special_attention_task - INFO - 开始验证特别关注新闻真实性: special_attention_task
+2025-03-10 20:06:00,577 - special_attention_task - ERROR - 新闻真实性验证异常: fact_check() got an unexpected keyword argument 'model'
+2025-03-10 20:06:00,577 - special_attention_task - ERROR - AI整理内容异常: generate_content() got an unexpected keyword argument 'temperature'
+2025-03-10 20:06:00,577 - special_attention_task - ERROR - 创建特别关注视频生成任务失败: generate_video_from_text() got an unexpected keyword argument 'style'
+2025-03-10 20:06:00,584 - mongodb_connector - INFO - 将UUID 1842a03e-5ebf-427a-84fd-a5d779a87040 直接发布到Redis通道 special_attention
+INFO:     127.0.0.1:60323 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:06:10,598 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:06:12,335 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:06:12,336 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:06:12,336 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:06:14,083 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:06:14,083 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:06:15,859 - mongodb_connector - INFO - 将UUID ac3b31b4-825d-4d0b-9aff-8ec824e2c05e 发送到Redis列表 timeline
+INFO:     127.0.0.1:60395 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:06:25,875 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:06:27,605 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:06:27,606 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:06:27,606 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:06:29,375 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:06:29,375 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:06:31,522 - mongodb_connector - INFO - 将UUID f8a7e0a8-3250-45f6-8a59-ca394f850fd3 发送到消息队列 special_attention
+2025-03-10 20:06:31,863 - special_attention_task - INFO - 从Redis通道 special_attention 收到消息: f8a7e0a8-3250-45f6-8a59-ca394f850fd3
+2025-03-10 20:06:31,863 - special_attention_task - INFO - 执行特别关注任务: special_attention_task
+2025-03-10 20:06:31,863 - special_attention_task - INFO - 开始验证特别关注新闻真实性: special_attention_task
+2025-03-10 20:06:31,864 - special_attention_task - ERROR - 新闻真实性验证异常: fact_check() got an unexpected keyword argument 'model'
+2025-03-10 20:06:31,864 - special_attention_task - ERROR - AI整理内容异常: generate_content() got an unexpected keyword argument 'temperature'
+2025-03-10 20:06:31,864 - special_attention_task - ERROR - 创建特别关注视频生成任务失败: generate_video_from_text() got an unexpected keyword argument 'style'
+2025-03-10 20:06:31,876 - mongodb_connector - INFO - 将UUID f8a7e0a8-3250-45f6-8a59-ca394f850fd3 直接发布到Redis通道 special_attention
+INFO:     127.0.0.1:60439 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:06:41,894 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:06:43,654 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:06:43,654 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:06:43,655 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:06:45,306 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:06:45,307 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:06:47,423 - mongodb_connector - INFO - 将UUID a6114bd7-e6a7-481c-a2f9-2aa8d14befe6 发送到消息队列 special_attention
+2025-03-10 20:06:47,742 - special_attention_task - INFO - 从Redis通道 special_attention 收到消息: a6114bd7-e6a7-481c-a2f9-2aa8d14befe6
+2025-03-10 20:06:47,743 - special_attention_task - INFO - 执行特别关注任务: special_attention_task
+2025-03-10 20:06:47,743 - special_attention_task - INFO - 开始验证特别关注新闻真实性: special_attention_task
+2025-03-10 20:06:47,743 - special_attention_task - ERROR - 新闻真实性验证异常: fact_check() got an unexpected keyword argument 'model'
+2025-03-10 20:06:47,743 - special_attention_task - ERROR - AI整理内容异常: generate_content() got an unexpected keyword argument 'temperature'
+2025-03-10 20:06:47,743 - special_attention_task - ERROR - 创建特别关注视频生成任务失败: generate_video_from_text() got an unexpected keyword argument 'style'
+2025-03-10 20:06:47,758 - mongodb_connector - INFO - 将UUID a6114bd7-e6a7-481c-a2f9-2aa8d14befe6 直接发布到Redis通道 special_attention
+INFO:     127.0.0.1:60484 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:06:57,774 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:06:59,418 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:06:59,419 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:06:59,419 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:07:01,020 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:07:01,021 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:07:02,746 - mongodb_connector - INFO - 将UUID 6572bc24-6e1c-45a8-b9b5-34e9854ce243 发送到Redis列表 timeline
+INFO:     127.0.0.1:60519 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:07:12,763 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:07:14,537 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:07:14,538 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:07:14,538 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:07:16,299 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:07:16,299 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:07:18,049 - mongodb_connector - INFO - 将UUID b482a889-f385-44ec-9fba-e6adfceace1d 发送到Redis列表 timeline
+INFO:     127.0.0.1:60569 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:07:28,068 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:07:29,844 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:07:29,844 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:07:29,844 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:07:31,696 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:07:31,696 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:07:33,475 - mongodb_connector - INFO - 将UUID d8b37551-4fb9-4b79-8e5c-254215caa29b 发送到Redis列表 timeline
+INFO:     127.0.0.1:60618 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:07:43,496 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:07:45,154 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:07:45,155 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:07:45,155 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:07:46,974 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:07:46,974 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:07:48,822 - mongodb_connector - INFO - 将UUID 8243eca4-1f1f-4307-a313-3b36ef92ae01 发送到Redis列表 timeline
+INFO:     127.0.0.1:60671 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:07:58,837 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:08:00,603 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:08:00,604 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:08:00,604 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:08:02,448 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:08:02,449 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:08:04,236 - mongodb_connector - INFO - 将UUID dfc2877b-e8d7-45ef-b257-e665e56ee077 发送到Redis列表 timeline
+INFO:     127.0.0.1:60699 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:08:14,252 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:08:16,014 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:08:16,015 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:08:16,015 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:08:17,770 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:08:17,770 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:08:19,595 - mongodb_connector - INFO - 将UUID beef8b22-ea27-4b3f-b6cf-15d72c745624 发送到Redis列表 timeline
+INFO:     127.0.0.1:60747 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:08:29,612 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:08:31,330 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:08:31,330 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:08:31,330 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:08:33,174 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:08:33,175 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:08:34,983 - mongodb_connector - INFO - 将UUID 43ebec7c-ed81-468f-b0fe-5902094e2472 发送到Redis列表 timeline
+INFO:     127.0.0.1:60792 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:08:44,999 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:08:46,628 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:08:46,630 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:08:46,630 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:08:48,272 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:08:48,272 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:08:50,029 - mongodb_connector - INFO - 将UUID c6446ee8-8fc3-42cb-9e87-3d7640fd86db 发送到Redis列表 timeline
+INFO:     127.0.0.1:60843 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:09:00,046 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:09:01,882 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:09:01,882 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:09:01,882 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:09:03,651 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:09:03,651 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:09:05,289 - mongodb_connector - INFO - 将UUID a0042bf1-e987-4542-94d6-5319d0e8b8da 发送到Redis列表 timeline
+INFO:     127.0.0.1:60875 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:09:15,307 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:09:16,941 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:09:16,941 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:09:16,941 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:09:18,757 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:09:18,757 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:09:20,741 - mongodb_connector - INFO - 将UUID 0dd82930-9662-425f-abdf-23d0bd7bda77 发送到消息队列 special_attention
+2025-03-10 20:09:21,087 - special_attention_task - INFO - 从Redis通道 special_attention 收到消息: 0dd82930-9662-425f-abdf-23d0bd7bda77
+2025-03-10 20:09:21,088 - special_attention_task - INFO - 执行特别关注任务: special_attention_task
+2025-03-10 20:09:21,088 - special_attention_task - INFO - 开始验证特别关注新闻真实性: special_attention_task
+2025-03-10 20:09:21,088 - special_attention_task - ERROR - 新闻真实性验证异常: fact_check() got an unexpected keyword argument 'model'
+2025-03-10 20:09:21,088 - special_attention_task - ERROR - AI整理内容异常: generate_content() got an unexpected keyword argument 'temperature'
+2025-03-10 20:09:21,088 - special_attention_task - ERROR - 创建特别关注视频生成任务失败: generate_video_from_text() got an unexpected keyword argument 'style'
+2025-03-10 20:09:21,109 - mongodb_connector - INFO - 将UUID 0dd82930-9662-425f-abdf-23d0bd7bda77 直接发布到Redis通道 special_attention
+INFO:     127.0.0.1:60934 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:09:31,122 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:09:32,756 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:09:32,756 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:09:32,756 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:09:34,406 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:09:34,406 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:09:36,029 - mongodb_connector - INFO - 将UUID e403299d-a83b-47f6-a18d-1c0625e49f20 发送到Redis列表 timeline
+INFO:     127.0.0.1:60973 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:09:46,043 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:09:47,681 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:09:47,681 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:09:47,681 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:09:49,318 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:09:49,318 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:09:50,965 - mongodb_connector - INFO - 将UUID fb200c90-4a04-4c80-8681-f26e8c25a55f 发送到Redis列表 timeline
+INFO:     127.0.0.1:61016 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:10:00,978 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:10:02,614 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:10:02,615 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:10:02,615 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:10:04,339 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:10:04,340 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:10:06,093 - mongodb_connector - INFO - 将UUID 39ecd23f-b72b-4b06-b200-4b769b500327 发送到Redis列表 timeline
+INFO:     127.0.0.1:61050 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:10:16,111 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:10:17,873 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:10:17,873 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:10:17,873 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:10:19,628 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:10:19,628 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:10:21,401 - mongodb_connector - INFO - 将UUID 91d4aa2a-0672-432b-8948-75bf58d251d3 发送到Redis列表 timeline
+INFO:     127.0.0.1:61110 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:10:31,417 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:10:33,063 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:10:33,063 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:10:33,063 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:10:34,709 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:10:34,709 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:10:36,436 - mongodb_connector - INFO - 将UUID 6c837187-13d4-4009-9f1f-3636d998320d 发送到Redis列表 timeline
+INFO:     127.0.0.1:61142 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:10:46,449 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:10:48,074 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:10:48,074 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:10:48,074 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:10:49,720 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:10:49,721 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:10:51,470 - mongodb_connector - INFO - 将UUID 056df754-c195-42ee-8949-d92197103571 发送到Redis列表 timeline
+INFO:     127.0.0.1:61186 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:11:01,485 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:11:03,130 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:11:03,131 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:11:03,131 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:11:04,903 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:11:04,903 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:11:06,661 - mongodb_connector - INFO - 将UUID b6cf84d2-5c6f-447d-aa6b-dec751fbfe32 发送到Redis列表 timeline
+INFO:     127.0.0.1:61216 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:11:16,679 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:11:18,409 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:11:18,409 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:11:18,409 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:11:20,161 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:11:20,161 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:11:21,818 - mongodb_connector - INFO - 将UUID 90cf3087-e5a9-4f5f-ae0c-5696e5c52144 发送到Redis列表 timeline
+INFO:     127.0.0.1:61271 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:11:31,834 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:11:33,553 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:11:33,553 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:11:33,553 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:11:35,293 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:11:35,293 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:11:37,402 - mongodb_connector - INFO - 将UUID 36d486ba-2548-47a9-b088-39d433127d41 发送到消息队列 special_attention
+2025-03-10 20:11:37,746 - special_attention_task - INFO - 从Redis通道 special_attention 收到消息: 36d486ba-2548-47a9-b088-39d433127d41
+2025-03-10 20:11:37,746 - special_attention_task - INFO - 执行特别关注任务: special_attention_task
+2025-03-10 20:11:37,746 - special_attention_task - INFO - 开始验证特别关注新闻真实性: special_attention_task
+2025-03-10 20:11:37,746 - special_attention_task - ERROR - 新闻真实性验证异常: fact_check() got an unexpected keyword argument 'model'
+2025-03-10 20:11:37,746 - special_attention_task - ERROR - AI整理内容异常: generate_content() got an unexpected keyword argument 'temperature'
+2025-03-10 20:11:37,746 - special_attention_task - ERROR - 创建特别关注视频生成任务失败: generate_video_from_text() got an unexpected keyword argument 'style'
+2025-03-10 20:11:37,749 - mongodb_connector - INFO - 将UUID 36d486ba-2548-47a9-b088-39d433127d41 直接发布到Redis通道 special_attention
+INFO:     127.0.0.1:61307 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:11:47,765 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:11:49,621 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:11:49,622 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:11:49,622 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:11:51,375 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:11:51,375 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:11:53,532 - mongodb_connector - INFO - 将UUID 7a92d461-754d-4228-ade8-0259d8842910 发送到消息队列 special_attention
+2025-03-10 20:11:53,873 - special_attention_task - INFO - 从Redis通道 special_attention 收到消息: 7a92d461-754d-4228-ade8-0259d8842910
+2025-03-10 20:11:53,873 - special_attention_task - INFO - 执行特别关注任务: special_attention_task
+2025-03-10 20:11:53,874 - special_attention_task - INFO - 开始验证特别关注新闻真实性: special_attention_task
+2025-03-10 20:11:53,874 - special_attention_task - ERROR - 新闻真实性验证异常: fact_check() got an unexpected keyword argument 'model'
+2025-03-10 20:11:53,874 - special_attention_task - ERROR - AI整理内容异常: generate_content() got an unexpected keyword argument 'temperature'
+2025-03-10 20:11:53,874 - special_attention_task - ERROR - 创建特别关注视频生成任务失败: generate_video_from_text() got an unexpected keyword argument 'style'
+2025-03-10 20:11:53,883 - mongodb_connector - INFO - 将UUID 7a92d461-754d-4228-ade8-0259d8842910 直接发布到Redis通道 special_attention
+INFO:     127.0.0.1:61350 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:12:03,900 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:12:05,647 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:12:05,647 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:12:05,647 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:12:07,434 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:12:07,434 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:12:09,115 - mongodb_connector - INFO - 将UUID 532a03db-9c6c-4260-a1ba-424558388dcc 发送到Redis列表 timeline
+INFO:     127.0.0.1:61384 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:12:19,133 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:12:20,955 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:12:20,955 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:12:20,955 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:12:22,603 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:12:22,603 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:12:24,247 - mongodb_connector - INFO - 将UUID fff3a20f-6448-42f8-b93c-0e9373ba3e4e 发送到Redis列表 timeline
+INFO:     127.0.0.1:61433 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:12:34,264 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:12:36,157 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:12:36,157 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:12:36,157 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:12:37,956 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:12:37,956 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:12:40,032 - mongodb_connector - INFO - 将UUID 1e4a624d-7dc6-47e0-b538-192e54940138 发送到消息队列 special_attention
+2025-03-10 20:12:40,364 - special_attention_task - INFO - 从Redis通道 special_attention 收到消息: 1e4a624d-7dc6-47e0-b538-192e54940138
+2025-03-10 20:12:40,364 - special_attention_task - INFO - 执行特别关注任务: special_attention_task
+2025-03-10 20:12:40,364 - special_attention_task - INFO - 开始验证特别关注新闻真实性: special_attention_task
+2025-03-10 20:12:40,364 - special_attention_task - ERROR - 新闻真实性验证异常: fact_check() got an unexpected keyword argument 'model'
+2025-03-10 20:12:40,364 - special_attention_task - ERROR - AI整理内容异常: generate_content() got an unexpected keyword argument 'temperature'
+2025-03-10 20:12:40,364 - special_attention_task - ERROR - 创建特别关注视频生成任务失败: generate_video_from_text() got an unexpected keyword argument 'style'
+2025-03-10 20:12:40,379 - mongodb_connector - INFO - 将UUID 1e4a624d-7dc6-47e0-b538-192e54940138 直接发布到Redis通道 special_attention
+INFO:     127.0.0.1:61470 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:12:50,395 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:12:52,134 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:12:52,135 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:12:52,135 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:12:53,785 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:12:53,786 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:12:55,947 - mongodb_connector - INFO - 将UUID c7bf9d4a-294b-41a2-9c37-ff5eea35abcc 发送到消息队列 special_attention
+2025-03-10 20:12:56,271 - special_attention_task - INFO - 从Redis通道 special_attention 收到消息: c7bf9d4a-294b-41a2-9c37-ff5eea35abcc
+2025-03-10 20:12:56,271 - special_attention_task - INFO - 执行特别关注任务: special_attention_task
+2025-03-10 20:12:56,272 - special_attention_task - INFO - 开始验证特别关注新闻真实性: special_attention_task
+2025-03-10 20:12:56,272 - special_attention_task - ERROR - 新闻真实性验证异常: fact_check() got an unexpected keyword argument 'model'
+2025-03-10 20:12:56,272 - special_attention_task - ERROR - AI整理内容异常: generate_content() got an unexpected keyword argument 'temperature'
+2025-03-10 20:12:56,272 - special_attention_task - ERROR - 创建特别关注视频生成任务失败: generate_video_from_text() got an unexpected keyword argument 'style'
+2025-03-10 20:12:56,274 - mongodb_connector - INFO - 将UUID c7bf9d4a-294b-41a2-9c37-ff5eea35abcc 直接发布到Redis通道 special_attention
+INFO:     127.0.0.1:61515 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:13:06,292 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:13:08,056 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:13:08,056 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:13:08,056 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:13:09,703 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:13:09,703 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:13:11,457 - mongodb_connector - INFO - 将UUID 7d131973-79ad-46bd-8c37-8ada412dde95 发送到Redis列表 timeline
+INFO:     127.0.0.1:61552 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:13:21,475 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:13:23,090 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:13:23,090 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:13:23,090 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:13:24,859 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:13:24,859 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:13:26,540 - mongodb_connector - INFO - 将UUID 2bcc5688-f24e-41ba-8566-f1032f90b04f 发送到Redis列表 timeline
+INFO:     127.0.0.1:61609 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:13:36,556 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:13:38,289 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:13:38,289 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:13:38,289 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:13:40,037 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:13:40,038 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:13:42,066 - mongodb_connector - INFO - 将UUID 8f01a2fc-2a54-47bb-841d-5c4a23b07d76 发送到消息队列 special_attention
+2025-03-10 20:13:42,414 - mongodb_connector - INFO - 将UUID 8f01a2fc-2a54-47bb-841d-5c4a23b07d76 直接发布到Redis通道 special_attention
+INFO:     127.0.0.1:61640 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:13:42,420 - special_attention_task - INFO - 从Redis通道 special_attention 收到消息: 8f01a2fc-2a54-47bb-841d-5c4a23b07d76
+2025-03-10 20:13:42,420 - special_attention_task - INFO - 执行特别关注任务: special_attention_task
+2025-03-10 20:13:42,420 - special_attention_task - INFO - 开始验证特别关注新闻真实性: special_attention_task
+2025-03-10 20:13:42,420 - special_attention_task - ERROR - 新闻真实性验证异常: fact_check() got an unexpected keyword argument 'model'
+2025-03-10 20:13:42,420 - special_attention_task - ERROR - AI整理内容异常: generate_content() got an unexpected keyword argument 'temperature'
+2025-03-10 20:13:42,420 - special_attention_task - ERROR - 创建特别关注视频生成任务失败: generate_video_from_text() got an unexpected keyword argument 'style'
+2025-03-10 20:13:52,431 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:13:54,220 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:13:54,220 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:13:54,220 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:13:55,985 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:13:55,985 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:13:58,124 - mongodb_connector - INFO - 将UUID ec4e7904-f28d-403e-8f56-dfac712a23f4 发送到消息队列 special_attention
+2025-03-10 20:13:58,474 - mongodb_connector - INFO - 将UUID ec4e7904-f28d-403e-8f56-dfac712a23f4 直接发布到Redis通道 special_attention
+2025-03-10 20:13:58,474 - special_attention_task - INFO - 从Redis通道 special_attention 收到消息: ec4e7904-f28d-403e-8f56-dfac712a23f4
+2025-03-10 20:13:58,475 - special_attention_task - INFO - 执行特别关注任务: special_attention_task
+2025-03-10 20:13:58,475 - special_attention_task - INFO - 开始验证特别关注新闻真实性: special_attention_task
+2025-03-10 20:13:58,475 - special_attention_task - ERROR - 新闻真实性验证异常: fact_check() got an unexpected keyword argument 'model'
+2025-03-10 20:13:58,475 - special_attention_task - ERROR - AI整理内容异常: generate_content() got an unexpected keyword argument 'temperature'
+2025-03-10 20:13:58,475 - special_attention_task - ERROR - 创建特别关注视频生成任务失败: generate_video_from_text() got an unexpected keyword argument 'style'
+INFO:     127.0.0.1:61682 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:14:08,497 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:14:10,262 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:14:10,263 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:14:10,263 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:14:12,094 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:14:12,094 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:14:13,897 - mongodb_connector - INFO - 将UUID 73d89fff-ee62-46a4-88e2-4762ee40348a 发送到Redis列表 timeline
+INFO:     127.0.0.1:61723 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:14:23,911 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:14:25,640 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:14:25,641 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:14:25,641 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:14:27,354 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:14:27,354 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:14:29,371 - mongodb_connector - INFO - 将UUID 7343fc08-6274-4e90-ba50-0050f3b20e37 发送到消息队列 special_attention
+2025-03-10 20:14:29,694 - special_attention_task - INFO - 从Redis通道 special_attention 收到消息: 7343fc08-6274-4e90-ba50-0050f3b20e37
+2025-03-10 20:14:29,694 - special_attention_task - INFO - 执行特别关注任务: special_attention_task
+2025-03-10 20:14:29,694 - special_attention_task - INFO - 开始验证特别关注新闻真实性: special_attention_task
+2025-03-10 20:14:29,694 - special_attention_task - ERROR - 新闻真实性验证异常: fact_check() got an unexpected keyword argument 'model'
+2025-03-10 20:14:29,694 - special_attention_task - ERROR - AI整理内容异常: generate_content() got an unexpected keyword argument 'temperature'
+2025-03-10 20:14:29,695 - special_attention_task - ERROR - 创建特别关注视频生成任务失败: generate_video_from_text() got an unexpected keyword argument 'style'
+2025-03-10 20:14:29,712 - mongodb_connector - INFO - 将UUID 7343fc08-6274-4e90-ba50-0050f3b20e37 直接发布到Redis通道 special_attention
+INFO:     127.0.0.1:61778 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:14:39,731 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:14:41,450 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:14:41,450 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:14:41,450 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:14:43,201 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:14:43,202 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:14:45,034 - mongodb_connector - INFO - 将UUID cb8429e7-1337-4600-87b8-d8262682225b 发送到Redis列表 timeline
+INFO:     127.0.0.1:61826 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:14:55,058 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:14:56,710 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:14:56,710 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:14:56,710 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:14:58,478 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:14:58,478 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:15:00,545 - mongodb_connector - INFO - 将UUID 4b5de38a-2dbd-49dc-b92f-bce9a8d5ee5a 发送到消息队列 special_attention
+2025-03-10 20:15:00,888 - special_attention_task - INFO - 从Redis通道 special_attention 收到消息: 4b5de38a-2dbd-49dc-b92f-bce9a8d5ee5a
+2025-03-10 20:15:00,888 - special_attention_task - INFO - 执行特别关注任务: special_attention_task
+2025-03-10 20:15:00,888 - special_attention_task - INFO - 开始验证特别关注新闻真实性: special_attention_task
+2025-03-10 20:15:00,888 - special_attention_task - ERROR - 新闻真实性验证异常: fact_check() got an unexpected keyword argument 'model'
+2025-03-10 20:15:00,888 - special_attention_task - ERROR - AI整理内容异常: generate_content() got an unexpected keyword argument 'temperature'
+2025-03-10 20:15:00,888 - special_attention_task - ERROR - 创建特别关注视频生成任务失败: generate_video_from_text() got an unexpected keyword argument 'style'
+2025-03-10 20:15:00,897 - mongodb_connector - INFO - 将UUID 4b5de38a-2dbd-49dc-b92f-bce9a8d5ee5a 直接发布到Redis通道 special_attention
+INFO:     127.0.0.1:61856 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:15:10,920 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:15:12,665 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:15:12,666 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:15:12,666 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:15:14,335 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:15:14,335 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:15:15,970 - mongodb_connector - INFO - 将UUID de2a4b60-de8e-48c9-a935-874721923d1d 发送到Redis列表 timeline
+INFO:     127.0.0.1:61910 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:15:25,994 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:15:27,654 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:15:27,654 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:15:27,654 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:15:29,428 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:15:29,428 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:15:31,180 - mongodb_connector - INFO - 将UUID 715c8c6a-c2c3-457a-af48-4a33be249909 发送到Redis列表 timeline
+INFO:     127.0.0.1:61954 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:15:41,198 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:15:42,939 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:15:42,940 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:15:42,940 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:15:44,701 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:15:44,701 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:15:46,550 - mongodb_connector - INFO - 将UUID 878c18d7-3154-4a21-bc20-fdba9d48713a 发送到Redis列表 timeline
+INFO:     127.0.0.1:61998 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:15:56,566 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:15:58,316 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:15:58,316 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:15:58,316 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:15:59,973 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:15:59,973 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:16:01,988 - mongodb_connector - INFO - 将UUID 6ca9cd7e-2320-4851-8c50-be6aabaa39b1 发送到消息队列 special_attention
+2025-03-10 20:16:02,311 - special_attention_task - INFO - 从Redis通道 special_attention 收到消息: 6ca9cd7e-2320-4851-8c50-be6aabaa39b1
+2025-03-10 20:16:02,311 - special_attention_task - INFO - 执行特别关注任务: special_attention_task
+2025-03-10 20:16:02,311 - special_attention_task - INFO - 开始验证特别关注新闻真实性: special_attention_task
+2025-03-10 20:16:02,311 - special_attention_task - ERROR - 新闻真实性验证异常: fact_check() got an unexpected keyword argument 'model'
+2025-03-10 20:16:02,311 - special_attention_task - ERROR - AI整理内容异常: generate_content() got an unexpected keyword argument 'temperature'
+2025-03-10 20:16:02,311 - special_attention_task - ERROR - 创建特别关注视频生成任务失败: generate_video_from_text() got an unexpected keyword argument 'style'
+2025-03-10 20:16:02,318 - mongodb_connector - INFO - 将UUID 6ca9cd7e-2320-4851-8c50-be6aabaa39b1 直接发布到Redis通道 special_attention
+INFO:     127.0.0.1:62029 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:16:12,341 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:16:14,094 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:16:14,094 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:16:14,095 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:16:15,871 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:16:15,872 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:16:17,797 - mongodb_connector - INFO - 将UUID 56bd985b-5d22-495e-886a-a5daaa3a534d 发送到Redis列表 timeline
+INFO:     127.0.0.1:62076 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:16:27,823 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:16:29,565 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:16:29,565 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:16:29,565 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:16:31,350 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:16:31,351 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:16:33,136 - mongodb_connector - INFO - 将UUID 76586254-d08a-462a-a76b-d81dbee12b76 发送到Redis列表 timeline
+INFO:     127.0.0.1:62127 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:16:43,156 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:16:44,829 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:16:44,830 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:16:44,831 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:16:46,481 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:16:46,482 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:16:48,143 - mongodb_connector - INFO - 将UUID cdc6f743-1628-41e0-89d5-deb44a513204 发送到Redis列表 timeline
+INFO:     127.0.0.1:62169 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:16:58,165 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:16:59,883 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:16:59,883 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:16:59,883 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:17:01,620 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:17:01,620 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:17:03,369 - mongodb_connector - INFO - 将UUID 1e6d5679-2fbc-4532-871c-6803f8bc6948 发送到Redis列表 timeline
+INFO:     127.0.0.1:62201 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:17:13,389 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:17:15,110 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:17:15,110 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:17:15,111 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:17:16,888 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:17:16,889 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:17:18,548 - mongodb_connector - INFO - 将UUID f3691b4b-ceb6-4d6d-92d8-83c8ca8037ba 发送到Redis列表 timeline
+INFO:     127.0.0.1:62243 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:17:28,564 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:17:30,321 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:17:30,321 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:17:30,321 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:17:32,087 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:17:32,087 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:17:33,743 - mongodb_connector - INFO - 将UUID 693e80c3-c321-463f-bd71-95813ebb7e50 发送到Redis列表 timeline
+INFO:     127.0.0.1:62295 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:17:43,760 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:17:45,525 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:17:45,525 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:17:45,525 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:17:47,269 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:17:47,269 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:17:49,007 - mongodb_connector - INFO - 将UUID 893340a6-2eb8-4d2d-8d6c-2bd83c779a34 发送到Redis列表 timeline
+INFO:     127.0.0.1:62345 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:17:59,027 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:18:00,676 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:18:00,676 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:18:00,676 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:18:02,451 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:18:02,451 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:18:04,207 - mongodb_connector - INFO - 将UUID 35ecc07c-498a-4fab-b7b3-cacee3764c12 发送到Redis列表 timeline
+INFO:     127.0.0.1:62378 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:18:14,224 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:18:15,884 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:18:15,885 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:18:15,885 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:18:17,508 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:18:17,508 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:18:19,153 - mongodb_connector - INFO - 将UUID f772432f-4109-4afb-8366-5b188d82249c 发送到Redis列表 timeline
+INFO:     127.0.0.1:62420 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:18:29,178 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:18:30,843 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:18:30,844 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:18:30,844 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:18:32,515 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:18:32,515 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:18:34,598 - mongodb_connector - INFO - 将UUID d5374f82-40cc-464c-9ae6-b4d0a8ddc192 发送到消息队列 special_attention
+2025-03-10 20:18:34,921 - special_attention_task - INFO - 从Redis通道 special_attention 收到消息: d5374f82-40cc-464c-9ae6-b4d0a8ddc192
+2025-03-10 20:18:34,921 - special_attention_task - INFO - 执行特别关注任务: special_attention_task
+2025-03-10 20:18:34,921 - special_attention_task - INFO - 开始验证特别关注新闻真实性: special_attention_task
+2025-03-10 20:18:34,921 - special_attention_task - ERROR - 新闻真实性验证异常: fact_check() got an unexpected keyword argument 'model'
+2025-03-10 20:18:34,921 - special_attention_task - ERROR - AI整理内容异常: generate_content() got an unexpected keyword argument 'temperature'
+2025-03-10 20:18:34,921 - special_attention_task - ERROR - 创建特别关注视频生成任务失败: generate_video_from_text() got an unexpected keyword argument 'style'
+2025-03-10 20:18:34,927 - mongodb_connector - INFO - 将UUID d5374f82-40cc-464c-9ae6-b4d0a8ddc192 直接发布到Redis通道 special_attention
+INFO:     127.0.0.1:62459 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:18:44,943 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:18:46,702 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:18:46,702 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:18:46,702 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:18:48,467 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:18:48,468 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:18:50,214 - mongodb_connector - INFO - 将UUID 29120e0b-d418-4775-8c03-6b62c721a0ad 发送到Redis列表 timeline
+INFO:     127.0.0.1:62514 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:19:00,233 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:19:01,875 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:19:01,876 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:19:01,876 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:19:03,528 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:19:03,528 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:19:05,505 - mongodb_connector - INFO - 将UUID 430b2091-d229-40c4-a768-9d7d67da2fbb 发送到消息队列 special_attention
+2025-03-10 20:19:05,825 - special_attention_task - INFO - 从Redis通道 special_attention 收到消息: 430b2091-d229-40c4-a768-9d7d67da2fbb
+2025-03-10 20:19:05,826 - special_attention_task - INFO - 执行特别关注任务: special_attention_task
+2025-03-10 20:19:05,826 - special_attention_task - INFO - 开始验证特别关注新闻真实性: special_attention_task
+2025-03-10 20:19:05,826 - special_attention_task - ERROR - 新闻真实性验证异常: fact_check() got an unexpected keyword argument 'model'
+2025-03-10 20:19:05,826 - special_attention_task - ERROR - AI整理内容异常: generate_content() got an unexpected keyword argument 'temperature'
+2025-03-10 20:19:05,826 - special_attention_task - ERROR - 创建特别关注视频生成任务失败: generate_video_from_text() got an unexpected keyword argument 'style'
+2025-03-10 20:19:05,835 - mongodb_connector - INFO - 将UUID 430b2091-d229-40c4-a768-9d7d67da2fbb 直接发布到Redis通道 special_attention
+INFO:     127.0.0.1:62551 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:19:15,854 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:19:17,457 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:19:17,457 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:19:17,457 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:19:19,213 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:19:19,214 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:19:20,886 - mongodb_connector - INFO - 将UUID 0c62cc60-e457-4d8e-b46f-d99da67d6290 发送到Redis列表 timeline
+INFO:     127.0.0.1:62603 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:19:30,902 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:19:32,516 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:19:32,517 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:19:32,517 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:19:34,357 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:19:34,358 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:19:36,073 - mongodb_connector - INFO - 将UUID eca618a9-7d36-413e-ae1f-befadf1d168a 发送到Redis列表 timeline
+INFO:     127.0.0.1:62645 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:19:46,086 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:19:47,855 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:19:47,856 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:19:47,856 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:19:49,503 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:19:49,503 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:19:51,518 - mongodb_connector - INFO - 将UUID 90c729e5-ac17-4514-974f-db7ca8254d60 发送到消息队列 special_attention
+2025-03-10 20:19:51,837 - special_attention_task - INFO - 从Redis通道 special_attention 收到消息: 90c729e5-ac17-4514-974f-db7ca8254d60
+2025-03-10 20:19:51,837 - special_attention_task - INFO - 执行特别关注任务: special_attention_task
+2025-03-10 20:19:51,837 - special_attention_task - INFO - 开始验证特别关注新闻真实性: special_attention_task
+2025-03-10 20:19:51,838 - special_attention_task - ERROR - 新闻真实性验证异常: fact_check() got an unexpected keyword argument 'model'
+2025-03-10 20:19:51,838 - special_attention_task - ERROR - AI整理内容异常: generate_content() got an unexpected keyword argument 'temperature'
+2025-03-10 20:19:51,838 - special_attention_task - ERROR - 创建特别关注视频生成任务失败: generate_video_from_text() got an unexpected keyword argument 'style'
+2025-03-10 20:19:51,845 - mongodb_connector - INFO - 将UUID 90c729e5-ac17-4514-974f-db7ca8254d60 直接发布到Redis通道 special_attention
+INFO:     127.0.0.1:62688 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:20:01,862 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:20:03,588 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:20:03,589 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:20:03,589 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:20:05,381 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:20:05,382 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:20:07,149 - mongodb_connector - INFO - 将UUID 171cee57-a458-4cee-ad1d-0c2a9f72de35 发送到Redis列表 timeline
+INFO:     127.0.0.1:62729 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:20:17,167 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:20:18,949 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:20:18,950 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:20:18,950 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:20:20,649 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:20:20,650 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:20:22,789 - mongodb_connector - INFO - 将UUID 53ec392b-35fc-48e2-b372-db04d33557e6 发送到消息队列 special_attention
+2025-03-10 20:20:23,108 - special_attention_task - INFO - 从Redis通道 special_attention 收到消息: 53ec392b-35fc-48e2-b372-db04d33557e6
+2025-03-10 20:20:23,108 - special_attention_task - INFO - 执行特别关注任务: special_attention_task
+2025-03-10 20:20:23,108 - special_attention_task - INFO - 开始验证特别关注新闻真实性: special_attention_task
+2025-03-10 20:20:23,108 - special_attention_task - ERROR - 新闻真实性验证异常: fact_check() got an unexpected keyword argument 'model'
+2025-03-10 20:20:23,108 - special_attention_task - ERROR - AI整理内容异常: generate_content() got an unexpected keyword argument 'temperature'
+2025-03-10 20:20:23,109 - special_attention_task - ERROR - 创建特别关注视频生成任务失败: generate_video_from_text() got an unexpected keyword argument 'style'
+2025-03-10 20:20:23,127 - mongodb_connector - INFO - 将UUID 53ec392b-35fc-48e2-b372-db04d33557e6 直接发布到Redis通道 special_attention
+INFO:     127.0.0.1:62783 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:20:33,142 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:20:34,922 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:20:34,924 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:20:34,924 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:20:36,558 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:20:36,558 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:20:38,280 - mongodb_connector - INFO - 将UUID 4220977b-2fa6-47a2-9d42-b3a6e1239bdd 发送到Redis列表 timeline
+INFO:     127.0.0.1:62823 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:20:48,298 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:20:50,028 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:20:50,028 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:20:50,028 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:20:51,684 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:20:51,684 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:20:53,383 - mongodb_connector - INFO - 将UUID 72b736f5-a1ca-44f3-806c-a430c74b454d 发送到Redis列表 timeline
+INFO:     127.0.0.1:62867 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:21:03,401 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:21:05,033 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:21:05,033 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:21:05,033 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:21:06,682 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:21:06,683 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:21:08,483 - mongodb_connector - INFO - 将UUID 0228ff7c-b170-42fd-9428-c17d26224fb4 发送到Redis列表 timeline
+INFO:     127.0.0.1:62902 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:21:18,500 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:21:20,113 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:21:20,114 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:21:20,114 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:21:21,881 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:21:21,882 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:21:23,542 - mongodb_connector - INFO - 将UUID 869a3199-11ad-4227-ad51-e0879493e028 发送到Redis列表 timeline
+INFO:     127.0.0.1:62957 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:21:33,559 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:21:35,206 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:21:35,208 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:21:35,208 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:21:36,847 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:21:36,847 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:21:38,653 - mongodb_connector - INFO - 将UUID cdd0eb5d-5215-4144-918b-df05fd4f767b 发送到Redis列表 timeline
+INFO:     127.0.0.1:62994 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:21:48,667 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:21:50,430 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:21:50,431 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:21:50,431 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:21:52,181 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:21:52,181 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:21:53,862 - mongodb_connector - INFO - 将UUID 399881ff-5edd-4ab5-833d-639d5e2ef124 发送到Redis列表 timeline
+INFO:     127.0.0.1:63034 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:22:03,881 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:22:05,499 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:22:05,499 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:22:05,499 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:22:07,337 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:22:07,337 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:22:09,091 - mongodb_connector - INFO - 将UUID f9a44ca3-aa5e-40c9-8f33-dd28e66bfc67 发送到Redis列表 timeline
+INFO:     127.0.0.1:63072 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:22:19,108 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:22:20,836 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:22:20,836 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:22:20,836 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:22:22,506 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:22:22,506 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:22:24,245 - mongodb_connector - INFO - 将UUID 1c95436b-1fd7-40d3-986e-fbe8a42b101d 发送到Redis列表 timeline
+INFO:     127.0.0.1:63136 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:22:34,264 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:22:35,952 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:22:35,952 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:22:35,952 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:22:37,764 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:22:37,764 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:22:39,554 - mongodb_connector - INFO - 将UUID dde255a4-b24e-43cc-a4e1-05319604ceac 发送到Redis列表 timeline
+INFO:     127.0.0.1:63174 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:22:49,567 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:22:51,200 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:22:51,200 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:22:51,200 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:22:52,930 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:22:52,930 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:22:54,909 - mongodb_connector - INFO - 将UUID 1f256942-6e50-420a-b24f-a7bc14eb9682 发送到消息队列 special_attention
+2025-03-10 20:22:55,254 - mongodb_connector - INFO - 将UUID 1f256942-6e50-420a-b24f-a7bc14eb9682 直接发布到Redis通道 special_attention
+INFO:     127.0.0.1:63220 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:22:55,263 - special_attention_task - INFO - 从Redis通道 special_attention 收到消息: 1f256942-6e50-420a-b24f-a7bc14eb9682
+2025-03-10 20:22:55,263 - special_attention_task - INFO - 执行特别关注任务: special_attention_task
+2025-03-10 20:22:55,263 - special_attention_task - INFO - 开始验证特别关注新闻真实性: special_attention_task
+2025-03-10 20:22:55,263 - special_attention_task - ERROR - 新闻真实性验证异常: fact_check() got an unexpected keyword argument 'model'
+2025-03-10 20:22:55,263 - special_attention_task - ERROR - AI整理内容异常: generate_content() got an unexpected keyword argument 'temperature'
+2025-03-10 20:22:55,263 - special_attention_task - ERROR - 创建特别关注视频生成任务失败: generate_video_from_text() got an unexpected keyword argument 'style'
+2025-03-10 20:23:05,274 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:23:07,021 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:23:07,021 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:23:07,021 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:23:08,746 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:23:08,746 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:23:10,514 - mongodb_connector - INFO - 将UUID 16feca03-5b4a-4315-8f0c-b7a57a3d5b78 发送到Redis列表 timeline
+INFO:     127.0.0.1:63257 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:23:20,528 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:23:22,257 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:23:22,257 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:23:22,257 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:23:23,870 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:23:23,870 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:23:25,657 - mongodb_connector - INFO - 将UUID 97603f47-84bd-4a75-b5ef-132e6d5bac5b 发送到Redis列表 timeline
+INFO:     127.0.0.1:63304 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:23:35,673 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:23:37,321 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:23:37,321 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:23:37,322 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:23:39,052 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:23:39,052 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:23:40,726 - mongodb_connector - INFO - 将UUID 560ba2e4-06bd-4051-819a-d759ce481518 发送到Redis列表 timeline
+INFO:     127.0.0.1:63340 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:23:50,741 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:23:52,395 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:23:52,395 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:23:52,395 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:23:54,170 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:23:54,170 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:23:55,987 - mongodb_connector - INFO - 将UUID 0508cc46-9e2c-42b2-833d-3b9a74f913a5 发送到Redis列表 timeline
+INFO:     127.0.0.1:63385 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:24:06,005 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:24:07,635 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:24:07,635 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:24:07,635 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:24:09,265 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:24:09,265 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:24:10,901 - mongodb_connector - INFO - 将UUID 5cf26167-889b-4337-acc9-c558908ab166 发送到Redis列表 timeline
+INFO:     127.0.0.1:63421 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:24:20,917 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:24:22,670 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:24:22,671 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:24:22,671 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:24:24,462 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:24:24,462 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:24:26,554 - mongodb_connector - INFO - 将UUID d602a3e7-b2e6-4b88-be62-076905a12bc2 发送到消息队列 special_attention
+2025-03-10 20:24:26,899 - special_attention_task - INFO - 从Redis通道 special_attention 收到消息: d602a3e7-b2e6-4b88-be62-076905a12bc2
+2025-03-10 20:24:26,899 - special_attention_task - INFO - 执行特别关注任务: special_attention_task
+2025-03-10 20:24:26,899 - special_attention_task - INFO - 开始验证特别关注新闻真实性: special_attention_task
+2025-03-10 20:24:26,899 - special_attention_task - ERROR - 新闻真实性验证异常: fact_check() got an unexpected keyword argument 'model'
+2025-03-10 20:24:26,899 - special_attention_task - ERROR - AI整理内容异常: generate_content() got an unexpected keyword argument 'temperature'
+2025-03-10 20:24:26,900 - special_attention_task - ERROR - 创建特别关注视频生成任务失败: generate_video_from_text() got an unexpected keyword argument 'style'
+2025-03-10 20:24:26,913 - mongodb_connector - INFO - 将UUID d602a3e7-b2e6-4b88-be62-076905a12bc2 直接发布到Redis通道 special_attention
+INFO:     127.0.0.1:63474 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:24:36,932 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:24:38,586 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:24:38,586 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:24:38,586 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:24:40,219 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:24:40,221 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:24:42,282 - mongodb_connector - INFO - 将UUID bf25087c-efad-479e-bceb-be418fd652ca 发送到消息队列 special_attention
+2025-03-10 20:24:42,603 - special_attention_task - INFO - 从Redis通道 special_attention 收到消息: bf25087c-efad-479e-bceb-be418fd652ca
+2025-03-10 20:24:42,603 - special_attention_task - INFO - 执行特别关注任务: special_attention_task
+2025-03-10 20:24:42,603 - special_attention_task - INFO - 开始验证特别关注新闻真实性: special_attention_task
+2025-03-10 20:24:42,603 - special_attention_task - ERROR - 新闻真实性验证异常: fact_check() got an unexpected keyword argument 'model'
+2025-03-10 20:24:42,604 - special_attention_task - ERROR - AI整理内容异常: generate_content() got an unexpected keyword argument 'temperature'
+2025-03-10 20:24:42,604 - special_attention_task - ERROR - 创建特别关注视频生成任务失败: generate_video_from_text() got an unexpected keyword argument 'style'
+2025-03-10 20:24:42,609 - mongodb_connector - INFO - 将UUID bf25087c-efad-479e-bceb-be418fd652ca 直接发布到Redis通道 special_attention
+INFO:     127.0.0.1:63509 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:24:52,622 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:24:54,313 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:24:54,314 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:24:54,314 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:24:56,056 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:24:56,056 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:24:57,869 - mongodb_connector - INFO - 将UUID 52acba55-649a-46c7-92ed-230786b8fa27 发送到Redis列表 timeline
+INFO:     127.0.0.1:63559 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:25:07,893 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:25:09,645 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:25:09,645 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:25:09,645 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:25:11,408 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:25:11,409 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:25:13,199 - mongodb_connector - INFO - 将UUID cb9ba804-48e3-4a03-bcbd-f5decfb9315c 发送到Redis列表 timeline
+INFO:     127.0.0.1:63608 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:25:23,220 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:25:24,931 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:25:24,931 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:25:24,931 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:25:26,570 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:25:26,570 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:25:28,310 - mongodb_connector - INFO - 将UUID 9fc0ebed-72c4-4bb5-b63d-531b3f8ef718 发送到Redis列表 timeline
+INFO:     127.0.0.1:63665 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:25:38,329 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:25:39,993 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:25:39,994 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:25:39,994 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:25:41,723 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:25:41,724 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:25:43,502 - mongodb_connector - INFO - 将UUID d8dbf784-6038-43b7-b7a1-882fb295e033 发送到Redis列表 timeline
+INFO:     127.0.0.1:63700 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:25:53,525 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:25:55,147 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:25:55,147 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:25:55,147 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:25:56,878 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:25:56,878 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:25:58,821 - mongodb_connector - INFO - 将UUID 3b588057-0941-467c-942d-516d80a40ac4 发送到消息队列 special_attention
+2025-03-10 20:25:59,165 - special_attention_task - INFO - 从Redis通道 special_attention 收到消息: 3b588057-0941-467c-942d-516d80a40ac4
+2025-03-10 20:25:59,165 - special_attention_task - INFO - 执行特别关注任务: special_attention_task
+2025-03-10 20:25:59,165 - special_attention_task - INFO - 开始验证特别关注新闻真实性: special_attention_task
+2025-03-10 20:25:59,165 - special_attention_task - ERROR - 新闻真实性验证异常: fact_check() got an unexpected keyword argument 'model'
+2025-03-10 20:25:59,165 - special_attention_task - ERROR - AI整理内容异常: generate_content() got an unexpected keyword argument 'temperature'
+2025-03-10 20:25:59,166 - special_attention_task - ERROR - 创建特别关注视频生成任务失败: generate_video_from_text() got an unexpected keyword argument 'style'
+2025-03-10 20:25:59,166 - mongodb_connector - INFO - 将UUID 3b588057-0941-467c-942d-516d80a40ac4 直接发布到Redis通道 special_attention
+INFO:     127.0.0.1:63747 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:26:09,185 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:26:10,820 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:26:10,820 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:26:10,820 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:26:12,563 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:26:12,563 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:26:14,602 - mongodb_connector - INFO - 将UUID 3de0dbc6-a818-4c40-a865-2f7dc0c58bab 发送到消息队列 special_attention
+2025-03-10 20:26:14,948 - special_attention_task - INFO - 从Redis通道 special_attention 收到消息: 3de0dbc6-a818-4c40-a865-2f7dc0c58bab
+2025-03-10 20:26:14,948 - special_attention_task - INFO - 执行特别关注任务: special_attention_task
+2025-03-10 20:26:14,948 - special_attention_task - INFO - 开始验证特别关注新闻真实性: special_attention_task
+2025-03-10 20:26:14,948 - special_attention_task - ERROR - 新闻真实性验证异常: fact_check() got an unexpected keyword argument 'model'
+2025-03-10 20:26:14,948 - special_attention_task - ERROR - AI整理内容异常: generate_content() got an unexpected keyword argument 'temperature'
+2025-03-10 20:26:14,949 - special_attention_task - ERROR - 创建特别关注视频生成任务失败: generate_video_from_text() got an unexpected keyword argument 'style'
+2025-03-10 20:26:14,949 - mongodb_connector - INFO - 将UUID 3de0dbc6-a818-4c40-a865-2f7dc0c58bab 直接发布到Redis通道 special_attention
+INFO:     127.0.0.1:63801 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:26:24,973 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:26:26,706 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:26:26,707 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:26:26,707 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:26:28,438 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:26:28,439 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:26:30,099 - mongodb_connector - INFO - 将UUID 01d384c1-7eec-4092-8839-d79f804107dc 发送到Redis列表 timeline
+INFO:     127.0.0.1:63848 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:26:40,121 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:26:41,878 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:26:41,878 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:26:41,878 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:26:43,687 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:26:43,688 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:26:45,362 - mongodb_connector - INFO - 将UUID 69ac1dda-a309-4053-8f89-c04f7c0ce57a 发送到Redis列表 timeline
+INFO:     127.0.0.1:63901 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:26:55,384 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:26:57,030 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:26:57,030 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:26:57,030 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:26:58,665 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:26:58,665 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:27:00,718 - mongodb_connector - INFO - 将UUID aad1f06b-9821-434d-b611-434d1e473d8d 发送到消息队列 special_attention
+2025-03-10 20:27:01,039 - special_attention_task - INFO - 从Redis通道 special_attention 收到消息: aad1f06b-9821-434d-b611-434d1e473d8d
+2025-03-10 20:27:01,040 - special_attention_task - INFO - 执行特别关注任务: special_attention_task
+2025-03-10 20:27:01,040 - special_attention_task - INFO - 开始验证特别关注新闻真实性: special_attention_task
+2025-03-10 20:27:01,040 - special_attention_task - ERROR - 新闻真实性验证异常: fact_check() got an unexpected keyword argument 'model'
+2025-03-10 20:27:01,040 - special_attention_task - ERROR - AI整理内容异常: generate_content() got an unexpected keyword argument 'temperature'
+2025-03-10 20:27:01,040 - special_attention_task - ERROR - 创建特别关注视频生成任务失败: generate_video_from_text() got an unexpected keyword argument 'style'
+2025-03-10 20:27:01,046 - mongodb_connector - INFO - 将UUID aad1f06b-9821-434d-b611-434d1e473d8d 直接发布到Redis通道 special_attention
+INFO:     127.0.0.1:63939 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:27:11,066 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:27:12,852 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:27:12,852 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:27:12,852 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:27:14,490 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:27:14,490 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:27:16,141 - mongodb_connector - INFO - 将UUID df93e17a-ec42-4fd2-b981-38c5b1b085f5 发送到Redis列表 timeline
+INFO:     127.0.0.1:63985 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:27:26,163 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:27:27,903 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:27:27,903 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:27:27,903 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:27:29,674 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:27:29,676 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:27:31,471 - mongodb_connector - INFO - 将UUID 2887ec31-dd58-4b52-bc9f-5ab7dfc4fce4 发送到Redis列表 timeline
+INFO:     127.0.0.1:64047 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:27:38,011 - timeline_task - INFO - 执行时间线任务: timeline_task
+Exception in thread Schedule-timeline_task:
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/threading.py", line 1038, in _bootstrap_inner
+    self.run()
+  File "/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/threading.py", line 975, in run
+    self._target(*self._args, **self._kwargs)
+  File "/Users/yezi/DegenPy/server/tasks/timeline_task/timeline_task.py", line 96, in schedule_thread
+    schedule.run_pending()
+  File "/Users/yezi/DegenPy/.venv/lib/python3.11/site-packages/schedule/__init__.py", line 854, in run_pending
+    default_scheduler.run_pending()
+  File "/Users/yezi/DegenPy/.venv/lib/python3.11/site-packages/schedule/__init__.py", line 101, in run_pending
+    self._run_job(job)
+  File "/Users/yezi/DegenPy/.venv/lib/python3.11/site-packages/schedule/__init__.py", line 173, in _run_job
+    ret = job.run()
+          ^^^^^^^^^
+  File "/Users/yezi/DegenPy/.venv/lib/python3.11/site-packages/schedule/__init__.py", line 691, in run
+    ret = self.job_func()
+          ^^^^^^^^^^^^^^^
+  File "/Users/yezi/DegenPy/server/tasks/timeline_task/timeline_task.py", line 120, in execute
+    if isinstance(data, list):
+                  ^^^^
+NameError: name 'data' is not defined
+2025-03-10 20:27:41,487 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:27:43,265 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:27:43,265 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:27:43,266 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:27:44,911 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:27:44,912 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:27:46,920 - mongodb_connector - INFO - 将UUID 366c30b2-6db3-48e1-ae70-838d6497b9a8 发送到消息队列 special_attention
+2025-03-10 20:27:47,240 - special_attention_task - INFO - 从Redis通道 special_attention 收到消息: 366c30b2-6db3-48e1-ae70-838d6497b9a8
+2025-03-10 20:27:47,242 - special_attention_task - INFO - 执行特别关注任务: special_attention_task
+2025-03-10 20:27:47,242 - special_attention_task - INFO - 开始验证特别关注新闻真实性: special_attention_task
+2025-03-10 20:27:47,242 - special_attention_task - ERROR - 新闻真实性验证异常: fact_check() got an unexpected keyword argument 'model'
+2025-03-10 20:27:47,243 - special_attention_task - ERROR - AI整理内容异常: generate_content() got an unexpected keyword argument 'temperature'
+2025-03-10 20:27:47,243 - special_attention_task - ERROR - 创建特别关注视频生成任务失败: generate_video_from_text() got an unexpected keyword argument 'style'
+2025-03-10 20:27:47,249 - mongodb_connector - INFO - 将UUID 366c30b2-6db3-48e1-ae70-838d6497b9a8 直接发布到Redis通道 special_attention
+INFO:     127.0.0.1:64110 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:27:57,272 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:27:58,987 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:27:58,988 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:27:58,988 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:28:00,734 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:28:00,735 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:28:02,409 - mongodb_connector - INFO - 将UUID ff30bdb1-1fe9-4169-8df5-16bb98ef3717 发送到Redis列表 timeline
+INFO:     127.0.0.1:64143 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:28:12,433 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:28:14,085 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:28:14,085 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:28:14,085 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:28:15,779 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:28:15,779 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:28:17,790 - mongodb_connector - INFO - 将UUID 25d13679-f79f-47c8-b178-c63c1a08ffb0 发送到消息队列 special_attention
+2025-03-10 20:28:18,113 - special_attention_task - INFO - 从Redis通道 special_attention 收到消息: 25d13679-f79f-47c8-b178-c63c1a08ffb0
+2025-03-10 20:28:18,113 - special_attention_task - INFO - 执行特别关注任务: special_attention_task
+2025-03-10 20:28:18,113 - special_attention_task - INFO - 开始验证特别关注新闻真实性: special_attention_task
+2025-03-10 20:28:18,114 - special_attention_task - ERROR - 新闻真实性验证异常: fact_check() got an unexpected keyword argument 'model'
+2025-03-10 20:28:18,114 - special_attention_task - ERROR - AI整理内容异常: generate_content() got an unexpected keyword argument 'temperature'
+2025-03-10 20:28:18,114 - special_attention_task - ERROR - 创建特别关注视频生成任务失败: generate_video_from_text() got an unexpected keyword argument 'style'
+2025-03-10 20:28:18,127 - mongodb_connector - INFO - 将UUID 25d13679-f79f-47c8-b178-c63c1a08ffb0 直接发布到Redis通道 special_attention
+INFO:     127.0.0.1:64190 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:28:28,149 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:28:29,924 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:28:29,924 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:28:29,924 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:28:31,659 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:28:31,659 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:28:33,328 - mongodb_connector - INFO - 将UUID 508d0322-0c27-4747-9e7f-69de910faa21 发送到Redis列表 timeline
+INFO:     127.0.0.1:64235 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:28:43,361 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:28:45,112 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:28:45,112 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:28:45,113 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:28:46,880 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:28:46,880 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:28:48,523 - mongodb_connector - INFO - 将UUID 63a09834-4d70-4c6e-9c3e-c849313274b7 发送到Redis列表 timeline
+INFO:     127.0.0.1:64297 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:28:58,536 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:29:00,172 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:29:00,172 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:29:00,172 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:29:01,896 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:29:01,896 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:29:03,673 - mongodb_connector - INFO - 将UUID ffeaa3c0-042f-4e50-a4d6-a96cdbb5d946 发送到Redis列表 timeline
+INFO:     127.0.0.1:64366 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:29:13,702 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:29:15,456 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:29:15,456 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:29:15,456 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:29:17,196 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:29:17,196 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:29:18,964 - mongodb_connector - INFO - 将UUID e766f0e1-c53d-468f-80e1-c5c3d182682a 发送到Redis列表 timeline
+INFO:     127.0.0.1:64438 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:29:28,978 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:29:30,597 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:29:30,598 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:29:30,598 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:29:32,374 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:29:32,375 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:29:34,342 - mongodb_connector - INFO - 将UUID b4c48f74-2cd7-4b0b-8629-ac8c7113e170 发送到消息队列 special_attention
+2025-03-10 20:29:34,690 - special_attention_task - INFO - 从Redis通道 special_attention 收到消息: b4c48f74-2cd7-4b0b-8629-ac8c7113e170
+2025-03-10 20:29:34,690 - special_attention_task - INFO - 执行特别关注任务: special_attention_task
+2025-03-10 20:29:34,690 - special_attention_task - INFO - 开始验证特别关注新闻真实性: special_attention_task
+2025-03-10 20:29:34,690 - special_attention_task - ERROR - 新闻真实性验证异常: fact_check() got an unexpected keyword argument 'model'
+2025-03-10 20:29:34,690 - special_attention_task - ERROR - AI整理内容异常: generate_content() got an unexpected keyword argument 'temperature'
+2025-03-10 20:29:34,691 - special_attention_task - ERROR - 创建特别关注视频生成任务失败: generate_video_from_text() got an unexpected keyword argument 'style'
+2025-03-10 20:29:34,698 - mongodb_connector - INFO - 将UUID b4c48f74-2cd7-4b0b-8629-ac8c7113e170 直接发布到Redis通道 special_attention
+INFO:     127.0.0.1:64498 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:29:44,708 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:29:46,440 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:29:46,440 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:29:46,440 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:29:48,234 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:29:48,234 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:29:50,263 - mongodb_connector - INFO - 将UUID 1ecc4325-9aac-4cc3-bdcd-bc1ae469b748 发送到消息队列 special_attention
+2025-03-10 20:29:50,605 - special_attention_task - INFO - 从Redis通道 special_attention 收到消息: 1ecc4325-9aac-4cc3-bdcd-bc1ae469b748
+2025-03-10 20:29:50,605 - special_attention_task - INFO - 执行特别关注任务: special_attention_task
+2025-03-10 20:29:50,605 - special_attention_task - INFO - 开始验证特别关注新闻真实性: special_attention_task
+2025-03-10 20:29:50,605 - special_attention_task - ERROR - 新闻真实性验证异常: fact_check() got an unexpected keyword argument 'model'
+2025-03-10 20:29:50,605 - special_attention_task - ERROR - AI整理内容异常: generate_content() got an unexpected keyword argument 'temperature'
+2025-03-10 20:29:50,605 - special_attention_task - ERROR - 创建特别关注视频生成任务失败: generate_video_from_text() got an unexpected keyword argument 'style'
+2025-03-10 20:29:50,605 - mongodb_connector - INFO - 将UUID 1ecc4325-9aac-4cc3-bdcd-bc1ae469b748 直接发布到Redis通道 special_attention
+INFO:     127.0.0.1:64552 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:30:00,619 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:30:02,244 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:30:02,244 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:30:02,244 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:30:03,860 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:30:03,860 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:30:05,525 - mongodb_connector - INFO - 将UUID 1db8968b-d944-415b-ba1a-9378f8945d4e 发送到Redis列表 timeline
+INFO:     127.0.0.1:64611 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:30:15,537 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:30:17,203 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:30:17,203 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:30:17,203 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:30:19,046 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:30:19,046 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:30:21,122 - mongodb_connector - INFO - 将UUID 24e27a90-c22a-400e-897d-acaeaf79f715 发送到消息队列 special_attention
+2025-03-10 20:30:21,464 - special_attention_task - INFO - 从Redis通道 special_attention 收到消息: 24e27a90-c22a-400e-897d-acaeaf79f715
+2025-03-10 20:30:21,464 - special_attention_task - INFO - 执行特别关注任务: special_attention_task
+2025-03-10 20:30:21,464 - special_attention_task - INFO - 开始验证特别关注新闻真实性: special_attention_task
+2025-03-10 20:30:21,464 - special_attention_task - ERROR - 新闻真实性验证异常: fact_check() got an unexpected keyword argument 'model'
+2025-03-10 20:30:21,464 - special_attention_task - ERROR - AI整理内容异常: generate_content() got an unexpected keyword argument 'temperature'
+2025-03-10 20:30:21,464 - special_attention_task - ERROR - 创建特别关注视频生成任务失败: generate_video_from_text() got an unexpected keyword argument 'style'
+2025-03-10 20:30:21,488 - mongodb_connector - INFO - 将UUID 24e27a90-c22a-400e-897d-acaeaf79f715 直接发布到Redis通道 special_attention
+INFO:     127.0.0.1:64678 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:30:31,504 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:30:33,286 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:30:33,286 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:30:33,286 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:30:34,921 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:30:34,921 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:30:36,639 - mongodb_connector - INFO - 将UUID 3b7017ae-fde9-4384-88c2-4535f1d415ee 发送到Redis列表 timeline
+INFO:     127.0.0.1:64715 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:30:46,653 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:30:48,347 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:30:48,347 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:30:48,347 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:30:49,968 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:30:49,968 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:30:51,988 - mongodb_connector - INFO - 将UUID 6199479c-f394-4e39-a74e-227c14635b92 发送到消息队列 special_attention
+2025-03-10 20:30:52,306 - special_attention_task - INFO - 从Redis通道 special_attention 收到消息: 6199479c-f394-4e39-a74e-227c14635b92
+2025-03-10 20:30:52,307 - special_attention_task - INFO - 执行特别关注任务: special_attention_task
+2025-03-10 20:30:52,307 - special_attention_task - INFO - 开始验证特别关注新闻真实性: special_attention_task
+2025-03-10 20:30:52,307 - special_attention_task - ERROR - 新闻真实性验证异常: fact_check() got an unexpected keyword argument 'model'
+2025-03-10 20:30:52,307 - special_attention_task - ERROR - AI整理内容异常: generate_content() got an unexpected keyword argument 'temperature'
+2025-03-10 20:30:52,307 - special_attention_task - ERROR - 创建特别关注视频生成任务失败: generate_video_from_text() got an unexpected keyword argument 'style'
+2025-03-10 20:30:52,334 - mongodb_connector - INFO - 将UUID 6199479c-f394-4e39-a74e-227c14635b92 直接发布到Redis通道 special_attention
+INFO:     127.0.0.1:64759 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:31:02,351 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:31:04,050 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:31:04,050 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:31:04,051 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:31:05,646 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:31:05,646 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:31:07,301 - mongodb_connector - INFO - 将UUID ff833f88-8641-44b3-b740-8ee2dac7c130 发送到Redis列表 timeline
+INFO:     127.0.0.1:64814 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:31:17,338 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:31:19,054 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:31:19,054 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:31:19,054 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:31:20,725 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:31:20,725 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:31:22,398 - mongodb_connector - INFO - 将UUID 27e75aae-c1ae-4f1d-a389-60ccaf08f5be 发送到Redis列表 timeline
+INFO:     127.0.0.1:64908 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:31:32,408 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:31:34,167 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:31:34,167 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:31:34,167 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:31:35,935 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:31:35,935 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:31:37,586 - mongodb_connector - INFO - 将UUID d56ce5ed-ff1b-4805-b7fc-5f9c69d1b9f8 发送到Redis列表 timeline
+INFO:     127.0.0.1:64962 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:31:47,611 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:31:49,300 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:31:49,300 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:31:49,300 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:31:50,959 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:31:50,960 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:31:52,609 - mongodb_connector - INFO - 将UUID fd258c96-654d-4c53-8f6d-a6ead28a9dad 发送到Redis列表 timeline
+INFO:     127.0.0.1:65016 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:32:02,619 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:32:04,462 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:32:04,463 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:32:04,463 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:32:06,149 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:32:06,149 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:32:07,923 - mongodb_connector - INFO - 将UUID 0e9d518c-a579-4e64-8471-f490fdefcd86 发送到Redis列表 timeline
+INFO:     127.0.0.1:65066 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:32:17,938 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:32:19,706 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:32:19,707 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:32:19,707 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:32:21,341 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:32:21,341 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:32:23,089 - mongodb_connector - INFO - 将UUID 9b241005-8d10-4ca2-9f37-9780f05726d4 发送到Redis列表 timeline
+INFO:     127.0.0.1:65126 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:32:33,101 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:32:34,705 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:32:34,706 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:32:34,706 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:32:36,554 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:32:36,554 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:32:38,631 - mongodb_connector - INFO - 将UUID 3b481e33-df75-4a94-a56b-7d984100cc06 发送到消息队列 special_attention
+2025-03-10 20:32:38,974 - special_attention_task - INFO - 从Redis通道 special_attention 收到消息: 3b481e33-df75-4a94-a56b-7d984100cc06
+2025-03-10 20:32:38,974 - special_attention_task - INFO - 执行特别关注任务: special_attention_task
+2025-03-10 20:32:38,975 - special_attention_task - INFO - 开始验证特别关注新闻真实性: special_attention_task
+2025-03-10 20:32:38,975 - special_attention_task - ERROR - 新闻真实性验证异常: fact_check() got an unexpected keyword argument 'model'
+2025-03-10 20:32:38,975 - special_attention_task - ERROR - AI整理内容异常: generate_content() got an unexpected keyword argument 'temperature'
+2025-03-10 20:32:38,975 - special_attention_task - ERROR - 创建特别关注视频生成任务失败: generate_video_from_text() got an unexpected keyword argument 'style'
+2025-03-10 20:32:38,997 - mongodb_connector - INFO - 将UUID 3b481e33-df75-4a94-a56b-7d984100cc06 直接发布到Redis通道 special_attention
+INFO:     127.0.0.1:65163 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:32:49,015 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:32:50,753 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:32:50,754 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:32:50,754 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:32:52,522 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:32:52,522 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:32:54,537 - mongodb_connector - INFO - 将UUID 9b216294-0873-449d-9b86-61d9180a1e86 发送到消息队列 special_attention
+2025-03-10 20:32:54,882 - special_attention_task - INFO - 从Redis通道 special_attention 收到消息: 9b216294-0873-449d-9b86-61d9180a1e86
+2025-03-10 20:32:54,882 - special_attention_task - INFO - 执行特别关注任务: special_attention_task
+2025-03-10 20:32:54,882 - special_attention_task - INFO - 开始验证特别关注新闻真实性: special_attention_task
+2025-03-10 20:32:54,882 - special_attention_task - ERROR - 新闻真实性验证异常: fact_check() got an unexpected keyword argument 'model'
+2025-03-10 20:32:54,882 - special_attention_task - ERROR - AI整理内容异常: generate_content() got an unexpected keyword argument 'temperature'
+2025-03-10 20:32:54,882 - special_attention_task - ERROR - 创建特别关注视频生成任务失败: generate_video_from_text() got an unexpected keyword argument 'style'
+2025-03-10 20:32:54,888 - mongodb_connector - INFO - 将UUID 9b216294-0873-449d-9b86-61d9180a1e86 直接发布到Redis通道 special_attention
+INFO:     127.0.0.1:65207 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:33:04,904 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:33:06,729 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:33:06,729 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:33:06,730 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:33:08,392 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:33:08,392 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:33:10,054 - mongodb_connector - INFO - 将UUID e0ff97f7-d635-43c6-a1a5-d9d29f13bfe0 发送到Redis列表 timeline
+INFO:     127.0.0.1:65263 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:33:20,069 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:33:21,821 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:33:21,821 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:33:21,822 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:33:23,593 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:33:23,593 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:33:25,239 - mongodb_connector - INFO - 将UUID dcd86e6b-fdfe-4faf-91a4-9b8ef849e839 发送到Redis列表 timeline
+INFO:     127.0.0.1:65310 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:33:35,254 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:33:37,023 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:33:37,024 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:33:37,024 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:33:38,785 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:33:38,785 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:33:40,781 - mongodb_connector - INFO - 将UUID fb74a387-ef05-4623-a842-15de891f4f38 发送到消息队列 special_attention
+2025-03-10 20:33:41,125 - special_attention_task - INFO - 从Redis通道 special_attention 收到消息: fb74a387-ef05-4623-a842-15de891f4f38
+2025-03-10 20:33:41,126 - special_attention_task - INFO - 执行特别关注任务: special_attention_task
+2025-03-10 20:33:41,126 - special_attention_task - INFO - 开始验证特别关注新闻真实性: special_attention_task
+2025-03-10 20:33:41,126 - special_attention_task - ERROR - 新闻真实性验证异常: fact_check() got an unexpected keyword argument 'model'
+2025-03-10 20:33:41,126 - special_attention_task - ERROR - AI整理内容异常: generate_content() got an unexpected keyword argument 'temperature'
+2025-03-10 20:33:41,126 - special_attention_task - ERROR - 创建特别关注视频生成任务失败: generate_video_from_text() got an unexpected keyword argument 'style'
+2025-03-10 20:33:41,134 - mongodb_connector - INFO - 将UUID fb74a387-ef05-4623-a842-15de891f4f38 直接发布到Redis通道 special_attention
+INFO:     127.0.0.1:65345 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:33:51,160 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:33:52,914 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:33:52,914 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:33:52,915 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:33:54,746 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:33:54,747 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:33:56,533 - mongodb_connector - INFO - 将UUID f8946512-5c78-4c41-9f55-d0222e5a9e4b 发送到Redis列表 timeline
+INFO:     127.0.0.1:65400 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:34:06,550 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:34:08,151 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:34:08,151 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:34:08,151 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:34:09,841 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:34:09,842 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:34:11,639 - mongodb_connector - INFO - 将UUID 08f77a9c-5a23-46dc-9f06-ed1d44858901 发送到Redis列表 timeline
+INFO:     127.0.0.1:65451 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:34:21,655 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:34:23,428 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:34:23,428 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:34:23,428 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:34:25,245 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:34:25,245 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:34:26,910 - mongodb_connector - INFO - 将UUID 24df9cec-d8bb-4aa5-9b1a-64f6c036c823 发送到Redis列表 timeline
+INFO:     127.0.0.1:65523 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:34:36,927 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:34:38,535 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:34:38,535 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:34:38,535 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:34:40,211 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:34:40,211 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:34:41,977 - mongodb_connector - INFO - 将UUID 476f5b09-0752-4220-b8ef-687a283efa0b 发送到Redis列表 timeline
+INFO:     127.0.0.1:49183 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:34:51,993 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:34:53,768 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:34:53,768 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:34:53,768 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:34:55,533 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:34:55,534 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:34:57,302 - mongodb_connector - INFO - 将UUID 3945cf2c-d2df-4e22-acae-7e56071f933f 发送到Redis列表 timeline
+INFO:     127.0.0.1:49236 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:35:07,317 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:35:09,068 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:35:09,068 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:35:09,068 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:35:10,710 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:35:10,710 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:35:12,344 - mongodb_connector - INFO - 将UUID c7f55ab3-51a6-4ffe-902e-b937dc88d15f 发送到Redis列表 timeline
+INFO:     127.0.0.1:49270 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:35:22,362 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:35:24,152 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:35:24,153 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:35:24,153 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:35:25,803 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:35:25,803 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:35:27,561 - mongodb_connector - INFO - 将UUID 2e464294-7515-4104-8fb8-bb042cdb19eb 发送到Redis列表 timeline
+INFO:     127.0.0.1:49327 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:35:37,576 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:35:39,316 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:35:39,316 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:35:39,317 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:35:41,101 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:35:41,101 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:35:42,818 - mongodb_connector - INFO - 将UUID f03b6631-da38-408c-97bb-66b9a66213ce 发送到Redis列表 timeline
+INFO:     127.0.0.1:49359 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:35:52,785 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:35:54,546 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:35:54,546 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:35:54,546 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:35:56,189 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:35:56,189 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:35:58,446 - mongodb_connector - INFO - 将UUID fc745e64-b91d-4444-b07b-df8a0ba2a24c 发送到消息队列 special_attention
+2025-03-10 20:35:58,767 - special_attention_task - INFO - 从Redis通道 special_attention 收到消息: fc745e64-b91d-4444-b07b-df8a0ba2a24c
+2025-03-10 20:35:58,768 - special_attention_task - INFO - 执行特别关注任务: special_attention_task
+2025-03-10 20:35:58,768 - special_attention_task - INFO - 开始验证特别关注新闻真实性: special_attention_task
+2025-03-10 20:35:58,768 - special_attention_task - ERROR - 新闻真实性验证异常: fact_check() got an unexpected keyword argument 'model'
+2025-03-10 20:35:58,768 - special_attention_task - ERROR - AI整理内容异常: generate_content() got an unexpected keyword argument 'temperature'
+2025-03-10 20:35:58,768 - special_attention_task - ERROR - 创建特别关注视频生成任务失败: generate_video_from_text() got an unexpected keyword argument 'style'
+2025-03-10 20:35:58,773 - mongodb_connector - INFO - 将UUID fc745e64-b91d-4444-b07b-df8a0ba2a24c 直接发布到Redis通道 special_attention
+INFO:     127.0.0.1:49422 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:36:08,791 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:36:10,432 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:36:10,432 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:36:10,432 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:36:12,261 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:36:12,262 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:36:13,967 - mongodb_connector - INFO - 将UUID 6b1ffe70-39b3-4055-840b-01915ec87530 发送到Redis列表 timeline
+INFO:     127.0.0.1:49460 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:36:23,983 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:36:25,717 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:36:25,717 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:36:25,717 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:36:27,486 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:36:27,486 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:36:29,331 - mongodb_connector - INFO - 将UUID 26a6c816-4fae-4aff-b02e-bfaa014af958 发送到Redis列表 timeline
+INFO:     127.0.0.1:49521 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:36:39,351 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:36:41,080 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:36:41,080 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:36:41,080 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:36:42,850 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:36:42,850 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:36:44,682 - mongodb_connector - INFO - 将UUID 2f217776-dd76-4d63-b6c7-c5902aa01498 发送到Redis列表 timeline
+INFO:     127.0.0.1:49585 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:36:54,696 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:36:56,349 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:36:56,350 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:36:56,350 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:36:58,102 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:36:58,102 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:36:59,783 - mongodb_connector - INFO - 将UUID 4f291113-90f6-418b-82c9-197d1638a9e5 发送到Redis列表 timeline
+INFO:     127.0.0.1:49630 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:37:09,797 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:37:11,614 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:37:11,614 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:37:11,614 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:37:13,253 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:37:13,254 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:37:14,913 - mongodb_connector - INFO - 将UUID 07e5d45b-006a-440f-9620-6ed4c81a7666 发送到Redis列表 timeline
+INFO:     127.0.0.1:49677 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:37:24,940 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:37:26,537 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:37:26,537 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:37:26,537 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:37:28,189 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:37:28,189 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:37:29,926 - mongodb_connector - INFO - 将UUID 42d47f38-5bb7-4852-9482-888882f7169d 发送到Redis列表 timeline
+INFO:     127.0.0.1:49740 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:37:39,952 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:37:41,722 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:37:41,722 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:37:41,723 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:37:43,454 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:37:43,454 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:37:45,121 - mongodb_connector - INFO - 将UUID 9bbd2430-0261-45e3-9273-26206a5a2465 发送到Redis列表 timeline
+INFO:     127.0.0.1:49781 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:37:55,141 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:37:56,784 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:37:56,784 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:37:56,784 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:37:58,525 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:37:58,525 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:38:00,192 - mongodb_connector - INFO - 将UUID f783ee9a-1de2-4eb2-9e0a-dabec6d9f76c 发送到Redis列表 timeline
+INFO:     127.0.0.1:49826 - "POST /data HTTP/1.1" 200 OK
+2025-03-10 20:38:10,203 - message_queue - INFO - 尝试连接到Redis: 172.104.160.100:6379
+2025-03-10 20:38:11,949 - message_queue - INFO - 队列前缀设置为: [无前缀]
+2025-03-10 20:38:11,951 - message_queue - INFO - 成功连接到Redis服务器，消息队列功能已启用
+2025-03-10 20:38:11,951 - mongodb_connector - INFO - 消息队列初始化成功
+2025-03-10 20:38:13,718 - mongodb_connector - INFO - 成功连接到Redis服务器
+2025-03-10 20:38:13,718 - mongodb_connector - INFO - MongoDB 连接器初始化: degenPy, Collection: twitterTweets
+2025-03-10 20:38:15,374 - mongodb_connector - INFO - 将UUID 893f68f8-f9db-4712-a2c6-8888e5bcaf84 发送到Redis列表 timeline
+INFO:     127.0.0.1:49872 - "POST /data HTTP/1.1" 200 OK

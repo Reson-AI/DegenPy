@@ -6,6 +6,7 @@ import time
 import redis
 import logging
 import threading
+import traceback
 from typing import Dict, Any, List, Optional
 from datetime import datetime
 import os
@@ -85,18 +86,28 @@ class SpecialAttentionTask:
         
         # 启动监听线程
         def listen_thread():
+            logger.info(f"开始监听Redis通道: {channel}")
             for message in pubsub.listen():
                 if not self.running:
+                    logger.info(f"停止监听Redis通道: {channel}")
                     break
                     
+                logger.debug(f"收到消息: {message}")
                 if message['type'] == 'message':
                     try:
-                        data = json.loads(message['data'])
+                        # 尝试解析消息数据
+                        try:
+                            data = json.loads(message['data'])
+                        except (json.JSONDecodeError, TypeError):
+                            # 如果不是JSON，直接使用原始数据
+                            data = message['data']
+                            
+                        logger.info(f"从Redis通道 {channel} 收到消息: {data}")
                         # 记录数据来源为channel
                         self.trigger_source = 'channel'
                         self.execute(data)
                     except Exception as e:
-                        logger.error(f"处理消息失败: {str(e)}")
+                        logger.error(f"处理消息失败: {str(e)}\n{traceback.format_exc()}")
         
         thread = threading.Thread(
             target=listen_thread,
