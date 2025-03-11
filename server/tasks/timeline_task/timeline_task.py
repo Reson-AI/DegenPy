@@ -67,27 +67,12 @@ class TimelineTask:
         
         # 获取轮询配置
         poll_config = self.task_config.get('schedule', {})
-        if isinstance(poll_config, str):
-            # 兼容旧版配置
-            if poll_config.startswith('*/'):
-                # 例如 */5 * * * * 表示每5分钟
-                try:
-                    interval_minutes = int(poll_config.split('/')[1].split()[0])
-                    poll_config = {
-                        'type': 'interval',
-                        'minutes': interval_minutes
-                    }
-                except (IndexError, ValueError):
-                    poll_config = {
-                        'type': 'interval',
-                        'minutes': 5  # 默认5分钟
-                    }
-            else:
-                # 其他cron表达式，默认为5分钟
-                poll_config = {
-                    'type': 'interval',
-                    'minutes': 5
-                }
+        if isinstance(poll_config, str) or not poll_config:
+            # 简化配置，默认每30分钟执行一次
+            poll_config = {
+                'type': 'interval',
+                'minutes': 30
+            }
         
         # 启动轮询线程
         self._start_polling(poll_config)
