@@ -2,13 +2,12 @@
 # -*- coding: utf-8 -*-
 
 import json
-import time
-import redis
 import logging
+import asyncio
 import threading
-import traceback
+import time
 from typing import Dict, Any, List, Optional
-from datetime import datetime
+from datetime import datetime, timedelta
 import os
 from pathlib import Path
 
@@ -20,16 +19,21 @@ logging.basicConfig(
 logger = logging.getLogger("special_attention_task")
 
 # 导入数据库连接器
-from warehouse.api import get_data_by_uid
+from warehouse.api import get_data_by_uids
+from warehouse.storage.mongodb.connector import mongodb_connector
+from warehouse.utils.uid_tracker import uid_tracker
 
 # 导入视频生成服务
 from server.services.text2video import generate_video_from_text
 
 # 导入OpenRouter API
-from server.models.openrouter import generate_content, fact_check
+from server.models.openrouter import generate_content
+
+# 导入事实检查服务
+from server.services.fact_check import fact_check
 
 class SpecialAttentionTask:
-    """特别关注任务执行器，负责实时监听特别关注的推文，生成视频内容"""
+    """特别关注任务执行器，负责监控特别关注标签的内容，生成视频内容"""
     
     def __init__(self, task_config, agent_config):
         """
@@ -41,23 +45,36 @@ class SpecialAttentionTask:
         """
         self.task_config = task_config
         self.agent_config = agent_config
-        self.task_id = task_config.get('id')
+        self.task_id = task_config.get('id', 'unknown_task')
         self.running = False
-        
-        # 初始化Redis连接
-        redis_password = os.getenv('REDIS_PASSWORD', '')
-        self.redis = redis.Redis(
-            host=os.getenv('REDIS_HOST', 'localhost'),
-            port=int(os.getenv('REDIS_PORT', 6379)),
-            password=redis_password,  # 添加密码认证
-            db=int(os.getenv('REDIS_DB', 0)),
-            decode_responses=True
-        )
+        self.poll_thread = None
         
         # 加载组件
         self.components = task_config.get('components', [])
         logger.info(f"特别关注任务 {self.task_id} 使用组件: {', '.join(self.components)}")
         
+        # 获取特别关注标签列表
+        self.special_tags = self._load_special_tags()
+        logger.info(f"特别关注任务 {self.task_id} 监控标签: {self.special_tags}")
+    
+    def _load_special_tags(self):
+        """
+        加载特别关注标签列表
+        
+        Returns:
+            特别关注标签列表
+        """
+        data_source = self.task_config.get('data_source', {})
+        tags = data_source.get('tags', [])
+        
+        # 确保标签是列表形式
+        if isinstance(tags, str):
+            tags = [tags]
+        elif not isinstance(tags, list):
+            tags = []
+            
+        return tags
+    
     def start(self):
         """启动任务"""
         if self.running:
@@ -66,140 +83,170 @@ class SpecialAttentionTask:
         self.running = True
         logger.info(f"启动特别关注任务: {self.task_id}")
         
-        # 特别关注任务始终使用实时监听模式
-        self._start_realtime_mode()
+        # 获取轮询配置
+        poll_config = self.task_config.get('schedule', {})
+        if isinstance(poll_config, str):
+            # 兼容旧版配置
+            if poll_config.startswith('*/'):
+                # 例如 */5 * * * * 表示每5分钟
+                try:
+                    interval_minutes = int(poll_config.split('/')[1].split()[0])
+                    poll_config = {
+                        'type': 'interval',
+                        'minutes': interval_minutes
+                    }
+                except (IndexError, ValueError):
+                    poll_config = {
+                        'type': 'interval',
+                        'minutes': 5  # 默认5分钟
+                    }
+            else:
+                # 其他cron表达式，默认为5分钟
+                poll_config = {
+                    'type': 'interval',
+                    'minutes': 5
+                }
+        
+        # 启动轮询线程
+        self._start_polling(poll_config)
+    
+    def _start_polling(self, poll_config: Dict[str, Any]):
+        """启动轮询线程
+        
+        Args:
+            poll_config: 轮询配置，包含type和时间间隔
+        """
+        poll_type = poll_config.get('type', 'interval')
+        
+        if poll_type == 'interval':
+            # 计算间隔秒数
+            seconds = poll_config.get('seconds', 0)
+            minutes = poll_config.get('minutes', 0)
+            hours = poll_config.get('hours', 0)
             
-    def _start_realtime_mode(self):
-        """启动实时监听模式"""
-        source_config = self.task_config.get('data_source', {})
-        channel = source_config.get('channel')
-        
-        if not channel:
-            logger.error(f"实时监听模式缺少channel配置: {self.task_id}")
-            return
+            interval_seconds = seconds + minutes * 60 + hours * 3600
+            if interval_seconds <= 0:
+                interval_seconds = 300  # 默认5分钟
             
-        logger.info(f"启动实时监听: {channel}")
-        
-        # 创建Redis订阅
-        pubsub = self.redis.pubsub()
-        pubsub.subscribe(channel)
-        
-        # 启动监听线程
-        def listen_thread():
-            logger.info(f"开始监听Redis通道: {channel}")
-            for message in pubsub.listen():
-                if not self.running:
-                    logger.info(f"停止监听Redis通道: {channel}")
-                    break
+            logger.info(f"特别关注任务 {self.task_id} 启动轮询，间隔 {interval_seconds} 秒")
+            
+            # 启动轮询线程
+            def poll_thread_func():
+                logger.info(f"特别关注任务 {self.task_id} 轮询线程启动")
+                
+                # 立即执行一次
+                self._execute_and_handle_exceptions()
+                
+                while self.running:
+                    time.sleep(interval_seconds)
+                    if not self.running:
+                        break
                     
-                logger.debug(f"收到消息: {message}")
-                if message['type'] == 'message':
-                    try:
-                        # 尝试解析消息数据
-                        try:
-                            data = json.loads(message['data'])
-                        except (json.JSONDecodeError, TypeError):
-                            # 如果不是JSON，直接使用原始数据
-                            data = message['data']
-                            
-                        logger.info(f"从Redis通道 {channel} 收到消息: {data}")
-                        # 记录数据来源为channel
-                        self.trigger_source = 'channel'
-                        self.execute(data)
-                    except Exception as e:
-                        logger.error(f"处理消息失败: {str(e)}\n{traceback.format_exc()}")
+                    self._execute_and_handle_exceptions()
+                
+                logger.info(f"特别关注任务 {self.task_id} 轮询线程停止")
+            
+            self.poll_thread = threading.Thread(
+                target=poll_thread_func,
+                name=f"Poll-{self.task_id}",
+                daemon=True
+            )
+            self.poll_thread.start()
+        else:
+            logger.error(f"不支持的轮询类型: {poll_type}")
+    
+    def _execute_and_handle_exceptions(self):
+        """执行任务并处理异常"""
+        try:
+            # 检查新数据并执行任务
+            asyncio.run(self.check_and_execute())
+        except Exception as e:
+            logger.error(f"特别关注任务 {self.task_id} 执行出错: {str(e)}", exc_info=True)
+    
+    async def check_and_execute(self):
+        """检查是否有新数据并执行任务"""
+        logger.info(f"检查特别关注任务新数据: {self.task_id}")
         
-        thread = threading.Thread(
-            target=listen_thread,
-            name=f"Redis-{channel}",
-            daemon=True
-        )
-        thread.start()
+        # 获取新数据
+        data = await self._get_new_data()
+        if not data:
+            logger.info(f"没有新的特别关注数据: {self.task_id}")
+            return
         
-    def execute(self, trigger_data=None):
+        # 执行任务处理
+        self.execute(data)
+    
+    def execute(self, data=None):
         """
         执行任务
         
         Args:
-            trigger_data: 触发数据，实时模式下由Redis提供
+            data: 待处理的数据
         """
         logger.info(f"执行特别关注任务: {self.task_id}")
         
-        # 如果没有设置数据来源，默认为key
-        if not hasattr(self, 'trigger_source'):
-            self.trigger_source = 'key'
-        
-        # 1. 获取数据 (data_fetcher组件)
-        if "data_fetcher" in self.components:
-            data = self._get_data(trigger_data)
-            if not data:
-                logger.warning(f"没有获取到数据: {self.task_id}")
-                return
-        else:
-            data = trigger_data
+        if not data:
+            logger.warning(f"没有数据可处理: {self.task_id}")
+            return
             
-        # 2. 内容事实核查 (fact_checker组件)
-        if "fact_checker" in self.components:
-            verified_content = self._fact_check(data)
-            if not verified_content:
-                logger.warning(f"内容核查失败: {self.task_id}")
-                return
-        else:
-            verified_content = self._extract_raw_content(data)
-            
-        # 3. 内容处理 (content_processor组件)
-        if "content_processor" in self.components:
-            processed_content = self._process_content(verified_content)
+        # 内容事实核查和处理 (合并fact_checker和content_processor组件)
+        if "fact_checker" in self.components or "content_processor" in self.components:
+            processed_content = self._process_and_verify_content(data)
             if not processed_content:
-                logger.warning(f"内容处理失败: {self.task_id}")
+                logger.warning(f"内容验证和处理失败: {self.task_id}")
                 return
         else:
-            processed_content = verified_content
+            processed_content = self._extract_raw_content(data)
             
-        # 4. 生成视频 (video_generator组件)
+        # 生成视频 (video_generator组件)
         if "video_generator" in self.components:
             self._generate_video(processed_content)
-        
-    def _get_data(self, trigger_data=None):
+    
+    async def _get_new_data(self):
         """
-        获取数据
+        获取新数据
         
-        Args:
-            trigger_data: 触发数据
-            
         Returns:
-            处理后的数据
+            新的数据列表
         """
-        # 如果有触发数据，优先使用
-        if trigger_data:
-            # 如果是列表，处理每一项
-            if isinstance(trigger_data, list):
-                complete_data_list = []
-                for item in trigger_data:
-                    # 如果项目只包含UUID，获取完整数据
-                    if isinstance(item, dict) and 'uuid' in item and 'content' not in item:
-                        uid = item.get('uuid')
-                        complete_data = get_data_by_uid(uid)
-                        if complete_data:
-                            complete_data_list.append(complete_data)
-                        else:
-                            complete_data_list.append(item)
-                    else:
-                        complete_data_list.append(item)
-                return complete_data_list
-            # 如果是单个对象，检查是否只包含UUID
-            elif isinstance(trigger_data, dict) and 'uuid' in trigger_data and 'content' not in trigger_data:
-                uid = trigger_data.get('uuid')
-                complete_data = get_data_by_uid(uid)
-                if complete_data:
-                    return complete_data
-                else:
-                    return trigger_data
-            else:
-                return trigger_data
-                
-        # 特别关注任务一般不会主动获取数据，默认返回None
-        return None
+        try:
+            # 如果没有特别关注标签，则无法获取数据
+            if not self.special_tags:
+                logger.warning(f"特别关注任务没有配置标签: {self.task_id}")
+                return None
+            
+            # 构建查询条件：查找包含特定标签的数据
+            query = {
+                "tags": {"$in": self.special_tags}
+            }
+            
+            # 从MongoDB中查询数据，按时间戳降序排序
+            recent_data = list(mongodb_connector.db.data.find(query).sort("timestamp", -1).limit(10))
+            
+            if not recent_data:
+                return None
+            
+            # 提取UID列表
+            uids = [item.get("_id") for item in recent_data if "_id" in item]
+            
+            # 使用UID跟踪器过滤出未处理的UID
+            unprocessed_uids = uid_tracker.get_unprocessed(uids, self.task_id)
+            
+            if not unprocessed_uids:
+                return None
+            
+            # 获取未处理数据的完整内容
+            unprocessed_data = get_data_by_uids(unprocessed_uids)
+            
+            # 标记为已处理
+            for uid in unprocessed_uids:
+                uid_tracker.add_uid(uid, self.task_id)
+            
+            return unprocessed_data
+            
+        except Exception as e:
+            logger.error(f"获取新数据失败: {str(e)}", exc_info=True)
+            return None
     
     def _extract_raw_content(self, data):
         """
@@ -211,96 +258,108 @@ class SpecialAttentionTask:
         Returns:
             提取的原始内容
         """
-        raw_content = ""
-        if isinstance(data, dict):
-            raw_content = data.get('content', '')
-        elif isinstance(data, list):
-            raw_content = "\n\n".join([item.get('content', '') for item in data if 'content' in item])
-        else:
-            raw_content = str(data)
+        if not data:
+            return None
             
-        return raw_content.strip()
+        # 如果是列表，取第一项
+        if isinstance(data, list):
+            if not data:
+                return None
+            data = data[0]
+            
+        # 从字典中提取内容
+        if isinstance(data, dict):
+            # 优先使用content字段
+            if 'content' in data:
+                content = data['content']
+                # 如果content是字典，尝试提取text字段
+                if isinstance(content, dict) and 'text' in content:
+                    return content['text']
+                # 如果content是字符串，直接返回
+                elif isinstance(content, str):
+                    return content
+            
+            # 如果没有content字段或提取失败，返回整个数据的字符串表示
+            return json.dumps(data, ensure_ascii=False, indent=2)
         
-    def _fact_check(self, data):
+        # 如果是字符串，直接返回
+        if isinstance(data, str):
+            return data
+            
+        # 其他类型，转换为字符串
+        return str(data)
+    
+    def _process_and_verify_content(self, data):
         """
-        验证内容的真实性
+        验证内容真实性并整理成特别关注新闻（合并了_fact_check和_process_content功能）
         
         Args:
-            data: 数据
+            data: 原始数据
             
         Returns:
-            验证后的内容
+            处理后的内容
         """
         # 提取原始内容
         raw_content = self._extract_raw_content(data)
         
         if not raw_content:
             return raw_content
-        
-        # 特别关注任务需要严格的真实性验证
+            
         try:
-            logger.info(f"开始验证特别关注新闻真实性: {self.task_id}")
-            ai_config = self.task_config.get('ai_config', {})
-            model = ai_config.get('model', 'anthropic/claude-3-opus:beta')
-            verification_results = fact_check(raw_content, model=model)
-            
-            # 如果验证结果表明内容可能不真实，添加警告
-            if verification_results and 'is_verified' in verification_results:
-                if verification_results['is_verified']:
-                    logger.info(f"新闻真实性验证通过: {self.task_id}")
-                    verified_content = raw_content
-                else:
-                    warning = verification_results.get('warning', '此新闻内容真实性无法确认，请谨慎对待。')
-                    logger.warning(f"新闻真实性验证不通过: {self.task_id}")
-                    verified_content = f"[警告: {warning}]\n\n{raw_content}"
-            else:
-                logger.warning(f"新闻真实性验证结果不完整: {self.task_id}")
-                verified_content = raw_content
-        except Exception as e:
-            logger.error(f"新闻真实性验证异常: {str(e)}")
-            verified_content = raw_content
-            
-        return verified_content
-            
-    def _process_content(self, content):
-        """
-        使用AI处理内容，整理成特别关注新闻
-        
-        Args:
-            content: 内容
-            
-        Returns:
-            处理后的内容
-        """
-        try:
-            # 准备提示词
-            task_name = self.task_config.get('name', '特别关注')
-            
-            prompt = f"""请将以下内容整理成一条特别关注的新闻报道。保留所有重要信息，但要使用清晰、直接的语言。强调新闻的重要性和紧急性。新闻类型：特别关注 - {task_name}
-
-原始内容：
-{content}
-
-整理后的特别关注新闻报道："""
-            
-            # 使用OpenRouter API生成内容
+            # 获取AI配置
             ai_config = self.task_config.get('ai_config', {})
             model = ai_config.get('model', 'anthropic/claude-3-opus:beta')
             temperature = ai_config.get('temperature', 0.7)
             max_tokens = ai_config.get('max_tokens', 4000)
+            task_name = self.task_config.get('name', '特别关注')
+            
+            # 准备融合了验证和整理功能的高级提示词
+            prompt = f"""# 任务：特别关注新闻验证与整理
+
+## 背景
+你是一位专业的新闻编辑和事实核查专家，负责处理标记为"{task_name}"的特别关注新闻。
+
+## 步骤
+1. **事实核查**：仔细分析以下内容，评估其真实性和可信度
+2. **新闻整理**：将内容重新组织为简洁、清晰的特别关注新闻报道
+
+## 要求
+- 保留所有关键事实和重要信息
+- 使用简洁有力的语言，突出新闻的重要性和紧急性
+- 如发现可疑或无法验证的信息，在报道开头添加明确的警告标签
+- 确保最终报道具有专业新闻风格，适合紧急播报
+- 报道应包含标题和正文，标题要简洁有力，能够吸引读者注意
+- 如果内容涉及数据或统计，请确保准确呈现
+
+## 原始内容
+{raw_content}
+
+## 输出格式
+如果内容可信：直接输出整理后的新闻报道
+如果内容存在可疑点：以"[警告: 具体警告内容]"开头，然后是整理后的报道
+
+## 特别关注新闻报道：
+"""
+            
+            # 使用OpenRouter API生成内容
             processed_content = generate_content(prompt, model=model, temperature=temperature, max_tokens=max_tokens)
             
             if processed_content:
-                logger.info(f"使用AI成功整理特别关注内容: {self.task_id}")
+                # 检查是否包含警告标签
+                if processed_content.startswith('[警告:'):
+                    logger.warning(f"新闻真实性验证不通过: {self.task_id}")
+                else:
+                    logger.info(f"新闻验证通过并成功整理: {self.task_id}")
+                    
                 return processed_content
             else:
-                logger.warning(f"AI整理内容失败，使用原始内容: {self.task_id}")
-                return content
+                logger.warning(f"AI处理内容失败，使用原始内容: {self.task_id}")
+                return raw_content
                 
         except Exception as e:
-            logger.error(f"AI整理内容异常: {str(e)}")
-            return content
-            
+            logger.error(f"新闻验证和整理异常: {str(e)}", exc_info=True)
+            return raw_content
+    
     def _generate_video(self, content):
         """
         生成视频
@@ -318,41 +377,44 @@ class SpecialAttentionTask:
             
             # 转换优先级为数字
             priority_map = {
-                'low': 0,
-                'normal': 1,
-                'high': 2
+                'low': 3,
+                'normal': 2,
+                'high': 1,
+                'urgent': 0
             }
-            priority = priority_map.get(priority_str, 2)  # 特别关注默认为高优先级
+            priority = priority_map.get(priority_str, 1)  # 默认为high
             
-            # 获取发布平台
-            platforms = self.task_config.get('platforms', [])
+            # 设置视频时长
+            duration = video_config.get('duration', 30)
             
-            # 创建动作序列
-            action_sequence = platforms.copy()
+            # 生成视频
+            logger.info(f"开始生成特别关注视频: {self.task_id}")
             
-            # 如果配置了webhook，添加webhook动作
-            if self.task_config.get('webhook'):
-                action_sequence.append('webhook')
-            
-            # 特别关注通常是单条内容
-            task_id = generate_video_from_text(
+            # 调用视频生成服务
+            video_result = generate_video_from_text(
                 content=content,
-                trigger_id=self.task_id,
-                agent_id=self.agent_config.get('id'),
-                action_sequence=action_sequence,
-                priority=priority,
                 style=style,
-                metadata={"type": "special_attention", "style": style}
+                duration=duration,
+                priority=priority,
+                task_id=self.task_id
             )
             
-            logger.info(f"特别关注视频生成任务已创建: {task_id}")
-            return task_id
-            
+            if video_result and 'video_id' in video_result:
+                logger.info(f"特别关注视频生成成功: {video_result['video_id']}")
+            else:
+                logger.warning(f"特别关注视频生成结果不完整: {video_result}")
+                
         except Exception as e:
-            logger.error(f"创建特别关注视频生成任务失败: {str(e)}")
-            return None
-            
+            logger.error(f"特别关注视频生成异常: {str(e)}")
+    
     def stop(self):
         """停止任务"""
-        self.running = False
+        if not self.running:
+            return
+            
         logger.info(f"停止特别关注任务: {self.task_id}")
+        self.running = False
+        
+        # 等待轮询线程结束
+        if self.poll_thread and self.poll_thread.is_alive():
+            self.poll_thread.join(timeout=1.0)

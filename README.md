@@ -168,7 +168,6 @@ DegenPy/
    - 自动根据源类型确定标签：`followed`和`trending`为标签2，`other`为标签1
 
 2. **数据检索接口**：
-   - `get_data_by_uid`: 根据UID获取数据
    - `get_data_by_uids`: 根据多个UID获取数据
    - `execute_query`: 执行自定义查询
 

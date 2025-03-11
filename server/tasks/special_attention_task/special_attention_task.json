@@ -1,14 +1,17 @@
 {
     "id": "special_attention_task",
     "name": "特别关注信息处理",
-    "description": "实时监听特别关注的推文，生成视频内容",
+    "description": "每分钟获取一次特别关注标签的推文，生成视频内容",
     "type": "special_attention",
     "executor": "server.tasks.special_attention_task.special_attention_task.SpecialAttentionTask",
-    "schedule": "realtime",
+    "schedule": {
+        "type": "interval",
+        "seconds": 60
+    },
     "data_source": {
-        "type": "redis_subscribe",
-        "channel": "special_attention",
-        "tag": 2
+        "type": "mongodb",
+        "time_window": 300,
+        "tags": ["special_attention"]
     },
     "video_config": {
         "style": "breaking_news",

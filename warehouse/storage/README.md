@@ -94,6 +94,5 @@ PGSQL_DATABASE=degenpy
 所有数据库连接器都实现了以下接口：
 
 - `store_data(content, author_id, source_type, uid)`: 存储数据
-- `get_data_by_uid(uid)`: 根据UID获取数据
 - `get_data_by_uids(uids)`: 根据多个UID获取数据
 - `execute_query(query)`: 执行查询

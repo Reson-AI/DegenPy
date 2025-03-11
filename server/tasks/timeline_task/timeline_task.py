@@ -2,13 +2,12 @@
 # -*- coding: utf-8 -*-
 
 import json
-import time
-import redis
 import logging
-import schedule
+import asyncio
 import threading
+import time
 from typing import Dict, Any, List, Optional
-from datetime import datetime
+from datetime import datetime, timedelta
 import os
 from pathlib import Path
 
@@ -20,7 +19,9 @@ logging.basicConfig(
 logger = logging.getLogger("timeline_task")
 
 # 导入数据库连接器
-from warehouse.api import get_data_by_uid
+from warehouse.api import get_data_by_uids
+from warehouse.storage.mongodb.connector import mongodb_connector
+from warehouse.utils.uid_tracker import uid_tracker
 
 # 导入视频生成服务
 from server.services.text2video import generate_video_from_text
@@ -29,7 +30,7 @@ from server.services.text2video import generate_video_from_text
 from server.models.openrouter import generate_content
 
 class TimelineTask:
-    """时间线任务执行器，负责定期获取普通推文，生成汇总视频内容"""
+    """时间线任务执行器，负责定期获取内容，生成汇总视频"""
     
     def __init__(self, task_config, agent_config):
         """
@@ -41,21 +42,21 @@ class TimelineTask:
         """
         self.task_config = task_config
         self.agent_config = agent_config
-        self.task_id = task_config.get('id')
+        self.task_id = task_config.get('id', 'unknown_task')
         self.running = False
-        
-        # 初始化Redis连接
-        self.redis = redis.Redis(
-            host=os.getenv('REDIS_HOST', 'localhost'),
-            port=int(os.getenv('REDIS_PORT', 6379)),
-            db=int(os.getenv('REDIS_DB', 0)),
-            decode_responses=True
-        )
+        self.poll_thread = None
         
         # 加载组件
         self.components = task_config.get('components', [])
         logger.info(f"时间线任务 {self.task_id} 使用组件: {', '.join(self.components)}")
         
+        # 获取批量大小配置
+        data_source = self.task_config.get('data_source', {})
+        self.batch_size = data_source.get('batch_size', 10)
+        self.time_window = data_source.get('time_window', 1800)  # 默认30分钟
+        
+        logger.info(f"时间线任务 {self.task_id} 初始化完成，批量大小: {self.batch_size}, 时间窗口: {self.time_window}秒")
+    
     def start(self):
         """启动任务"""
         if self.running:
@@ -64,231 +65,267 @@ class TimelineTask:
         self.running = True
         logger.info(f"启动时间线任务: {self.task_id}")
         
-        # 时间线任务使用定时执行模式
-        schedule_str = self.task_config.get('schedule')
-        if schedule_str and schedule_str != 'realtime':
-            self._start_scheduled_mode(schedule_str)
-        else:
-            logger.error(f"时间线任务缺少有效的定时配置: {self.task_id}")
-            
-    def _start_scheduled_mode(self, schedule_str):
-        """启动定时执行模式"""
-        logger.info(f"启动定时执行: {schedule_str}")
-        
-        # 解析cron表达式
-        parts = schedule_str.split()
-        if len(parts) == 5:
-            minute, hour, day, month, weekday = parts
-            
-            # 创建调度任务
-            if minute.startswith('*/'):
-                # 每X分钟执行
-                interval = int(minute[2:])
-                schedule.every(interval).minutes.do(self.execute)
+        # 获取轮询配置
+        poll_config = self.task_config.get('schedule', {})
+        if isinstance(poll_config, str):
+            # 兼容旧版配置
+            if poll_config.startswith('*/'):
+                # 例如 */5 * * * * 表示每5分钟
+                try:
+                    interval_minutes = int(poll_config.split('/')[1].split()[0])
+                    poll_config = {
+                        'type': 'interval',
+                        'minutes': interval_minutes
+                    }
+                except (IndexError, ValueError):
+                    poll_config = {
+                        'type': 'interval',
+                        'minutes': 5  # 默认5分钟
+                    }
             else:
-                # 其他复杂cron表达式
-                # 这里简化处理，实际应该使用更完善的cron解析库
-                schedule.every().day.at(f"{hour.replace('*', '0')}:{minute.replace('*', '0')}").do(self.execute)
+                # 其他cron表达式，默认为5分钟
+                poll_config = {
+                    'type': 'interval',
+                    'minutes': 5
+                }
+        
+        # 启动轮询线程
+        self._start_polling(poll_config)
+    
+    def _start_polling(self, poll_config: Dict[str, Any]):
+        """启动轮询线程
+        
+        Args:
+            poll_config: 轮询配置，包含type和时间间隔
+        """
+        poll_type = poll_config.get('type', 'interval')
+        
+        if poll_type == 'interval':
+            # 计算间隔秒数
+            seconds = poll_config.get('seconds', 0)
+            minutes = poll_config.get('minutes', 0)
+            hours = poll_config.get('hours', 0)
             
-            # 启动调度线程
-            def schedule_thread():
+            interval_seconds = seconds + minutes * 60 + hours * 3600
+            if interval_seconds <= 0:
+                interval_seconds = 300  # 默认5分钟
+            
+            logger.info(f"时间线任务 {self.task_id} 启动轮询，间隔 {interval_seconds} 秒")
+            
+            # 启动轮询线程
+            def poll_thread_func():
+                logger.info(f"时间线任务 {self.task_id} 轮询线程启动")
+                
+                # 立即执行一次
+                self._execute_and_handle_exceptions()
+                
                 while self.running:
-                    schedule.run_pending()
-                    time.sleep(1)
+                    time.sleep(interval_seconds)
+                    if not self.running:
+                        break
+                    
+                    self._execute_and_handle_exceptions()
+                
+                logger.info(f"时间线任务 {self.task_id} 轮询线程停止")
             
-            thread = threading.Thread(
-                target=schedule_thread,
-                name=f"Schedule-{self.task_id}",
+            self.poll_thread = threading.Thread(
+                target=poll_thread_func,
+                name=f"Poll-{self.task_id}",
                 daemon=True
             )
-            thread.start()
+            self.poll_thread.start()
         else:
-            logger.error(f"无效的cron表达式: {schedule_str}")
+            logger.error(f"不支持的轮询类型: {poll_type}")
+    
+    def _execute_and_handle_exceptions(self):
+        """执行任务并处理异常"""
+        try:
+            # 检查新数据并执行任务
+            asyncio.run(self.check_and_execute())
+        except Exception as e:
+            logger.error(f"时间线任务 {self.task_id} 执行出错: {str(e)}", exc_info=True)
             
-    def execute(self, trigger_data=None):
+    async def check_and_execute(self):
+        """检查是否有新数据并执行任务"""
+        logger.info(f"检查时间线任务新数据: {self.task_id}")
+        
+        # 获取最近时间窗口内的新数据
+        data = await self._get_new_data()
+        if not data:
+            logger.info(f"没有新的时间线数据: {self.task_id}")
+            return
+        
+        # 执行任务处理
+        self.execute(data)
+    
+    def execute(self, data=None):
         """
         执行任务
         
         Args:
-            trigger_data: 触发数据，一般为None，因为时间线任务是定时触发的
+            data: 待处理的数据
         """
         logger.info(f"执行时间线任务: {self.task_id}")
         
-        # 1. 获取数据 (data_fetcher组件)
-        if "data_fetcher" in self.components:
-            data = self._get_data(trigger_data)
-            if not data:
-                logger.warning(f"没有获取到数据: {self.task_id}")
-                return
-        else:
-            data = trigger_data
+        if not data:
+            logger.warning(f"没有数据可处理: {self.task_id}")
+            return
             
-        # 2. 内容处理 (content_processor组件)
-        if "content_processor" in self.components:
-            processed_items = []
-            if isinstance(data, list):
-                for item in data:
-                    processed_item = self._process_item(item)
-                    if processed_item:
-                        processed_items.append(processed_item)
+        # 确保数据是列表形式
+        items_list = data if isinstance(data, list) else [data]
+        
+        # 如果没有数据，直接返回
+        if not items_list:
+            logger.warning(f"没有可处理的数据项: {self.task_id}")
+            return
+            
+        # 收集原始数据项
+        raw_items = []
+        for item in items_list:
+            if isinstance(item, dict):
+                # 直接使用字典项
+                raw_items.append(item)
             else:
-                processed_item = self._process_item(data)
-                if processed_item:
-                    processed_items.append(processed_item)
+                # 非字典项转换为字典
+                raw_items.append({"content": str(item)})
+        
+        # 内容处理和汇总生成
+        if "content_processor" in self.components and raw_items:
+            summary_content = self._process_all_items(raw_items)
         else:
-            processed_items = data if isinstance(data, list) else [data]
+            # 如果没有内容处理组件或没有原始数据项，直接使用原始数据
+            summary_parts = []
             
-        # 3. 汇总生成 (summary_generator组件)
-        if "summary_generator" in self.components and len(processed_items) > 1:
-            summary_content = self._generate_summary(processed_items)
-        else:
-            summary_content = "\n\n".join([str(item) for item in processed_items if item])
-            
-        # 4. 生成视频 (video_generator组件)
-        if "video_generator" in self.components:
-            self._generate_video(summary_content, len(processed_items))
-        
-    def _get_data(self, trigger_data=None):
-        """
-        获取数据
-        
-        Args:
-            trigger_data: 触发数据
-            
-        Returns:
-            处理后的数据
-        """
-        source_config = self.task_config.get('data_source', {})
-        source_type = source_config.get('type')
-        
-        # 如果有触发数据，优先使用
-        if trigger_data:
-            return trigger_data
-                
-        # 从数据源获取数据
-        if source_type == 'redis_list':
-            key = source_config.get('key')
-            batch_size = source_config.get('batch_size', 10)
-            
-            if not key:
-                logger.error(f"Redis列表模式缺少key配置: {self.task_id}")
-                return None
-                
-            # 获取指定数量的消息
-            messages = []
-            for _ in range(batch_size):
-                message = self.redis.lpop(key)
-                if message:
-                    try:
-                        messages.append(json.loads(message))
-                    except:
-                        messages.append(message)
+            for item in items_list:
+                if isinstance(item, dict):
+                    # 尝试从字典中提取可读内容
+                    if 'content' in item and isinstance(item['content'], str):
+                        summary_parts.append(item['content'])
+                    else:
+                        # 将字典转为格式化的字符串
+                        summary_parts.append(json.dumps(item, ensure_ascii=False, indent=2))
                 else:
-                    break
+                    summary_parts.append(str(item))
                     
-            return messages
+            summary_content = "\n\n---\n\n".join(summary_parts)
             
-        elif source_type == 'recent_uids':
-            source_type = source_config.get('source_type')
-            min_items = source_config.get('min_items', 3)
-            
-            return None
-                    
-        return None
-            
-    def _process_item(self, item):
-        """
-        处理单个项目
+        # 生成视频
+        if "video_generator" in self.components:
+            # 计算原始数据项目数量
+            item_count = len(raw_items) if raw_items else 1
+            self._generate_video(summary_content, item_count)
         
-        Args:
-            item: 数据项
-            
-        Returns:
-            处理后的内容
+    async def _get_new_data(self):
         """
-        # 提取原始内容
-        raw_content = ""
-        if isinstance(item, dict):
-            raw_content = item.get('content', '')
-        else:
-            raw_content = str(item)
-            
-        if not raw_content.strip():
-            return raw_content
-            
+        获取新数据
+        
+        Returns:
+            新的数据列表
+        """
         try:
-            # 准备提示词
-            task_name = self.task_config.get('name', '时间线消息')
+            # 获取时间窗口配置
+            time_threshold = datetime.now() - timedelta(seconds=self.time_window)
             
-            prompt = f"""请将以下内容整理成一条简洁、专业的新闻报道。保留所有重要信息，但要使用清晰、直接的语言。新闻类型：{task_name}
-
-原始内容：
-{raw_content}
-
-整理后的新闻报道："""
+            # 查询最近时间窗口内的数据
+            query = {
+                "timestamp": {"$gte": time_threshold}
+            }
             
-            # 使用OpenRouter API生成内容
-            ai_config = self.task_config.get('ai_config', {})
-            model = ai_config.get('model', 'anthropic/claude-3-haiku:beta')
-            temperature = ai_config.get('temperature', 0.5)
-            max_tokens = ai_config.get('max_tokens', 3000)
-            processed_content = generate_content(prompt, model=model, temperature=temperature, max_tokens=max_tokens)
+            # 从MongoDB中查询数据，按时间戳降序排序，限制批量大小
+            recent_data = list(mongodb_connector.db.data.find(query).sort("timestamp", -1).limit(self.batch_size))
             
-            if processed_content:
-                logger.info(f"使用AI成功整理内容项目: {self.task_id}")
-                return processed_content
-            else:
-                logger.warning(f"AI整理内容失败，使用原始内容: {self.task_id}")
-                return raw_content
-                
+            if not recent_data:
+                return None
+            
+            # 提取UID列表
+            uids = [item.get("_id") for item in recent_data if "_id" in item]
+            
+            # 使用UID跟踪器过滤出未处理的UID
+            unprocessed_uids = uid_tracker.get_unprocessed(uids, self.task_id)
+            
+            if not unprocessed_uids:
+                return None
+            
+            # 获取未处理数据的完整内容
+            unprocessed_data = get_data_by_uids(unprocessed_uids)
+            
+            # 标记为已处理
+            for uid in unprocessed_uids:
+                uid_tracker.add_uid(uid, self.task_id)
+            
+            return unprocessed_data
+            
         except Exception as e:
-            logger.error(f"AI整理内容异常: {str(e)}")
-            return raw_content
-    
-    def _generate_summary(self, items):
+            logger.error(f"获取新数据失败: {str(e)}", exc_info=True)
+            return None
+            
+    def _process_all_items(self, raw_items):
         """
-        生成汇总内容
+        一次性处理所有数据项
         
         Args:
-            items: 处理后的项目列表
+            raw_items: 原始数据项列表（字典格式）
             
         Returns:
-            汇总内容
+            处理后的汇总内容
         """
-        if not items:
+        if not raw_items:
             return ""
             
         try:
-            # 将列表转换为汇总文本
-            items_text = "\n\n---\n\n".join([str(item) for item in items if item])
-            
             # 准备提示词
             task_name = self.task_config.get('name', '时间线汇总')
             
-            prompt = f"""请将以下多条新闻内容整理为一个汇总报告。创建一个简洁的概述，然后按重要性顺序列出主要内容点。新闻类型：{task_name}
+            # 为每个项目添加ID
+            for i, item in enumerate(raw_items):
+                item["id"] = i + 1
+                
+            # 将字典列表转换为JSON字符串
+            content_json = json.dumps(raw_items, ensure_ascii=False, indent=2)
+            
+            prompt = f"""请分析以下多条信息，并创建一份完整的时间线汇总报告。报告应该：
+                        1. 提供一个简洁的总体概述
+                        2. 按重要性和时间顺序组织信息
+                        3. 保留所有关键细节和数据点
+                        4. 使用清晰、专业的语言
+                        5. 适合作为{task_name}的内容
 
-原始内容：
-{items_text}
+                        原始信息（JSON格式）：
+                        {content_json}
 
-整理后的汇总报告："""
+                        时间线汇总报告："""
             
             # 使用OpenRouter API生成内容
             ai_config = self.task_config.get('ai_config', {})
-            model = ai_config.get('model', 'anthropic/claude-3-sonnet:beta')
+            model = ai_config.get('model', 'anthropic/claude-3-sonnet:beta')  # 使用更强大的模型进行汇总
             temperature = ai_config.get('temperature', 0.5)
-            max_tokens = ai_config.get('max_tokens', 3000)
+            max_tokens = ai_config.get('max_tokens', 4000)  # 增加token上限以处理更多内容
             summary_content = generate_content(prompt, model=model, temperature=temperature, max_tokens=max_tokens)
             
             if summary_content:
-                logger.info(f"使用AI成功生成汇总内容: {self.task_id}")
+                logger.info(f"使用AI成功生成时间线汇总: {self.task_id}")
                 return summary_content
             else:
-                logger.warning(f"AI生成汇总内容失败，使用原始列表: {self.task_id}")
-                return items_text
+                logger.warning(f"AI生成汇总失败，使用原始内容: {self.task_id}")
+                # 如果失败，返回原始数据项的格式化输出
+                formatted_items = []
+                for item in raw_items:
+                    if isinstance(item, dict) and 'content' in item and isinstance(item['content'], str):
+                        formatted_items.append(item['content'])
+                    else:
+                        formatted_items.append(json.dumps(item, ensure_ascii=False, indent=2))
+                return "\n\n---\n\n".join(formatted_items)
                 
         except Exception as e:
-            logger.error(f"AI生成汇总内容异常: {str(e)}")
-            return "\n\n".join([str(item) for item in items if item])
+            logger.error(f"AI生成汇总异常: {str(e)}")
+            # 如果发生异常，返回原始数据项的格式化输出
+            formatted_items = []
+            for item in raw_items:
+                if isinstance(item, dict) and 'content' in item and isinstance(item['content'], str):
+                    formatted_items.append(item['content'])
+                else:
+                    formatted_items.append(json.dumps(item, ensure_ascii=False, indent=2))
+            return "\n\n---\n\n".join(formatted_items)
             
     def _generate_video(self, content, item_count=1):
         """
@@ -348,5 +385,12 @@ class TimelineTask:
             
     def stop(self):
         """停止任务"""
-        self.running = False
+        if not self.running:
+            return
+            
         logger.info(f"停止时间线任务: {self.task_id}")
+        self.running = False
+        
+        # 等待轮询线程结束
+        if self.poll_thread and self.poll_thread.is_alive():
+            self.poll_thread.join(timeout=1.0)
