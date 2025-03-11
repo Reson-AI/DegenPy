@@ -64,16 +64,11 @@ class SpecialAttentionTask:
         Returns:
             特别关注标签列表
         """
-        data_source = self.task_config.get('data_source', {})
-        tags = data_source.get('tags', [])
+        # 直接从配置中获取标签
+        tags = self.task_config.get('data_source', {}).get('tags', [])
         
-        # 确保标签是列表形式
-        if isinstance(tags, str):
-            tags = [tags]
-        elif not isinstance(tags, list):
-            tags = []
-            
-        return tags
+        # 如果标签是字符串，转换为列表
+        return [tags] if isinstance(tags, str) else (tags if isinstance(tags, list) else [])
     
     def start(self):
         """启动任务"""

@@ -121,30 +121,35 @@ async def root():
 
 @app.get("/tags")
 async def get_tags():
-    """获取特别关注的标签列表
+    """获取或更新特别关注的标签列表
     
     Returns:
         包含状态、消息和标签列表的响应
     """
     try:
-        if os.path.exists(TAGS_CONFIG_PATH):
-            with open(TAGS_CONFIG_PATH, 'r', encoding='utf-8') as f:
-                config = json.load(f)
-                return Response(
-                    status="success",
-                    message="获取标签列表成功",
-                    data=config
-                )
-        else:
-            # 如果配置文件不存在，返回空列表
+        # 确保配置目录存在
+        os.makedirs(os.path.dirname(TAGS_CONFIG_PATH), exist_ok=True)
+        
+        # 如果配置文件不存在，创建默认配置
+        if not os.path.exists(TAGS_CONFIG_PATH):
             default_config = {"special_tags": []}
             with open(TAGS_CONFIG_PATH, 'w', encoding='utf-8') as f:
                 json.dump(default_config, f, ensure_ascii=False, indent=2)
             return Response(
                 status="success",
-                message="配置文件不存在，已创建默认配置",
+                message="创建默认标签配置",
                 data=default_config
             )
+        
+        # 读取配置
+        with open(TAGS_CONFIG_PATH, 'r', encoding='utf-8') as f:
+            config = json.load(f)
+        
+        return Response(
+            status="success",
+            message="获取标签列表成功",
+            data=config
+        )
     except Exception as e:
         return Response(
             status="error",
@@ -178,96 +183,6 @@ async def update_tags(config: TagsConfig):
         return Response(
             status="error",
             message=f"更新标签列表时出错: {str(e)}"
-        )
-
-@app.put("/tags/add/{tag}")
-async def add_tag(tag: str):
-    """添加一个特别关注的标签
-    
-    Args:
-        tag: 要添加的标签名称
-        
-    Returns:
-        包含状态、消息和更新后的标签列表的响应
-    """
-    try:
-        # 读取当前配置
-        current_config = {"special_tags": []}
-        if os.path.exists(TAGS_CONFIG_PATH):
-            with open(TAGS_CONFIG_PATH, 'r', encoding='utf-8') as f:
-                current_config = json.load(f)
-        
-        # 如果标签已存在，返回成功但不重复添加
-        if tag in current_config.get("special_tags", []):
-            return Response(
-                status="success",
-                message=f"标签 '{tag}' 已在列表中",
-                data=current_config
-            )
-        
-        # 添加新标签
-        current_config.setdefault("special_tags", []).append(tag)
-        
-        # 写入配置文件
-        with open(TAGS_CONFIG_PATH, 'w', encoding='utf-8') as f:
-            json.dump(current_config, f, ensure_ascii=False, indent=2)
-        
-        return Response(
-            status="success",
-            message=f"标签 '{tag}' 添加成功",
-            data=current_config
-        )
-    except Exception as e:
-        return Response(
-            status="error",
-            message=f"添加标签时出错: {str(e)}"
-        )
-
-@app.delete("/tags/remove/{tag}")
-async def remove_tag(tag: str):
-    """移除一个特别关注的标签
-    
-    Args:
-        tag: 要移除的标签名称
-        
-    Returns:
-        包含状态、消息和更新后的标签列表的响应
-    """
-    try:
-        # 读取当前配置
-        if not os.path.exists(TAGS_CONFIG_PATH):
-            return Response(
-                status="error",
-                message="配置文件不存在"
-            )
-        
-        with open(TAGS_CONFIG_PATH, 'r', encoding='utf-8') as f:
-            current_config = json.load(f)
-        
-        # 如果标签不在列表中，返回成功但不执行移除
-        if tag not in current_config.get("special_tags", []):
-            return Response(
-                status="success",
-                message=f"标签 '{tag}' 不在列表中",
-                data=current_config
-            )
-        
-        # 移除标签
-        current_config["special_tags"].remove(tag)
-        
-        # 写入配置文件
-        with open(TAGS_CONFIG_PATH, 'w', encoding='utf-8') as f:
-            json.dump(current_config, f, ensure_ascii=False, indent=2)
-        
-        return Response(
-            status="success",
-            message=f"标签 '{tag}' 移除成功",
-            data=current_config
-        )
-    except Exception as e:
-        return Response(
-            status="error",
-            message=f"移除标签时出错: {str(e)}"
         )
 
 @app.post("/data")

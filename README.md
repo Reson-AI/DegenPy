@@ -8,7 +8,6 @@ An automated content generation and publishing system for cryptocurrency and fin
 DegenPy/
 ├── warehouse/             # 数据仓库组件
 │   ├── api.py             # 仓库 API 实现
-│   ├── message_queue.py   # 消息队列管理
 │   ├── storage/           # 数据库连接器
 │   │   ├── mongodb/       # MongoDB 连接器
 │   │   └── init_db.py     # 数据库初始化脚本
@@ -49,23 +48,19 @@ DegenPy/
 
 1. **数据仓库** (`warehouse/api.py`): 接收并存储来自外部源的数据，使用MongoDB作为主要存储后端:
    - MongoDB: 主要数据库存储，支持文档型数据和灵活的数据模型
-   - Redis: 用于存储时间线数据的UUID列表和消息队列集成
-   
-2. **消息队列** (`warehouse/message_queue.py`): 管理消息的发送和接收:
-   - 特别关注数据发送到RabbitMQ消息队列
-   - 支持实时通知和异步处理
+   - 支持通过UID跟踪器管理数据处理状态
 
-3. **代理引擎** (`server/agents/engine.py`): 管理AI代理的行为和交互:
+2. **代理引擎** (`server/agents/engine.py`): 管理AI代理的行为和交互:
    - 加载和管理代理配置
    - 处理代理与任务的关联
    - 根据代理的个性和偏好生成内容
 
-4. **任务执行器** (`server/tasks/task_executor.py`):
+3. **任务执行器** (`server/tasks/task_executor.py`):
    - 根据数据来源自动选择处理方式
-   - 从消息队列获取特别关注数据并进行验证和AI处理
-   - 从Redis列表获取时间线数据并直接生成视频
+   - 使用UID跟踪器管理数据处理状态
+   - 处理特别关注和时间线数据并生成内容
 
-5. **服务组件** (`server/services/`):
+4. **服务组件** (`server/services/`):
    - **Text2Video服务**: 管理从文本内容生成视频
    - **视频池服务**: 管理视频任务及其元数据
    - **动作调度器**: 处理视频生成后的动作执行
