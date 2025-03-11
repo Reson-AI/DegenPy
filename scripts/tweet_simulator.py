@@ -18,23 +18,7 @@ load_dotenv()
 # API URL
 WAREHOUSE_API_URL = os.getenv("WAREHOUSE_API_URL", "http://localhost:8000")
 
-# 特别关注的发言人列表（从配置文件加载）
-def load_special_speakers():
-    config_path = Path(__file__).parent.parent / "warehouse" / "config" / "speakers.json"
-    try:
-        with open(config_path, 'r', encoding='utf-8') as f:
-            config = json.load(f)
-            return config.get("special_speakers", [])
-    except Exception as e:
-        print(f"加载特别关注的发言人配置时出错: {str(e)}")
-        return []
-
-# 普通发言人列表
-REGULAR_SPEAKERS = [
-    "@jack", "@tim_cook", "@sundarpichai", "@satyanadella", 
-    "@jeffbezos", "@richardbranson", "@jimcramer", "@warrenbuffett",
-    "@garyvee", "@naval", "@pmarca", "@paulg", "@sama", "@balajis"
-]
+# 推文相关配置
 
 # 推文内容模板
 TWEET_TEMPLATES = [
@@ -76,13 +60,6 @@ TWEET_VOCABULARY = {
 
 def generate_random_tweet():
     """生成一条随机推文"""
-    # 随机选择发言人（30%概率选择特别关注的发言人）
-    special_speakers = load_special_speakers()
-    if random.random() < 0.3 and special_speakers:
-        speaker = random.choice(special_speakers)
-    else:
-        speaker = random.choice(REGULAR_SPEAKERS)
-    
     # 随机选择推文模板
     template = random.choice(TWEET_TEMPLATES)
     
@@ -96,34 +73,49 @@ def generate_random_tweet():
     
     # 创建推文数据
     tweet = {
-        "speaker": speaker,
         "time": current_time,
         "text": template
     }
     
     return tweet
 
-def send_tweet_to_api(tweet):
+def send_tweet_to_api(tweet, tags=None):
     """发送推文到API
     
     Args:
         tweet: 包含speaker、time和text的字典
+        tags: 可选的标签列表或集合
         
     Returns:
         成功时返回API响应，失败时返回False
     """
     try:
         url = f"{WAREHOUSE_API_URL}/data"
-        response = requests.post(url, json={"content": tweet})
+        
+        # 构建请求数据
+        request_data = {
+            "content": tweet
+        }
+        
+        # 如果提供了标签，添加到请求中
+        if tags:
+            # 如果是集合，转换为列表
+            if isinstance(tags, set):
+                tags = list(tags)
+            request_data["tags"] = tags
+        
+        response = requests.post(url, json=request_data)
         
         if response.status_code == 200:
             result = response.json()
             print(f"推文发送成功: {tweet['speaker']} - {tweet['text'][:30]}...")
+            if tags:
+                print(f"包含标签: {tags}")
             return result
         else:
             print(f"发送失败，状态码: {response.status_code}")
             print(f"请求URL: {url}")
-            print(f"请求数据: {json.dumps({'content': tweet}, ensure_ascii=False)}")
+            print(f"请求数据: {json.dumps(request_data, ensure_ascii=False)}")
             print(f"响应内容: {response.text}")
             try:
                 return response.json()
@@ -206,38 +198,101 @@ def test_db_service(num_tweets=5, interval=1):
         print("\n数据库服务写入功能异常，请检查配置和连接！❌")
         return False
 
-def main():
-    """主函数"""
-    parser = argparse.ArgumentParser(description="推文模拟器")
-    parser.add_argument("--test", action="store_true", help="运行测试模式")
-    parser.add_argument("--count", type=int, default=5, help="测试模式下发送的推文数量")
-    parser.add_argument("--interval", type=int, default=1, help="测试模式下发送推文的间隔（秒）")
-    args = parser.parse_args()
+def test_new_format(num_tweets=5, interval=1):
+    """测试新格式的推文发送
     
-    if args.test:
-        # 测试模式
-        test_db_service(args.count, args.interval)
-    else:
-        # 正常模式
-        print("开始模拟推文发送，每十秒发送一条...")
-        while True:
-            try:
-                # 生成随机推文
-                tweet = generate_random_tweet()
+    Args:
+        num_tweets: 要发送的推文数量
+        interval: 发送间隔（秒）
+    """
+    # 特别关注的标签
+    special_tags = ["Trump", "Musk", "BTC"]
+    
+    # 其他常见标签
+    other_tags = ["crypto", "AI", "tech", "finance", "politics", "news", 
+                 "economy", "innovation", "market", "stocks", "ETH", 
+                 "SOL", "XRP", "trading", "investment", "startup"]
+    
+    # 发言人列表
+    speakers = ["@realDonaldTrump", "@elonmusk", "@SBF_FTX", "@VitalikButerin",
+               "@jack", "@tim_cook", "@sundarpichai", "@satyanadella", 
+               "@jeffbezos", "@richardbranson", "@jimcramer", "@warrenbuffett"]
+    
+    success_count = 0
+    failed_count = 0
+    
+    print(f"\n开始测试新格式发送，将发送 {num_tweets} 条推文...")
+    
+    for i in range(num_tweets):
+        try:
+            # 随机选择发言人
+            speaker = random.choice(speakers)
+            
+            # 生成推文内容
+            tweet = generate_random_tweet()
+            tweet["speaker"] = speaker
+            
+            # 生成随机标签列表，确保至少包含一个特别关注标签
+            num_tags = random.randint(1, 4)  # 随机生成1-4个标签
+            
+            # 决定是否包含特别关注标签
+            include_special = random.random() < 0.7  # 70%的概率包含特别关注标签
+            
+            tags = []
+            if include_special:
+                # 随机选择一个特别关注标签
+                tags.append(random.choice(special_tags))
                 
-                # 发送到API
-                send_tweet_to_api(tweet)
+                # 添加其他随机标签
+                remaining_tags = random.sample(other_tags, min(num_tags-1, len(other_tags)))
+                tags.extend(remaining_tags)
+            else:
+                # 只使用其他标签
+                tags = random.sample(other_tags, min(num_tags, len(other_tags)))
+            
+            print(f"\n发送第 {i+1}/{num_tweets} 条推文...")
+            print(f"\u53d1言人: {speaker}")
+            print(f"\u5185容: {tweet['text'][:50]}...")
+            print(f"\u6807签: {tags}")
+            
+            # 发送推文
+            result = send_tweet_to_api(tweet, tags)
+            
+            if result:
+                success_count += 1
+                print(f"\u2705 推文 {i+1} 发送成功!")
+            else:
+                failed_count += 1
+                print(f"\u274c 推文 {i+1} 发送失败!")
+            
+            if i < num_tweets - 1:  # 最后一条不需要等待
+                print(f"\u7b49待 {interval} 秒后发送下一条推文...")
+                time.sleep(interval)
                 
-                # 等待10秒
-                print(f"等待10秒后发送下一条推文...")
-                time.sleep(10)
-            except KeyboardInterrupt:
-                print("程序被用户中断")
-                break
-            except Exception as e:
-                print(f"发生错误: {str(e)}")
-                # 出错后等待10秒再重试
-                time.sleep(10)
+        except Exception as e:
+            print(f"\u274c 发送推文 {i+1} 时出错: {str(e)}")
+            failed_count += 1
+    
+    # 打印测试结果
+    print("\n==== 测试结果 ====")
+    print(f"总计发送: {num_tweets} 条推文")
+    print(f"成功: {success_count} 条")
+    print(f"失败: {failed_count} 条")
+    
+    success_rate = (success_count / num_tweets) * 100 if num_tweets > 0 else 0
+    print(f"成功率: {success_rate:.2f}%")
+    
+    return success_count > 0
+
+def main():
+    """主函数 - 点击即可运行测试"""
+    # 默认参数设置
+    num_tweets = 5  # 默认发送5条推文
+    interval = 1    # 默认间隔1秒
+    
+    # 直接运行新格式测试
+    print("开始运行推文模拟器测试...")
+    test_new_format(num_tweets, interval)
 
 if __name__ == "__main__":
     main()
