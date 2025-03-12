@@ -11,7 +11,7 @@
     "data_source": {
         "type": "mongodb",
         "time_window": 300,
-        "tags": ["special_attention"]
+        "tags": ["Trump", "Musk", "BTC"]
     },
     "video_config": {
         "style": "breaking_news",

@@ -24,10 +24,10 @@ from warehouse.storage.mongodb.connector import mongodb_connector
 from warehouse.utils.uid_tracker import uid_tracker
 
 # 导入视频生成服务
-from server.services.text2video import generate_video_from_text
+from server.actions.text2v import create_video
 
-# 导入OpenRouter API
-from server.models.openrouter import generate_content
+# 导入推文转新闻功能
+from server.actions.tweet2news import generate_news_from_tweet
 
 class TimelineTask:
     """时间线任务执行器，负责定期获取内容，生成汇总视频"""
@@ -167,19 +167,24 @@ class TimelineTask:
         # 直接使用原始数据项列表
         raw_items = items_list
         
+        # 如果没有原始数据，直接跳过内容处理和视频生成
+        if not raw_items:
+            logger.info("没有要处理的数据，跳过内容处理和视频生成")
+            return
+            
         # 内容处理和汇总生成
-        if "content_processor" in self.components and raw_items:
+        summary_content = None
+        if "content_processor" in self.components:
             # 直接将整个字典列表传递给处理方法
             summary_content = self._process_all_items(raw_items)
         else:
             # 如果没有内容处理组件，将原始数据转换为JSON字符串
             summary_content = json.dumps(raw_items, ensure_ascii=False, indent=2)
-            
-        # 生成视频
-        if "video_generator" in self.components:
-            # 计算原始数据项目数量
-            item_count = len(raw_items) if raw_items else 1
-            self._generate_video(summary_content, item_count)
+        
+        # 只有在成功生成新闻内容后，才生成视频
+        if summary_content and "video_generator" in self.components:
+            logger.info("新闻内容生成成功，开始生成视频")
+            self._generate_video(summary_content, 1)  # 只传递一条汇总内容
         
     async def _get_new_data(self):
         """
@@ -194,11 +199,14 @@ class TimelineTask:
             
             # 查询最近时间窗口内的数据
             query = {
-                "timestamp": {"$gte": time_threshold}
+                "createdAt": {"$gte": time_threshold}
             }
             
-            # 从MongoDB中查询数据，按时间戳降序排序，限制批量大小
-            recent_data = list(mongodb_connector.db.data.find(query).sort("timestamp", -1).limit(self.batch_size))
+            # 获取MongoDB中的实际集合名称
+            collection_name = os.getenv('MONGODB_COLLECTION', 'twitterTweets')
+            
+            # 从MongoDB中查询数据，按创建时间降序排序
+            recent_data = list(mongodb_connector.db[collection_name].find(query).sort("createdAt", -1))
             
             if not recent_data:
                 return None
@@ -250,33 +258,82 @@ class TimelineTask:
             # 将字典列表转换为JSON字符串
             content_json = json.dumps(raw_items, ensure_ascii=False, indent=2)
             
-            prompt = f"""请分析以下多条信息，并创建一份完整的时间线汇总报告。报告应该：
-                        1. 提供一个简洁的总体概述
-                        2. 按重要性和时间顺序组织信息
-                        3. 保留所有关键细节和数据点
-                        4. 使用清晰、专业的语言
-                        5. 适合作为{task_name}的内容
-                        6. 不要输出原始JSON数据，只输出整理后的报告
+            # 准备社交媒体汇总风格的提示词
+            prompt = f"""将以下推文内容整理为一篇社交媒体热点总结，突出关键观点和公众反应：
 
-                        原始信息（JSON格式）：
-                        {content_json}
+{content_json}
 
-                        时间线汇总报告："""
+请直接输出新闻报道内容，不要包含任何前缀说明。生成内容大概100词，内容风格为新闻稿，后续用于口播新闻
+"""
             
-            # 使用OpenRouter API生成内容
-            ai_config = self.task_config.get('ai_config', {})
-            model = ai_config.get('model', 'anthropic/claude-3-sonnet:beta')  # 使用更强大的模型进行汇总
-            temperature = ai_config.get('temperature', 0.5)
-            max_tokens = ai_config.get('max_tokens', 4000)  # 增加token上限以处理更多内容
-            summary_content = generate_content(prompt, model=model, temperature=temperature, max_tokens=max_tokens)
+            # 调用D-ID API生成视频
+            logger.info(f"开始为时间线任务生成视频: {self.task_id}")
+            video_result = create_video(prompt)
             
-            if summary_content:
-                logger.info(f"使用AI成功生成时间线汇总: {self.task_id}")
-                return summary_content
+            # 处理视频生成结果
+            if video_result and video_result.get('success', False):
+                # 提取关键信息
+                d_id_video_id = video_result.get('video_id')
+                status = video_result.get('status', 'created')
+                created_at = video_result.get('created_at')
+                
+                # 保存视频信息到任务记录
+                video_info = {
+                    "task_id": self.task_id,
+                    "d_id_video_id": d_id_video_id,
+                    "status": status,
+                    "created_at": created_at
+                }
+                
+                # 将视频信息保存到MongoDB
+                try:
+                    collection = self.db['video_tasks']
+                    collection.update_one(
+                        {"task_id": self.task_id},
+                        {"$set": video_info},
+                        upsert=True
+                    )
+                    logger.info(f"视频信息已保存到数据库: task_id={self.task_id}, d_id_video_id={d_id_video_id}")
+                except Exception as db_err:
+                    logger.error(f"保存视频信息到数据库失败: {str(db_err)}")
+                
+                logger.info(f"时间线视频生成成功: task_id={self.task_id}, d_id_video_id={d_id_video_id}, status={status}")
+                
+                # 返回视频信息
+                return {
+                    "task_id": self.task_id,
+                    "d_id_video_id": d_id_video_id,
+                    "status": status,
+                    "message": "视频生成任务已提交"
+                }
             else:
-                logger.warning(f"AI生成汇总失败，返回原始JSON: {self.task_id}")
-                # 如果失败，直接返回原始数据的JSON字符串
-                return content_json
+                # 记录失败信息
+                error_msg = video_result.get('error', '未知错误') if video_result else '无返回结果'
+                logger.warning(f"时间线视频生成失败: {error_msg}")
+                
+                # 记录失败信息到数据库
+                try:
+                    collection = self.db['timeline_video_tasks']
+                    collection.update_one(
+                        {"task_id": self.task_id},
+                        {"$set": {
+                            "task_id": self.task_id,
+                            "status": "error",
+                            "error": error_msg,
+                            "updated_at": int(time.time())
+                        }},
+                        upsert=True
+                    )
+                except Exception as db_err:
+                    logger.error(f"保存视频错误信息到数据库失败: {str(db_err)}")
+                
+                # 失败时返回错误信息
+                return {
+                    "task_id": self.task_id,
+                    "status": "error",
+                    "error": error_msg,
+                    "message": "视频生成失败"
+                }
                 
         except Exception as e:
             logger.error(f"AI生成汇总异常: {str(e)}")
@@ -308,7 +365,7 @@ class TimelineTask:
                 'normal': 1,
                 'high': 2
             }
-            priority = priority_map.get(priority_str, 1)  # 时间线任务默认为正常优先级
+            priority = priority_map.get(priority_str, 2)  # 时间线任务默认为正常优先级
             
             # 获取发布平台
             platforms = self.task_config.get('platforms', [])
@@ -320,23 +377,27 @@ class TimelineTask:
             if self.task_config.get('webhook'):
                 action_sequence.append('webhook')
             
-            # 添加汇总标记
+            # 添加汇总标记并创建提示词
             summary_title = self.task_config.get('name', '时间线汇总')
-            summary_content = f"{summary_title}\n\n{content}"
+            news_report_style_prompt = f"""\u4ee5新闻报道的形式展示下列时间线汇总内容，使用清晰的标题、分栏和有序元素展示信息：
+
+{summary_title}
+
+{content}"""
             
             # 调用视频生成服务
-            task_id = generate_video_from_text(
-                content=summary_content,
-                trigger_id=self.task_id,
-                agent_id=self.agent_config.get('id'),
-                action_sequence=action_sequence,
+            video_result = generate_video_from_text(
+                content=news_report_style_prompt,
                 priority=priority,
-                style=style,
-                metadata={"type": "timeline", "count": item_count, "style": style}
+                task_id=self.task_id
             )
             
-            logger.info(f"时间线视频生成任务已创建: {task_id}, 包含{item_count}条内容")
-            return task_id
+            if video_result and 'video_id' in video_result:
+                logger.info(f"时间线视频生成成功: {video_result['video_id']}")
+                return video_result['video_id']
+            else:
+                logger.warning(f"时间线视频生成结果不完整: {video_result}")
+                return None
             
         except Exception as e:
             logger.error(f"创建时间线视频生成任务失败: {str(e)}")

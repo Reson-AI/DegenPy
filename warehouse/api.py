@@ -9,7 +9,7 @@ import threading
 from datetime import datetime, timedelta
 from typing import Dict, List, Optional, Union, Any
 from fastapi import FastAPI, HTTPException, Query, Depends
-from pydantic import BaseModel
+from pydantic import BaseModel, RootModel
 import uvicorn
 from dotenv import load_dotenv
 from pathlib import Path
@@ -43,10 +43,14 @@ class ContentData(BaseModel):
     content: Dict[str, Any]
     time: Optional[str] = None
 
-class StoreRequest(BaseModel):
-    content: Dict[str, Any]  # 存储内容的字典，包含 speaker、time、text等字段
+class StoreItem(BaseModel):
+    content: Dict[str, Any]  # 存储内容的字典
     tags: Optional[List[str]] = None  # 可选的标签数组
     uid: Optional[str] = None  # 如果不提供将自动生成 UUID
+
+# 使用 RootModel 来创建一个直接接受列表的模型
+class StoreRequest(RootModel):
+    root: List[StoreItem]
 
 class Response(BaseModel):
     status: str
@@ -131,34 +135,41 @@ async def store_data(request: StoreRequest):
     """存储数据
     
     Args:
-        request: 包含内容字典、标签字典和可选UID的请求
+        request: 包含一个或多个存储项的列表，每个存储项包含内容字典、标签数组和可选UID
         
     Returns:
         包含状态、消息和数据的响应
     """
     try:
         db = get_db_manager()
+        results = []
+        failed_count = 0
         
-        # 直接使用请求中的content和tags，不需要额外解析
-        result = db.connector.store_data(
-            content=request.content,
-            tags=request.tags,
-            uid=request.uid
-        )
-        
-        if result:
-            # 添加到UID跟踪器
-            uid_tracker.add_uid(result["uid"], API_TASK_ID)
+        # 遍历请求中的每个存储项，单独存储
+        for item in request.root:
+            result = db.connector.store_data(
+                content=item.content,
+                tags=item.tags,
+                uid=item.uid
+            )
             
+            if result:
+                # 添加到UID跟踪器
+                uid_tracker.add_uid(result["uuid"], API_TASK_ID)
+                results.append(result)
+            else:
+                failed_count += 1
+        
+        if results:
             return Response(
                 status="success",
-                message="数据存储成功",
-                data=result
+                message=f"成功存储 {len(results)} 条数据" + (f", {failed_count} 条失败" if failed_count > 0 else ""),
+                data={"stored_items": results}
             )
         else:
             return Response(
                 status="error",
-                message="数据存储失败"
+                message="所有数据存储失败"
             )
     except Exception as e:
         return Response(

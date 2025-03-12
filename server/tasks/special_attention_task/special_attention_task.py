@@ -24,10 +24,10 @@ from warehouse.storage.mongodb.connector import mongodb_connector
 from warehouse.utils.uid_tracker import uid_tracker
 
 # 导入视频生成服务
-from server.services.text2video import generate_video_from_text
+from server.actions.text2v import create_video
 
-# 导入OpenRouter API
-from server.models.openrouter import generate_content
+# 导入推文转新闻功能
+from server.actions.tweet2news import generate_news_from_tweet
 
 class SpecialAttentionTask:
     """特别关注任务执行器，负责监控特别关注标签的内容，生成视频内容"""
@@ -168,16 +168,35 @@ class SpecialAttentionTask:
             
         # 内容事实核查和处理 (合并fact_checker和content_processor组件)
         if "fact_checker" in self.components or "content_processor" in self.components:
-            processed_content = self._process_and_verify_content(data)
-            if not processed_content:
+            result = self._process_and_verify_content(data)
+            if not result:
                 logger.warning(f"内容验证和处理失败: {self.task_id}")
                 return
+                
+            # 判断是否为突发新闻
+            if isinstance(result, dict) and "is_breaking_news" in result:
+                is_breaking_news = result["is_breaking_news"]
+                processed_content = result["content"]
+                
+                # 只有突发新闻才生成视频
+                if is_breaking_news and "video_generator" in self.components:
+                    logger.info(f"内容是突发新闻，开始生成视频: {self.task_id}")
+                    self._generate_video(processed_content)
+                else:
+                    logger.info(f"内容不是突发新闻，不生成视频: {self.task_id}")
+            else:
+                # 兼容旧版逻辑，如果返回的不是字典格式
+                processed_content = result
+                
+                # 生成视频 (video_generator组件)
+                if "video_generator" in self.components:
+                    self._generate_video(processed_content)
         else:
             processed_content = self._extract_raw_content(data)
             
-        # 生成视频 (video_generator组件)
-        if "video_generator" in self.components:
-            self._generate_video(processed_content)
+            # 生成视频 (video_generator组件)
+            if "video_generator" in self.components:
+                self._generate_video(processed_content)
     
     async def _get_new_data(self):
         """
@@ -192,32 +211,71 @@ class SpecialAttentionTask:
                 logger.warning(f"特别关注任务没有配置标签: {self.task_id}")
                 return None
             
-            # 构建查询条件：查找包含特定标签的数据
+            # 获取MongoDB中的实际集合名称
+            collection_names = mongodb_connector.db.list_collection_names()
+            
+            # 使用正确的集合名称（从环境变量获取）
+            collection_name = os.getenv('MONGODB_COLLECTION', 'twitterTweets')
+            
+            # 计算一分钟前的时间点
+            one_minute_ago = datetime.now() - timedelta(minutes=1)
+            
+            # 构建查询条件：查找包含特定标签且时间在1分钟内的数据
             query = {
-                "tags": {"$in": self.special_tags}
+                "tags": {"$in": self.special_tags},
+                "createdAt": {"$gte": one_minute_ago}
             }
             
-            # 从MongoDB中查询数据，按时间戳降序排序
-            recent_data = list(mongodb_connector.db.data.find(query).sort("timestamp", -1).limit(10))
+            # 记录查询条件
+            logger.info(f"查询条件: {query}")
+            
+            # 从MongoDB中查询数据，按创建时间降序排序
+            recent_data = list(mongodb_connector.db[collection_name].find(query).sort("createdAt", -1))
+            
+            # 记录查询结果数量
+            logger.info(f"查询到 {len(recent_data)} 条数据")
             
             if not recent_data:
+                logger.info("未找到符合条件的数据")
                 return None
             
-            # 提取UID列表
-            uids = [item.get("_id") for item in recent_data if "_id" in item]
+            # 提取有效的UID列表
+            uids = [item.get("_id") for item in recent_data if "_id" in item and item.get("_id") is not None]
+            
+            if not uids:
+                logger.warning("未找到有效的UID")
+                return None
+                
+            logger.info(f"提取到的UID列表: {uids}")
             
             # 使用UID跟踪器过滤出未处理的UID
             unprocessed_uids = uid_tracker.get_unprocessed(uids, self.task_id)
+            logger.info(f"未处理的UID: {unprocessed_uids}")
             
             if not unprocessed_uids:
+                logger.info("所有UID已处理")
                 return None
             
             # 获取未处理数据的完整内容
-            unprocessed_data = get_data_by_uids(unprocessed_uids)
-            
-            # 标记为已处理
-            for uid in unprocessed_uids:
-                uid_tracker.add_uid(uid, self.task_id)
+            try:
+                unprocessed_data = mongodb_connector.get_data_by_uids(unprocessed_uids)
+                if not unprocessed_data:
+                    logger.warning("未能获取未处理数据的内容")
+                    return None
+                    
+                # 标记为已处理
+                for uid in unprocessed_uids:
+                    if uid is not None:  # 确保不添加None作为UID
+                        uid_tracker.add_uid(uid, self.task_id)
+                        
+                # 如果unprocessed_data不是列表，将其转换为列表
+                if not isinstance(unprocessed_data, list):
+                    unprocessed_data = [unprocessed_data]
+                    
+                return unprocessed_data
+            except Exception as e:
+                logger.error(f"获取或处理未处理数据时出错: {str(e)}")
+                return None
             
             return unprocessed_data
             
@@ -263,80 +321,62 @@ class SpecialAttentionTask:
             
         try:
             # 获取AI配置
-            ai_config = self.task_config.get('ai_config', {})
-            model = ai_config.get('model', 'anthropic/claude-3-opus:beta')
-            temperature = ai_config.get('temperature', 0.7)
-            max_tokens = ai_config.get('max_tokens', 4000)
             task_name = self.task_config.get('name', '特别关注')
             
             # 将原始数据转换为JSON字符串
             raw_content_json = json.dumps(raw_data_list, ensure_ascii=False, indent=2)
             
-            # 准备融合了验证和整理功能的高级提示词
-            prompt = f"""# 任务：特别关注新闻验证与整理
-
-## 背景
-你是一位专业的新闻编辑和事实核查专家，负责处理标记为"{task_name}"的特别关注新闻。
-
-## 步骤
-1. **事实核查**：仔细分析以下JSON格式的内容，评估其真实性和可信度
-2. **新闻整理**：将内容重新组织为简洁、清晰的特别关注新闻报道
-
-## 要求
-- 保留所有关键事实和重要信息
-- 使用简洁有力的语言，突出新闻的重要性和紧急性
-- 如发现可疑或无法验证的信息，在报道开头添加明确的警告标签
-- 确保最终报道具有专业新闻风格，适合紧急播报
-- 报道应包含标题和正文，标题要简洁有力，能够吸引读者注意
-- 如果内容涉及数据或统计，请确保准确呈现
-- 不要输出原始JSON数据，只输出整理后的报道
-
-## 原始内容（JSON格式）
-{raw_content_json}
-
-## 输出格式
-如果内容可信：直接输出整理后的新闻报道
-
-## 特别关注新闻报道：
+            # 准备突发新闻风格的提示词
+            prompt = f"""帮我分析这些推文，是否是币圈发突发：{raw_content_json}。如果是请直接输出新闻报道内容，不要包含任何前缀说明。如果内容不是突发新闻，请在报道开头添加[警告:内容不是突发新闻]标签。
 """
             
-            # 使用OpenRouter API生成内容
-            processed_content = generate_content(prompt, model=model, temperature=temperature, max_tokens=max_tokens)
+            # 使用新的generate_news_from_tweet函数生成新闻
+            processed_content = generate_news_from_tweet(
+                prompt=prompt
+            )
             
             if processed_content:
-                # 检查是否包含警告标签
+                # 检查是否包含警告标签，判断是否为突发新闻
                 if processed_content.startswith('[警告:'):
-                    logger.warning(f"新闻真实性验证不通过: {self.task_id}")
+                    logger.warning(f"内容不是突发新闻，不生成视频: {self.task_id}")
+                    # 返回特殊标记，表示不是突发新闻
+                    return {"content": processed_content, "is_breaking_news": False}
                 else:
-                    logger.info(f"新闻验证通过并成功整理: {self.task_id}")
-                    
-                return processed_content
+                    logger.info(f"内容是突发新闻，将生成视频: {self.task_id}")
+                    # 返回内容和标记，表示是突发新闻
+                    return {"content": processed_content, "is_breaking_news": True}
             else:
                 logger.warning(f"AI处理内容失败，使用原始内容: {self.task_id}")
-                # 如果AI处理失败，返回原始数据的JSON字符串
-                return raw_content_json
+                # 如果AI处理失败，返回原始数据的JSON字符串，并标记为非突发新闻
+                return {"content": raw_content_json, "is_breaking_news": False}
                 
         except Exception as e:
             logger.error(f"新闻验证和整理异常: {str(e)}", exc_info=True)
             # 发生异常时，尝试返回原始数据的JSON字符串
             try:
-                return json.dumps(raw_data_list, ensure_ascii=False, indent=2)
+                error_content = json.dumps(raw_data_list, ensure_ascii=False, indent=2)
+                return {"content": error_content, "is_breaking_news": False}
             except:
-                return "处理数据时发生错误"
+                return {"content": "处理数据时发生错误", "is_breaking_news": False}
     
     def _generate_video(self, content):
         """
         生成视频
         
         Args:
-            content: 内容，可能是字符串或列表
+            content: 内容，可能是字符串、字典或列表
         """
         try:
+            # 处理内容格式，如果是字典则提取content字段
+            if isinstance(content, dict) and "content" in content:
+                actual_content = content["content"]
+            else:
+                actual_content = content
+                
             # 获取视频配置
             video_config = self.task_config.get('video_config', {})
             
             # 设置默认值
-            style = video_config.get('style', 'breaking_news')
             priority_str = video_config.get('priority', 'high')
             
             # 转换优先级为数字
@@ -348,25 +388,63 @@ class SpecialAttentionTask:
             }
             priority = priority_map.get(priority_str, 1)  # 默认为high
             
-            # 设置视频时长
-            duration = video_config.get('duration', 30)
-            
             # 生成视频
             logger.info(f"开始生成特别关注视频: {self.task_id}")
             
-            # 调用视频生成服务
-            video_result = generate_video_from_text(
-                content=content,
-                style=style,
-                duration=duration,
-                priority=priority,
-                task_id=self.task_id
-            )
+            # 创建提示词和风格配置
+            breaking_news_style_prompt = f"以紧急突发新闻的形式展示以下内容，使用醒目的标题、动态文字和引人注目的图形元素：\n\n{actual_content}"
             
-            if video_result and 'video_id' in video_result:
-                logger.info(f"特别关注视频生成成功: {video_result['video_id']}")
+            # 调用视频生成服务
+            video_result = create_video(breaking_news_style_prompt)
+            
+            # 记录视频生成结果
+            if video_result and video_result.get('success', False):
+                # 提取关键信息
+                d_id_video_id = video_result.get('video_id')
+                status = video_result.get('status', 'created')
+                created_at = video_result.get('created_at')
+                
+                # 保存视频信息到任务记录
+                video_info = {
+                    "task_id": self.task_id,
+                    "d_id_video_id": d_id_video_id,
+                    "status": status,
+                    "created_at": created_at
+                }
+                
+                # 将视频信息保存到MongoDB
+                try:
+                    collection = self.db['video_tasks']
+                    collection.update_one(
+                        {"task_id": self.task_id},
+                        {"$set": video_info},
+                        upsert=True
+                    )
+                    logger.info(f"视频信息已保存到数据库: task_id={self.task_id}, d_id_video_id={d_id_video_id}")
+                except Exception as db_err:
+                    logger.error(f"保存视频信息到数据库失败: {str(db_err)}")
+                
+                logger.info(f"特别关注视频生成成功: task_id={self.task_id}, d_id_video_id={d_id_video_id}, status={status}")
             else:
-                logger.warning(f"特别关注视频生成结果不完整: {video_result}")
+                # 记录失败信息
+                error_msg = video_result.get('error', '未知错误') if video_result else '无返回结果'
+                logger.warning(f"特别关注视频生成失败: {error_msg}")
+                
+                # 记录失败信息到数据库
+                try:
+                    collection = self.db['video_tasks']
+                    collection.update_one(
+                        {"task_id": self.task_id},
+                        {"$set": {
+                            "task_id": self.task_id,
+                            "status": "error",
+                            "error": error_msg,
+                            "updated_at": int(time.time())
+                        }},
+                        upsert=True
+                    )
+                except Exception as db_err:
+                    logger.error(f"保存视频错误信息到数据库失败: {str(db_err)}")
                 
         except Exception as e:
             logger.error(f"特别关注视频生成异常: {str(e)}")

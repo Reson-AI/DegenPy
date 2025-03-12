@@ -1,0 +1,14 @@
+{
+    "name": "视频任务监控",
+    "description": "定期监控视频生成任务状态，并更新到数据库",
+    "enabled": true,
+    "executor": "server.tasks.video_tasks.video_tasks.VideoTaskMonitor",
+    "schedule": {
+        "type": "interval",
+        "interval": 60,
+        "unit": "seconds"
+    },
+    "max_retry": 3,
+    "timeout": 300,
+    "concurrent": false
+}

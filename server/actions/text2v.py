@@ -4,195 +4,193 @@
 import os
 import json
 import requests
-import time
+import logging
 from typing import Dict, Any, Optional, Tuple
 from dotenv import load_dotenv
 
-# Load environment variables
+# 配置日志
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logger = logging.getLogger('text2v')
+
+# 加载环境变量
 load_dotenv()
 
-class Text2VideoGenerator:
-    """
-    Text to Video generation service
-    
-    负责与文生视频 API 交互，执行具体的视频生成操作
-    """
-    
-    def __init__(self):
-        self.api_url = os.getenv("TEXT2VIDEO_API_URL")
-        if not self.api_url:
-            print("Warning: TEXT2VIDEO_API_URL environment variable not set, using mock implementation")
-            self.api_url = None
-            
-    def generate(self, text: str, config: Dict[str, Any]) -> Tuple[bool, Optional[str], Optional[str]]:
-        """
-        从文本生成视频
-        
-        Args:
-            text: 用于生成视频的文本内容
-            config: 视频生成配置
-                - style: 视频风格 (news_report, trend_analysis 等)
-                - duration: 目标时长（秒）
-                - resolution: 分辨率
-                - format: 视频格式
-                
-        Returns:
-            (成功标志, 视频URL或本地路径, 错误信息)
-        """
-        if not self.api_url:
-            return self._mock_generate(text, config)
-            
-        try:
-            # 准备请求数据
-            payload = {
-                "text": text,
-                "style": config.get("style", "default"),
-                "duration": config.get("duration", 30),
-                "resolution": config.get("resolution", "1080p"),
-                "format": config.get("format", "mp4")
-            }
-            
-            # 发送 API 请求
-            response = requests.post(
-                self.api_url,
-                json=payload,
-                headers={"Content-Type": "application/json"}
-            )
-            
-            if response.status_code == 202:
-                # 异步处理 - 获取任务ID并轮询状态
-                job_id = response.json().get("job_id")
-                return self._poll_job_status(job_id)
-            elif response.status_code == 200:
-                # 同步响应
-                video_url = response.json().get("video_url")
-                return True, video_url, None
-            else:
-                error_msg = f"Error generating video: {response.status_code} - {response.text}"
-                print(error_msg)
-                return False, None, error_msg
-                
-        except Exception as e:
-            error_msg = f"Exception in text2video generation: {str(e)}"
-            print(error_msg)
-            return False, None, error_msg
-            
-    def _poll_job_status(self, job_id: str, max_attempts: int = 30, delay: int = 10) -> Tuple[bool, Optional[str], Optional[str]]:
-        """
-        轮询任务完成状态
-        
-        Args:
-            job_id: 任务ID
-            max_attempts: 最大轮询次数
-            delay: 轮询间隔（秒）
-            
-        Returns:
-            (成功标志, 视频URL, 错误信息)
-        """
-        status_url = f"{self.api_url}/status/{job_id}"
-        
-        for attempt in range(max_attempts):
-            try:
-                response = requests.get(status_url)
-                
-                if response.status_code == 200:
-                    data = response.json()
-                    status = data.get("status")
-                    
-                    if status == "completed":
-                        return True, data.get("video_url"), None
-                    elif status == "failed":
-                        error_msg = f"Video generation failed: {data.get('error')}"
-                        print(error_msg)
-                        return False, None, error_msg
-                    else:
-                        # 仍在处理中
-                        print(f"Video generation in progress ({attempt+1}/{max_attempts}): {status}")
-                        time.sleep(delay)
-                else:
-                    print(f"Error checking job status: {response.status_code} - {response.text}")
-                    time.sleep(delay)
-                    
-            except Exception as e:
-                print(f"Exception while polling job status: {str(e)}")
-                time.sleep(delay)
-                
-        error_msg = f"Timed out waiting for video generation after {max_attempts} attempts"
-        print(error_msg)
-        return False, None, error_msg
-        
-    def _mock_generate(self, text: str, config: Dict[str, Any]) -> Tuple[bool, Optional[str], Optional[str]]:
-        """
-        模拟视频生成（用于测试）
-        
-        Args:
-            text: 文本内容
-            config: 配置
-            
-        Returns:
-            (成功标志, 模拟视频路径, 错误信息)
-        """
-        try:
-            # 创建临时视频文件
-            import tempfile
-            import uuid
-            
-            # 创建一个唯一的文件名
-            video_id = str(uuid.uuid4())
-            video_dir = os.path.join(tempfile.gettempdir(), "degenpy_videos")
-            os.makedirs(video_dir, exist_ok=True)
-            
-            video_path = os.path.join(video_dir, f"{video_id}.mp4")
-            
-            # 创建一个空的视频文件（模拟）
-            with open(video_path, "wb") as f:
-                f.write(b"MOCK_VIDEO_DATA")
-                
-            print(f"Mock video generated at: {video_path}")
-            
-            # 模拟处理延迟
-            time.sleep(2)
-            
-            return True, video_path, None
-            
-        except Exception as e:
-            error_msg = f"Error in mock video generation: {str(e)}"
-            print(error_msg)
-            return False, None, error_msg
+# D-ID API配置
+API_CREATE_URL = os.getenv("TEXT2VIDEO_API_CREATE_URL", "https://api.d-id.com/talks")
+API_STATUS_URL = os.getenv("TEXT2VIDEO_API_STATUS_URL", "https://api.d-id.com/talks/{id}")
+API_KEY = os.getenv("TEXT2VIDEO_API_KEY", "")
 
-# 单例实例
-generator = Text2VideoGenerator()
+# 默认头像图片URL
+DEFAULT_AVATAR_URL = "https://d-id-public-bucket.s3.us-west-2.amazonaws.com/alice.jpg"
 
-def generate_video(text: str, config: Dict[str, Any]) -> Tuple[bool, Optional[str], Optional[str]]:
+def create_video(text: str, avatar_url: str = None) -> Dict[str, Any]:
     """
-    从文本生成视频
+    使用D-ID API创建视频任务
     
     Args:
-        text: 用于生成视频的文本内容
-        config: 视频生成配置
-            
+        text: 要在视频中展示的文本内容
+        avatar_url: 头像图片URL，默认使用D-ID提供的示例头像
+        
     Returns:
-        (成功标志, 视频URL或本地路径, 错误信息)
+        包含任务信息的字典，包括id、状态等
     """
-    return generator.generate(text, config)
+    try:
+        # 如果未指定头像URL，使用默认头像
+        if not avatar_url:
+            avatar_url = DEFAULT_AVATAR_URL
+            
+        # 准备请求数据
+        payload = {
+            "source_url": avatar_url,
+            "script": {
+                "type": "text",
+                "subtitles": "false",
+                "provider": {
+                    "type": "microsoft",
+                    "voice_id": "zh-CN-YunxiNeural"  # 使用中文男声
+                },
+                "input": text,
+                "ssml": "false"
+            },
+            "config": { "fluent": "false" }
+        }
+        
+        # 准备请求头
+        headers = {
+            "accept": "application/json",
+            "content-type": "application/json",
+            "authorization": f"Basic {API_KEY}"
+        }
+        
+        # 发送请求创建视频
+        logger.info(f"开始创建视频: {text[:30]}...")
+        response = requests.post(API_CREATE_URL, json=payload, headers=headers)
+        
+        # 处理响应
+        if response.status_code in [200, 201, 202]:
+            result = response.json()
+            logger.info(f"视频创建任务成功提交: ID={result.get('id')}")
+            return {
+                "success": True,
+                "video_id": result.get('id'),
+                "status": result.get('status', 'created'),
+                "created_at": result.get('created_at'),
+                "error": None,
+                "raw_response": result
+            }
+        else:
+            error_msg = f"创建视频失败: HTTP {response.status_code} - {response.text}"
+            logger.error(error_msg)
+            return {
+                "success": False,
+                "video_id": None,
+                "status": "error",
+                "created_at": None,
+                "error": error_msg,
+                "raw_response": None
+            }
+            
+    except Exception as e:
+        error_msg = f"视频创建异常: {str(e)}"
+        logger.exception(error_msg)
+        return {
+            "success": False,
+            "video_id": None,
+            "status": "error",
+            "created_at": None,
+            "error": error_msg,
+            "raw_response": None
+        }
+
+def get_video_status(video_id: str) -> Dict[str, Any]:
+    """
+    获取D-ID视频任务的状态
+    
+    Args:
+        video_id: 视频任务ID
+        
+    Returns:
+        包含视频任务状态信息的字典
+    """
+    try:
+        # 构建状态查询URL
+        status_url = API_STATUS_URL.format(id=video_id)
+        
+        # 准备请求头
+        headers = {
+            "accept": "application/json",
+            "authorization": f"Basic {API_KEY}"
+        }
+        
+        # 发送请求获取状态
+        logger.info(f"正在查询视频状态: ID={video_id}")
+        response = requests.get(status_url, headers=headers)
+        
+        # 处理响应
+        if response.status_code == 200:
+            result = response.json()
+            status = result.get('status')
+            logger.info(f"获取到视频状态: ID={video_id}, 状态={status}")
+            
+            # 构建返回数据
+            response_data = {
+                "success": True,
+                "video_id": video_id,
+                "status": status,
+                "result_url": result.get('result_url'),  # 视频URL
+                "error": None,
+                "raw_response": result
+            }
+            
+            # 如果视频已完成，添加视频URL
+            if status == "done":
+                response_data["video_url"] = result.get('result_url')
+                logger.info(f"视频生成完成: ID={video_id}, URL={result.get('result_url')}")
+            # 如果视频生成失败，添加错误信息
+            elif status == "error":
+                response_data["error"] = result.get('error', '未知错误')
+                logger.error(f"视频生成失败: ID={video_id}, 错误={result.get('error', '未知错误')}")
+                
+            return response_data
+        else:
+            error_msg = f"获取视频状态失败: HTTP {response.status_code} - {response.text}"
+            logger.error(error_msg)
+            return {
+                "success": False,
+                "video_id": video_id,
+                "status": "error",
+                "result_url": None,
+                "error": error_msg,
+                "raw_response": None
+            }
+            
+    except Exception as e:
+        error_msg = f"获取视频状态异常: {str(e)}"
+        logger.exception(error_msg)
+        return {
+            "success": False,
+            "video_id": video_id,
+            "status": "error",
+            "result_url": None,
+            "error": error_msg,
+            "raw_response": None
+        }
 
 if __name__ == "__main__":
-    # 示例用法
-    config = {
-        "style": "news_report",
-        "duration": 30
-    }
+    # 测试示例
+    test_text = "比特币价格突破7万美元，创历史新高！加密货币市场持续走强，以太坊也突破4000美元关口。"
     
-    sample_text = """
-    Bitcoin has reached a new all-time high today, surpassing $70,000 for the first time.
-    Analysts attribute this surge to increased institutional adoption and growing interest
-    from traditional finance. This milestone comes after months of steady growth and
-    represents a significant moment for cryptocurrency enthusiasts.
-    """
+    # 步骤1: 创建视频
+    create_result = create_video(test_text)
+    print(f"创建视频结果: {json.dumps(create_result, ensure_ascii=False, indent=2)}")
     
-    success, video_path, error = generate_video(sample_text, config)
-    
-    if success and video_path:
-        print(f"Video generated successfully: {video_path}")
-    else:
-        print(f"Failed to generate video: {error}")
+    if create_result["success"]:
+        video_id = create_result["video_id"]
+        
+        # 步骤2: 查询视频状态 (实际应用中可能需要轮询)
+        import time
+        print("等待5秒后查询视频状态...")
+        time.sleep(5)
+        
+        status_result = get_video_status(video_id)
+        print(f"视频状态: {json.dumps(status_result, ensure_ascii=False, indent=2)}")
