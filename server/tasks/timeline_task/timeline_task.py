@@ -6,6 +6,7 @@ import logging
 import asyncio
 import threading
 import time
+import uuid
 from typing import Dict, Any, List, Optional
 from datetime import datetime, timedelta
 import os
@@ -177,14 +178,11 @@ class TimelineTask:
         if "content_processor" in self.components:
             # 直接将整个字典列表传递给处理方法
             summary_content = self._process_all_items(raw_items)
-        else:
-            # 如果没有内容处理组件，将原始数据转换为JSON字符串
-            summary_content = json.dumps(raw_items, ensure_ascii=False, indent=2)
         
         # 只有在成功生成新闻内容后，才生成视频
         if summary_content and "video_generator" in self.components:
             logger.info("新闻内容生成成功，开始生成视频")
-            self._generate_video(summary_content, 1)  # 只传递一条汇总内容
+            self._generate_video(summary_content)  # 只传递一条汇总内容
         
     async def _get_new_data(self):
         """
@@ -259,19 +257,42 @@ class TimelineTask:
             content_json = json.dumps(raw_items, ensure_ascii=False, indent=2)
             
             # 准备社交媒体汇总风格的提示词
-            prompt = f"""将以下推文内容整理为一篇社交媒体热点总结，突出关键观点和公众反应：
+            prompt = f"""Summarize the following tweet content into a social media hot topic summary, highlighting key viewpoints and public reactions：
 
-{content_json}
+                    {content_json}
 
-请直接输出新闻报道内容，不要包含任何前缀说明。生成内容大概100词，内容风格为新闻稿，后续用于口播新闻
-"""
+                    Please directly output the news report content without any prefix explanation.The generated content should be approximately 100 words,in the style of a news manuscript,to be used for broadcast news.
+                    """
             
+            # 调用AI接口，生成新闻
+            logger.info(f"开始为时间线任务生成新闻: {self.task_id}")
+            news_content = generate_news_from_tweet(prompt)
+            return news_content
+                
+        except Exception as e:
+            logger.error(f"AI生成汇总异常: {str(e)}")
+            # 如果发生异常，尝试返回原始数据的JSON字符串
+            try:
+                return json.dumps(raw_items, ensure_ascii=False, indent=2)
+            except:
+                return "处理数据时发生错误"
+            
+    def _generate_video(self, content):
+        """生成视频
+        
+        Args:
+            content: 用于生成视频的内容
+            
+        Returns:
+            视频生成结果
+        """
+        try:
             # 调用D-ID API生成视频
             logger.info(f"开始为时间线任务生成视频: {self.task_id}")
-            video_result = create_video(prompt)
+            video_result = create_video(content)
             
             # 处理视频生成结果
-            if video_result and video_result.get('success', False):
+            if video_result and video_result.get('success'):
                 # 提取关键信息
                 d_id_video_id = video_result.get('video_id')
                 status = video_result.get('status', 'created')
@@ -285,11 +306,11 @@ class TimelineTask:
                     "created_at": created_at
                 }
                 
-                # 将视频信息保存到MongoDB
+                # 将视频信息保存到MongoDB，使用d_id_video_id作为唯一标识符
                 try:
-                    collection = self.db['video_tasks']
+                    collection = mongodb_connector.db['video_tasks']
                     collection.update_one(
-                        {"task_id": self.task_id},
+                        {"d_id_video_id": d_id_video_id},
                         {"$set": video_info},
                         upsert=True
                     )
@@ -313,14 +334,20 @@ class TimelineTask:
                 
                 # 记录失败信息到数据库
                 try:
-                    collection = self.db['timeline_video_tasks']
+                    # 注意：这里需要mongodb_connector，而不是self.db
+                    collection = mongodb_connector.db['video_tasks']
+                    
+                    # 如果无法获取d_id_video_id（失败的情况），则生成一个唯一标识
+                    # 这样可以保证错误记录也不会覆盖现有记录
+                    error_record_id = str(uuid.uuid4())
+                    
                     collection.update_one(
-                        {"task_id": self.task_id},
+                        {"error_id": error_record_id},
                         {"$set": {
                             "task_id": self.task_id,
+                            "error_id": error_record_id,
                             "status": "error",
-                            "error": error_msg,
-                            "updated_at": int(time.time())
+                            "error": error_msg
                         }},
                         upsert=True
                     )
@@ -334,75 +361,15 @@ class TimelineTask:
                     "error": error_msg,
                     "message": "视频生成失败"
                 }
-                
         except Exception as e:
-            logger.error(f"AI生成汇总异常: {str(e)}")
-            # 如果发生异常，尝试返回原始数据的JSON字符串
-            try:
-                return json.dumps(raw_items, ensure_ascii=False, indent=2)
-            except:
-                return "处理数据时发生错误"
-            
-    def _generate_video(self, content, item_count=1):
-        """
-        生成视频
-        
-        Args:
-            content: 内容
-            item_count: 包含的项目数量
-        """
-        try:
-            # 获取视频配置
-            video_config = self.task_config.get('video_config', {})
-            
-            # 设置默认值
-            style = video_config.get('style', 'news_report')
-            priority_str = video_config.get('priority', 'normal')
-            
-            # 转换优先级为数字
-            priority_map = {
-                'low': 0,
-                'normal': 1,
-                'high': 2
+            logger.error(f"生成视频异常: {str(e)}")
+            return {
+                "task_id": self.task_id,
+                "status": "error",
+                "error": str(e),
+                "message": "视频生成异常"
             }
-            priority = priority_map.get(priority_str, 2)  # 时间线任务默认为正常优先级
-            
-            # 获取发布平台
-            platforms = self.task_config.get('platforms', [])
-            
-            # 创建动作序列
-            action_sequence = platforms.copy()
-            
-            # 如果配置了webhook，添加webhook动作
-            if self.task_config.get('webhook'):
-                action_sequence.append('webhook')
-            
-            # 添加汇总标记并创建提示词
-            summary_title = self.task_config.get('name', '时间线汇总')
-            news_report_style_prompt = f"""\u4ee5新闻报道的形式展示下列时间线汇总内容，使用清晰的标题、分栏和有序元素展示信息：
-
-{summary_title}
-
-{content}"""
-            
-            # 调用视频生成服务
-            video_result = generate_video_from_text(
-                content=news_report_style_prompt,
-                priority=priority,
-                task_id=self.task_id
-            )
-            
-            if video_result and 'video_id' in video_result:
-                logger.info(f"时间线视频生成成功: {video_result['video_id']}")
-                return video_result['video_id']
-            else:
-                logger.warning(f"时间线视频生成结果不完整: {video_result}")
-                return None
-            
-        except Exception as e:
-            logger.error(f"创建时间线视频生成任务失败: {str(e)}")
-            return None
-            
+    
     def stop(self):
         """停止任务"""
         if not self.running:

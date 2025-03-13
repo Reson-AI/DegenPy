@@ -5,12 +5,16 @@ import os
 import time
 import logging
 import traceback
+import threading
 from typing import Dict, List, Any, Optional
 from datetime import datetime
 
 # 导入MongoDB连接
 from pymongo import MongoClient, DESCENDING
 from pymongo.errors import PyMongoError
+
+# 导入MongoDB连接器
+from warehouse.storage.mongodb.connector import mongodb_connector
 
 # 导入D-ID API函数
 from server.actions.text2v import get_video_status
@@ -29,24 +33,14 @@ class VideoTaskMonitor:
     完成时自动调用TikTok接口发布视频
     """
     
-    def __init__(self):
+    def __init__(self, task_config, agent_config):
         """初始化监控器"""
-        self.task_id = f"video_monitor_{int(time.time())}"
-        self.db = self._connect_db()
+        self.task_config = task_config
+        self.agent_config = agent_config
+        self.task_id = task_config.get('id', 'unknown_task')
         self.max_check_attempts = 30  # 最大检查次数
-        
-    def _connect_db(self) -> Optional[Any]:
-        """连接MongoDB数据库"""
-        try:
-            mongo_uri = os.getenv("MONGO_URI", "mongodb://localhost:27017/")
-            mongo_db = os.getenv("MONGO_DB", "degenpy")
-            client = MongoClient(mongo_uri)
-            db = client[mongo_db]
-            logger.info(f"MongoDB连接成功: {mongo_uri}")
-            return db
-        except Exception as e:
-            logger.error(f"MongoDB连接失败: {str(e)}")
-            return None
+        self.running = False
+        self.poll_thread = None
     
     def start(self) -> Dict[str, Any]:
         """执行任务监控
@@ -54,29 +48,81 @@ class VideoTaskMonitor:
         Returns:
             包含任务执行结果的字典
         """
-        start_time = time.time()
-        logger.info(f"开始视频任务监控: {self.task_id}")
+        # 判断是否已经在运行
+        if self.running:
+            return {"success": True, "message": f"视频任务监控 {self.task_id} 已经在运行中"}
         
-        if not self.db:
-            return {
-                "success": False,
-                "message": "数据库连接失败",
-                "task_id": self.task_id,
-                "elapsed_time": time.time() - start_time
+        self.running = True
+        
+        # 获取轮询配置
+        poll_config = self.task_config.get('schedule', {})
+        if isinstance(poll_config, str) or not poll_config:
+            # 简化配置，默认每1分钟执行一次
+            poll_config = {
+                'type': 'interval',
+                'minutes': 1
             }
         
+        # 启动轮询线程
+        self._start_polling(poll_config)
+        logger.info(f"开始视频任务监控: {self.task_id}")
+        
+        return {"success": True, "message": f"视频任务监控 {self.task_id} 已启动"}
+        
+    def _start_polling(self, poll_config: Dict[str, Any]):
+        """启动轮询线程
+        
+        Args:
+            poll_config: 轮询配置，包含type和时间间隔
+        """
+        poll_type = poll_config.get('type', 'interval')
+        
+        if poll_type == 'interval':
+            # 计算间隔秒数
+            seconds = poll_config.get('seconds', 0)
+            minutes = poll_config.get('minutes', 0)
+            hours = poll_config.get('hours', 0)
+            
+            interval_seconds = seconds + minutes * 60 + hours * 3600
+            if interval_seconds <= 0:
+                interval_seconds = 60  # 默认1分钟
+            
+            logger.info(f"视频任务监控 {self.task_id} 启动轮询，间隔 {interval_seconds} 秒")
+            
+            # 启动轮询线程
+            def poll_thread_func():
+                logger.info(f"视频任务监控 {self.task_id} 轮询线程启动")
+                
+                # 立即执行一次
+                self._execute_and_handle_exceptions()
+                
+                while self.running:
+                    time.sleep(interval_seconds)
+                    if not self.running:
+                        break
+                    
+                    self._execute_and_handle_exceptions()
+                
+                logger.info(f"视频任务监控 {self.task_id} 轮询线程停止")
+            
+            self.poll_thread = threading.Thread(
+                target=poll_thread_func,
+                name=f"VideoTaskPoll-{self.task_id}",
+                daemon=True
+            )
+            self.poll_thread.start()
+        else:
+            logger.error(f"不支持的轮询类型: {poll_type}")
+        
+    def _execute_and_handle_exceptions(self):
+        """执行任务并处理异常"""
         try:
             # 获取需要更新状态的视频任务
             pending_tasks = self._get_pending_tasks()
             
             if not pending_tasks:
                 logger.info("没有需要更新的视频任务")
-                return {
-                    "success": True,
-                    "message": "没有需要更新的视频任务",
-                    "task_id": self.task_id,
-                    "elapsed_time": time.time() - start_time
-                }
+                return
             
             # 更新任务状态
             updated_count = 0
@@ -88,30 +134,12 @@ class VideoTaskMonitor:
                     if result["completed"]:
                         completed_count += 1
             
-            result = {
-                "success": True,
-                "message": f"更新了{updated_count}个视频任务状态，完成并发布了{completed_count}个视频",
-                "task_id": self.task_id,
-                "updated_count": updated_count,
-                "completed_count": completed_count,
-                "total_count": len(pending_tasks),
-                "elapsed_time": time.time() - start_time
-            }
-            
-            logger.info(f"视频任务监控完成: {result['message']}")
-            return result
+            logger.info(f"视频任务监控完成: 更新了{updated_count}个视频任务状态，完成并发布了{completed_count}个视频")
             
         except Exception as e:
             error_msg = f"视频任务监控异常: {str(e)}"
             logger.error(error_msg)
             logger.error(traceback.format_exc())
-            
-            return {
-                "success": False,
-                "message": error_msg,
-                "task_id": self.task_id,
-                "elapsed_time": time.time() - start_time
-            }
     
     def _get_pending_tasks(self) -> List[Dict[str, Any]]:
         """获取需要更新状态的视频任务
@@ -120,16 +148,15 @@ class VideoTaskMonitor:
             需要更新的任务列表
         """
         try:
-            collection = self.db['video_tasks']
+            collection = mongodb_connector.db['video_tasks']
             
             # 查询条件：只获取 created 和 started 状态的任务
             query = {
-                "status": {"$in": ["created", "started"]},
-                "attempt": {"$lt": self.max_check_attempts}
+                "status": {"$in": ["created", "started"]}
             }
             
             # 按创建时间排序，优先处理较早的任务
-            tasks = list(collection.find(query).sort("created_at", DESCENDING).limit(20))
+            tasks = list(collection.find(query).sort("created_at", DESCENDING))
             
             logger.info(f"找到{len(tasks)}个需要更新状态的视频任务")
             return tasks
@@ -147,13 +174,13 @@ class VideoTaskMonitor:
         Returns:
             包含更新状态的字典，包括updated和completed标志
         """
-        task_id = task.get("task_id")
         d_id_video_id = task.get("d_id_video_id")
+        task_id = task.get("task_id", "unknown")
         
         result = {"updated": False, "completed": False}
         
-        if not task_id or not d_id_video_id:
-            logger.warning(f"任务缺少必要信息: {task}")
+        if not d_id_video_id:
+            logger.warning(f"任务缺少必要的 d_id_video_id: {task}")
             return result
         
         try:
@@ -179,11 +206,8 @@ class VideoTaskMonitor:
             
             # 更新数据
             update_data = {
-                "status": mapped_status,
-                "raw_status": api_status,  # 保存原始状态用于调试
-                "last_checked": datetime.now(),
-                "attempt": current_attempt,
-                "updated_at": int(time.time())
+                "status": mapped_status,# 保存原始状态用于调试
+                "attempt": current_attempt
             }
             
             # 如果有结果URL，添加到更新数据中
@@ -194,10 +218,10 @@ class VideoTaskMonitor:
             if "error" in api_result:
                 update_data["error"] = api_result["error"]
             
-            # 更新MongoDB中的任务状态
-            collection = self.db['video_tasks']
+            # 更新MongoDB中的任务状态，使用d_id_video_id作为主键
+            collection = mongodb_connector.db['video_tasks']
             collection.update_one(
-                {"task_id": task_id},
+                {"d_id_video_id": d_id_video_id},
                 {"$set": update_data}
             )
             
@@ -227,12 +251,11 @@ class VideoTaskMonitor:
                     # 更新发布结果
                     publish_update = {
                         "tiktok_published": True,
-                        "tiktok_result": tiktok_result,
-                        "published_at": int(time.time())
+                        "tiktok_result": tiktok_result
                     }
                     
                     collection.update_one(
-                        {"task_id": task_id},
+                        {"d_id_video_id": d_id_video_id},
                         {"$set": publish_update}
                     )
                     
@@ -242,7 +265,7 @@ class VideoTaskMonitor:
                 except Exception as pub_err:
                     logger.error(f"发布视频到TikTok失败: ID={task_id}, 错误={str(pub_err)}")
                     collection.update_one(
-                        {"task_id": task_id},
+                        {"d_id_video_id": d_id_video_id},
                         {"$set": {
                             "tiktok_published": False,
                             "tiktok_error": str(pub_err)
@@ -253,7 +276,7 @@ class VideoTaskMonitor:
             elif current_attempt >= self.max_check_attempts:
                 # 超过最大尝试次数，标记为超时
                 collection.update_one(
-                    {"task_id": task_id},
+                    {"d_id_video_id": d_id_video_id},
                     {"$set": {"status": "timeout"}}
                 )
                 logger.warning(f"视频生成超时: ID={task_id}, 已达到最大尝试次数{self.max_check_attempts}")
@@ -263,13 +286,41 @@ class VideoTaskMonitor:
             return result
             
         except Exception as e:
-            logger.error(f"更新视频任务状态异常: task_id={task_id}, error={str(e)}")
+            logger.error(f"更新视频任务状态异常: d_id_video_id={d_id_video_id}, error={str(e)}")
             return result
 
 
-def execute():
-    """执行视频任务监控"""
-    monitor = VideoTaskMonitor()
+def stop(task_id=None):
+    """停止视频任务监控"""
+    # 这里只是一个接口占位符，在实际使用时需要实现
+    logger.info(f"停止视频任务监控: {task_id if task_id else 'all'}")
+    return {"success": True, "message": "视频任务监控已停止"}
+
+def execute(task_config=None, agent_config=None):
+    """执行视频任务监控
+    
+    Args:
+        task_config: 任务配置，如果为None则使用默认配置
+        agent_config: 代理配置，如果为None则使用默认配置
+        
+    Returns:
+        包含任务执行结果的字典
+    """
+    # 如果没有提供配置，则使用默认配置
+    if task_config is None:
+        task_config = {
+            'id': 'video_task_monitor',
+            'name': '视频任务监控',
+            'schedule': {
+                'type': 'interval',
+                'minutes': 1
+            }
+        }
+    
+    if agent_config is None:
+        agent_config = {}
+    
+    monitor = VideoTaskMonitor(task_config, agent_config)
     return monitor.start()
 
 
@@ -277,3 +328,10 @@ if __name__ == "__main__":
     # 用于测试
     result = execute()
     print(result)
+    
+    # 保持主线程运行，让守护线程能够执行
+    try:
+        while True:
+            time.sleep(60)
+    except KeyboardInterrupt:
+        print("收到中断信号，程序退出")

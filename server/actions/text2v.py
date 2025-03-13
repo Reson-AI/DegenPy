@@ -47,7 +47,7 @@ def create_video(text: str, avatar_url: str = None) -> Dict[str, Any]:
                 "subtitles": "false",
                 "provider": {
                     "type": "microsoft",
-                    "voice_id": "zh-CN-YunxiNeural"  # 使用中文男声
+                    "voice_id": "Sara" 
                 },
                 "input": text,
                 "ssml": "false"
@@ -59,7 +59,7 @@ def create_video(text: str, avatar_url: str = None) -> Dict[str, Any]:
         headers = {
             "accept": "application/json",
             "content-type": "application/json",
-            "authorization": f"Basic {API_KEY}"
+            "authorization": f"Bearer {API_KEY}"
         }
         
         # 发送请求创建视频
@@ -119,7 +119,7 @@ def get_video_status(video_id: str) -> Dict[str, Any]:
         # 准备请求头
         headers = {
             "accept": "application/json",
-            "authorization": f"Basic {API_KEY}"
+            "authorization": f"Bearer {API_KEY}"
         }
         
         # 发送请求获取状态

@@ -16,6 +16,9 @@ load_dotenv()
 # 导入视频生成API
 from server.actions.text2v import generate_video as text2v_generate_video
 
+# 导入Redis库
+import redis
+
 # 导入视频池和消息代理
 from server.services.video_pool import (
     create_video_task, 
@@ -26,6 +29,28 @@ from server.services.video_pool import (
     get_video_task_count
 )
 from server.infrastructure.message_broker import publish_video_task
+
+# Redis配置
+REDIS_HOST = os.getenv("REDIS_HOST", "localhost")
+REDIS_PORT = int(os.getenv("REDIS_PORT", "6379"))
+REDIS_DB = int(os.getenv("REDIS_DB", "0"))
+REDIS_PASSWORD = os.getenv("REDIS_PASSWORD", "")
+
+def get_redis_client():
+    """获取Redis客户端实例"""
+    try:
+        client = redis.Redis(
+            host=REDIS_HOST,
+            port=REDIS_PORT,
+            db=REDIS_DB,
+            password=REDIS_PASSWORD,
+            decode_responses=True
+        )
+        # 测试连接
+        client.ping()
+        return client
+    except Exception as e:
+        logger.error(f"Redis连接失败: {str(e)}")
 
 # 配置日志
 logging.basicConfig(
@@ -338,30 +363,71 @@ def stop_text2video_service():
     """停止文本到视频生成服务"""
     generator.stop()
 
-def generate_video_from_text(content: str, trigger_id: str, agent_id: str, 
-                            action_sequence: List[str], priority: int = 0) -> str:
+def generate_video_from_text(content: str, priority: int = 2, task_id: str = None) -> Dict[str, Any]:
     """
-    从文本生成视频
+    从文本生成视频 - 简化版
     
     Args:
-        content: 文本内容
-        trigger_id: 触发器ID
-        agent_id: 代理ID
-        action_sequence: 后续动作序列
-        priority: 任务优先级（数字越大优先级越高）
+        content: 文本内容（包含描述和风格信息）
+        priority: 任务优先级（0-2，默认2）
+        task_id: 任务ID，可选，用于跟踪
         
     Returns:
-        任务ID
+        包含视频信息的字典，包含video_id等字段
     """
-    # 检查队列长度
-    pending_count = get_video_task_count("pending")
-    max_queue_length = int(os.getenv("MAX_QUEUE_LENGTH", "100"))
+    # 创建任务ID
+    video_id = task_id or str(uuid.uuid4())
+    timestamp = time.time()
     
-    if pending_count >= max_queue_length:
-        logger.error(f"Queue length exceeded maximum limit of {max_queue_length}")
-        raise ValueError(f"Queue length exceeded maximum limit of {max_queue_length}")
-    
-    return generator.generate_video(content, trigger_id, agent_id, action_sequence, priority)
+    try:
+        # 检查当前队列状态
+        pending_count = get_video_task_count("pending")
+        logger.info(f"当前等待处理的视频任务数量: {pending_count}")
+        
+        # 移除并简化风格参数，直接从内容中捕捉视频的风格
+        # 直接创建视频任务
+        redis_client = get_redis_client()
+        task_info = {
+            "id": video_id,
+            "content": content,
+            "priority": priority,
+            "status": "pending",
+            "created_at": timestamp
+        }
+        
+        # 保存任务到Redis
+        task_key = f"video:task:{video_id}"
+        redis_client.hset(task_key, mapping={
+            "id": video_id,
+            "content": content,
+            "priority": str(priority),
+            "status": "pending",
+            "created_at": str(timestamp)
+        })
+        redis_client.expire(task_key, VIDEO_GEN_TIMEOUT * 2)  # 设置过期时间
+        
+        # 将任务添加到待处理队列
+        redis_client.zadd("video:tasks:pending", {video_id: priority})
+        
+        # 发布任务创建事件
+        publish_vieo_task(video_id, "pending", task_info)
+        
+        logger.info(f"已创建视频生成任务: {video_id}")
+        
+        # 返回视频信息
+        return {
+            "video_id": video_id,
+            "status": "pending",
+            "created_at": timestamp
+        }
+    except Exception as e:
+        logger.error(f"创建视频生成任务失败: {str(e)}", exc_info=True)
+        return {
+            "video_id": video_id,
+            "status": "error",
+            "error": str(e),
+            "created_at": timestamp
+        }
 
 if __name__ == "__main__":
     # 测试代码

@@ -172,31 +172,18 @@ class SpecialAttentionTask:
             if not result:
                 logger.warning(f"内容验证和处理失败: {self.task_id}")
                 return
-                
-            # 判断是否为突发新闻
-            if isinstance(result, dict) and "is_breaking_news" in result:
-                is_breaking_news = result["is_breaking_news"]
-                processed_content = result["content"]
-                
-                # 只有突发新闻才生成视频
-                if is_breaking_news and "video_generator" in self.components:
-                    logger.info(f"内容是突发新闻，开始生成视频: {self.task_id}")
-                    self._generate_video(processed_content)
-                else:
-                    logger.info(f"内容不是突发新闻，不生成视频: {self.task_id}")
             else:
-                # 兼容旧版逻辑，如果返回的不是字典格式
-                processed_content = result
-                
-                # 生成视频 (video_generator组件)
-                if "video_generator" in self.components:
-                    self._generate_video(processed_content)
-        else:
-            processed_content = self._extract_raw_content(data)
-            
-            # 生成视频 (video_generator组件)
-            if "video_generator" in self.components:
-                self._generate_video(processed_content)
+                # 如果是突发新闻，开始生成视频
+                if result.startswith('[警告:内容不是突发新闻]'):
+                    logger.warning(f"内容不是突发新闻，不生成视频: {self.task_id}")
+                else:
+                    processed_content = result
+                    # 只有突发新闻才生成视频
+                    if "video_generator" in self.components:
+                        logger.info(f"内容是突发新闻，开始生成视频: {self.task_id}")
+                        self._generate_video(processed_content)
+                    else:
+                        logger.info(f"内容不是突发新闻，不生成视频: {self.task_id}")
     
     async def _get_new_data(self):
         """
@@ -334,71 +321,28 @@ class SpecialAttentionTask:
             processed_content = generate_news_from_tweet(
                 prompt=prompt
             )
-            
-            if processed_content:
-                # 检查是否包含警告标签，判断是否为突发新闻
-                if processed_content.startswith('[警告:'):
-                    logger.warning(f"内容不是突发新闻，不生成视频: {self.task_id}")
-                    # 返回特殊标记，表示不是突发新闻
-                    return {"content": processed_content, "is_breaking_news": False}
-                else:
-                    logger.info(f"内容是突发新闻，将生成视频: {self.task_id}")
-                    # 返回内容和标记，表示是突发新闻
-                    return {"content": processed_content, "is_breaking_news": True}
-            else:
-                logger.warning(f"AI处理内容失败，使用原始内容: {self.task_id}")
-                # 如果AI处理失败，返回原始数据的JSON字符串，并标记为非突发新闻
-                return {"content": raw_content_json, "is_breaking_news": False}
+            return processed_content
                 
         except Exception as e:
             logger.error(f"新闻验证和整理异常: {str(e)}", exc_info=True)
-            # 发生异常时，尝试返回原始数据的JSON字符串
-            try:
-                error_content = json.dumps(raw_data_list, ensure_ascii=False, indent=2)
-                return {"content": error_content, "is_breaking_news": False}
-            except:
-                return {"content": "处理数据时发生错误", "is_breaking_news": False}
+            return None
     
     def _generate_video(self, content):
-        """
-        生成视频
+        """生成视频
         
         Args:
-            content: 内容，可能是字符串、字典或列表
+            content: 用于生成视频的内容
+            
+        Returns:
+            视频生成结果
         """
         try:
-            # 处理内容格式，如果是字典则提取content字段
-            if isinstance(content, dict) and "content" in content:
-                actual_content = content["content"]
-            else:
-                actual_content = content
-                
-            # 获取视频配置
-            video_config = self.task_config.get('video_config', {})
+            # 调用D-ID API生成视频
+            logger.info(f"开始为时间线任务生成视频: {self.task_id}")
+            video_result = create_video(content)
             
-            # 设置默认值
-            priority_str = video_config.get('priority', 'high')
-            
-            # 转换优先级为数字
-            priority_map = {
-                'low': 3,
-                'normal': 2,
-                'high': 1,
-                'urgent': 0
-            }
-            priority = priority_map.get(priority_str, 1)  # 默认为high
-            
-            # 生成视频
-            logger.info(f"开始生成特别关注视频: {self.task_id}")
-            
-            # 创建提示词和风格配置
-            breaking_news_style_prompt = f"以紧急突发新闻的形式展示以下内容，使用醒目的标题、动态文字和引人注目的图形元素：\n\n{actual_content}"
-            
-            # 调用视频生成服务
-            video_result = create_video(breaking_news_style_prompt)
-            
-            # 记录视频生成结果
-            if video_result and video_result.get('success', False):
+            # 处理视频生成结果
+            if video_result and video_result.get('status', '') == 'created':
                 # 提取关键信息
                 d_id_video_id = video_result.get('video_id')
                 status = video_result.get('status', 'created')
@@ -424,11 +368,19 @@ class SpecialAttentionTask:
                 except Exception as db_err:
                     logger.error(f"保存视频信息到数据库失败: {str(db_err)}")
                 
-                logger.info(f"特别关注视频生成成功: task_id={self.task_id}, d_id_video_id={d_id_video_id}, status={status}")
+                logger.info(f"时间线视频生成成功: task_id={self.task_id}, d_id_video_id={d_id_video_id}, status={status}")
+                
+                # 返回视频信息
+                return {
+                    "task_id": self.task_id,
+                    "d_id_video_id": d_id_video_id,
+                    "status": status,
+                    "message": "视频生成任务已提交"
+                }
             else:
                 # 记录失败信息
                 error_msg = video_result.get('error', '未知错误') if video_result else '无返回结果'
-                logger.warning(f"特别关注视频生成失败: {error_msg}")
+                logger.warning(f"时间线视频生成失败: {error_msg}")
                 
                 # 记录失败信息到数据库
                 try:
@@ -446,9 +398,22 @@ class SpecialAttentionTask:
                 except Exception as db_err:
                     logger.error(f"保存视频错误信息到数据库失败: {str(db_err)}")
                 
+                # 失败时返回错误信息
+                return {
+                    "task_id": self.task_id,
+                    "status": "error",
+                    "error": error_msg,
+                    "message": "视频生成失败"
+                }
         except Exception as e:
-            logger.error(f"特别关注视频生成异常: {str(e)}")
-    
+            logger.error(f"生成视频异常: {str(e)}")
+            return {
+                "task_id": self.task_id,
+                "status": "error",
+                "error": str(e),
+                "message": "视频生成异常"
+            }
+
     def stop(self):
         """停止任务"""
         if not self.running:

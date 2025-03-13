@@ -16,8 +16,8 @@ from pydantic import BaseModel
 load_dotenv()
 
 # 导入视频生成服务
-from server.services.text2video import generate_video_from_text
-from server.services.video_pool import get_video_task, get_video_task_count, get_video_path
+# from server.services.text2video import generate_video_from_text
+# from server.services.video_pool import get_video_task, get_video_task_count, get_video_path
 # 导入 warehouse API 功能
 from warehouse.api import app as warehouse_app
 from warehouse.storage import get_db_connector
