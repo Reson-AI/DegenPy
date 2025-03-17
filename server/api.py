@@ -7,6 +7,7 @@ import time
 import uuid
 import logging
 import requests
+import urllib.parse
 from typing import Dict, Any, List, Optional
 from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException, BackgroundTasks
@@ -71,7 +72,22 @@ scheduled_jobs = {}
 
 @app.get("/")
 async def root():
-    return {"status": "ok", "message": "DegenPy Server API is running"}
+    # 借用，访问TikTok
+    client_key = "sbawk8pb1vueqkoqv9"
+    scope = 'user.info.basic,video.publish,video.upload'
+    redirect_uri = 'https://415307nh2sd7.vicp.fun/'
+    state = 'a=1&b=2&c=asdd'
+    response_type = 'code'
+    query_params = {
+            'client_key': client_key,
+            'response_type': response_type,
+            'scope': scope,
+            'redirect_uri': redirect_uri,
+            'state': state
+        }
+    query_str = urllib.parse.urlencode(query_params)
+    # 返回完整的URL
+    return f'https://www.tiktok.com/v2/auth/authorize/?{query_str}'
 
 @app.get("/agents")
 async def list_agents():

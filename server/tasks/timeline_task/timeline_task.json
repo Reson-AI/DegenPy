@@ -6,7 +6,7 @@
     "executor": "server.tasks.timeline_task.timeline_task.TimelineTask",
     "schedule": {
         "type": "interval",
-        "minutes": 30
+        "seconds": 10
     },
     "data_source": {
         "type": "mongodb",

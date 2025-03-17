@@ -6,40 +6,108 @@ import json
 import requests
 import logging
 from typing import Dict, Any, Optional, Tuple
-from dotenv import load_dotenv
+from pathlib import Path
 
-# 配置日志
+# Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger('text2v')
 
-# 加载环境变量
-load_dotenv()
+# 直接从根目录下的 .env 文件读取配置
+def load_env_from_file():
+    env_path = Path(os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), '.env'))
+    if not env_path.exists():
+        logger.error(f"Error: .env file not found at {env_path}")
+        return {}
+        
+    # 读取 .env 文件内容
+    env_vars = {}
+    try:
+        with open(env_path, 'r') as f:
+            for line in f:
+                line = line.strip()
+                if not line or line.startswith('#') or '=' not in line:
+                    continue
+                key, value = line.split('=', 1)
+                env_vars[key.strip()] = value.strip().strip('"\'')
+        logger.info(f"Successfully loaded .env file from {env_path}")
+        return env_vars
+    except Exception as e:
+        logger.error(f"Error reading .env file: {e}")
+        return {}
 
-# D-ID API配置
-API_CREATE_URL = os.getenv("TEXT2VIDEO_API_CREATE_URL", "https://api.d-id.com/talks")
-API_STATUS_URL = os.getenv("TEXT2VIDEO_API_STATUS_URL", "https://api.d-id.com/talks/{id}")
-API_KEY = os.getenv("TEXT2VIDEO_API_KEY", "")
+# Load environment variables
+env_vars = load_env_from_file()
 
-# 默认头像图片URL
+# D-ID API configuration
+API_CREATE_URL = env_vars.get("TEXT2VIDEO_API_CREATE_URL", "https://api.d-id.com/talks")
+API_STATUS_URL = env_vars.get("TEXT2VIDEO_API_STATUS_URL", "https://api.d-id.com/talks/{id}")
+API_KEY = env_vars.get("TEXT2VIDEO_API_KEY", "")
+
+# Default avatar image URL
 DEFAULT_AVATAR_URL = "https://d-id-public-bucket.s3.us-west-2.amazonaws.com/alice.jpg"
+
+def check_api_configuration() -> Dict[str, Any]:
+    """
+    Check if D-ID API configuration is valid
+    
+    Returns:
+        Dictionary containing configuration status
+    """
+    if not API_KEY:
+        logger.warning("D-ID API key not found in .env file")
+        return {
+            "valid": False,
+            "error": "D-ID API key not found in .env file. Please add TEXT2VIDEO_API_KEY to your .env file."
+        }
+    
+    # Check if API URLs are valid
+    if not API_CREATE_URL or not API_STATUS_URL:
+        logger.warning("D-ID API URLs not properly configured")
+        return {
+            "valid": False,
+            "error": "D-ID API URLs not properly configured. Please check your .env file."
+        }
+    
+    logger.info("D-ID API configuration is valid")
+    return {
+        "valid": True,
+        "error": None,
+        "api_key": f"{API_KEY[:5]}...{API_KEY[-5:]}" if API_KEY else None,
+        "create_url": API_CREATE_URL,
+        "status_url": API_STATUS_URL
+    }
 
 def create_video(text: str, avatar_url: str = None) -> Dict[str, Any]:
     """
-    使用D-ID API创建视频任务
+    Create a video task using D-ID API
     
     Args:
-        text: 要在视频中展示的文本内容
-        avatar_url: 头像图片URL，默认使用D-ID提供的示例头像
+        text: Text content to be displayed in the video
+        avatar_url: Avatar image URL, defaults to the sample avatar provided by D-ID
         
     Returns:
-        包含任务信息的字典，包括id、状态等
+        Dictionary containing task information, including id, status, etc.
     """
     try:
-        # 如果未指定头像URL，使用默认头像
+        # Check if API configuration is valid
+        config_status = check_api_configuration()
+        if not config_status["valid"]:
+            error_msg = config_status["error"]
+            logger.error(error_msg)
+            return {
+                "success": False,
+                "video_id": None,
+                "status": "error",
+                "created_at": None,
+                "error": error_msg,
+                "raw_response": None
+            }
+            
+        # If avatar URL is not specified, use the default avatar
         if not avatar_url:
             avatar_url = DEFAULT_AVATAR_URL
             
-        # 准备请求数据
+        # Prepare request data
         payload = {
             "source_url": avatar_url,
             "script": {
@@ -55,21 +123,21 @@ def create_video(text: str, avatar_url: str = None) -> Dict[str, Any]:
             "config": { "fluent": "false" }
         }
         
-        # 准备请求头
+        # Prepare request headers
         headers = {
             "accept": "application/json",
             "content-type": "application/json",
-            "authorization": f"Bearer {API_KEY}"
+            "authorization": f"Basic eXVhbi53QGhpZ2hicm93dGVjaC51cw:SYKEflQYIKVjgi1C6Ja8W"
         }
         
-        # 发送请求创建视频
-        logger.info(f"开始创建视频: {text[:30]}...")
+        # Send request to create video
+        logger.info(f"Starting video creation: {text[:30]}...")
         response = requests.post(API_CREATE_URL, json=payload, headers=headers)
         
-        # 处理响应
+        # Process response
         if response.status_code in [200, 201, 202]:
             result = response.json()
-            logger.info(f"视频创建任务成功提交: ID={result.get('id')}")
+            logger.info(f"Video creation task successfully submitted: ID={result.get('id')}")
             return {
                 "success": True,
                 "video_id": result.get('id'),
@@ -79,7 +147,7 @@ def create_video(text: str, avatar_url: str = None) -> Dict[str, Any]:
                 "raw_response": result
             }
         else:
-            error_msg = f"创建视频失败: HTTP {response.status_code} - {response.text}"
+            error_msg = f"Failed to create video: HTTP {response.status_code} - {response.text}"
             logger.error(error_msg)
             return {
                 "success": False,
@@ -91,7 +159,7 @@ def create_video(text: str, avatar_url: str = None) -> Dict[str, Any]:
             }
             
     except Exception as e:
-        error_msg = f"视频创建异常: {str(e)}"
+        error_msg = f"Video creation exception: {str(e)}"
         logger.exception(error_msg)
         return {
             "success": False,
@@ -104,56 +172,70 @@ def create_video(text: str, avatar_url: str = None) -> Dict[str, Any]:
 
 def get_video_status(video_id: str) -> Dict[str, Any]:
     """
-    获取D-ID视频任务的状态
+    Get the status of a D-ID video task
     
     Args:
-        video_id: 视频任务ID
+        video_id: Video task ID
         
     Returns:
-        包含视频任务状态信息的字典
+        Dictionary containing video task status information
     """
     try:
-        # 构建状态查询URL
+        # Check if API configuration is valid
+        config_status = check_api_configuration()
+        if not config_status["valid"]:
+            error_msg = config_status["error"]
+            logger.error(error_msg)
+            return {
+                "success": False,
+                "video_id": video_id,
+                "status": "error",
+                "result_url": None,
+                "error": error_msg,
+                "raw_response": None
+            }
+            
+        # Build status query URL
         status_url = API_STATUS_URL.format(id=video_id)
         
-        # 准备请求头
+        # Prepare request headers
         headers = {
             "accept": "application/json",
-            "authorization": f"Bearer {API_KEY}"
+            "authorization": f"Basic eXVhbi53QGhpZ2hicm93dGVjaC51cw:SYKEflQYIKVjgi1C6Ja8W"
         }
         
-        # 发送请求获取状态
-        logger.info(f"正在查询视频状态: ID={video_id}")
+        # Send request to get status
+        logger.info(f"Querying video status: ID={video_id}")
         response = requests.get(status_url, headers=headers)
         
-        # 处理响应
+        # Process response
         if response.status_code == 200:
             result = response.json()
             status = result.get('status')
-            logger.info(f"获取到视频状态: ID={video_id}, 状态={status}")
+            logger.info(f"Retrieved video status: ID={video_id}, Status={status}")
             
-            # 构建返回数据
+            # Build return data
             response_data = {
                 "success": True,
                 "video_id": video_id,
                 "status": status,
-                "result_url": result.get('result_url'),  # 视频URL
+                "result_url": result.get('result_url'),  # Video URL
                 "error": None,
                 "raw_response": result
             }
             
-            # 如果视频已完成，添加视频URL
+            # If video is completed, add video URL
             if status == "done":
                 response_data["video_url"] = result.get('result_url')
-                logger.info(f"视频生成完成: ID={video_id}, URL={result.get('result_url')}")
-            # 如果视频生成失败，添加错误信息
+                logger.info(f"Video generation completed: ID={video_id}, URL={result.get('result_url')}")
+            # If video generation failed, add error information
             elif status == "error":
-                response_data["error"] = result.get('error', '未知错误')
-                logger.error(f"视频生成失败: ID={video_id}, 错误={result.get('error', '未知错误')}")
+                response_data["error"] = result.get('error', 'Unknown error')
+                logger.error(f"Video generation failed: ID={video_id}, Error={result.get('error', 'Unknown error')}")
                 
             return response_data
         else:
-            error_msg = f"获取视频状态失败: HTTP {response.status_code} - {response.text}"
+            error_msg = f"Failed to get video status: HTTP {response.status_code} - {response.text}"
             logger.error(error_msg)
             return {
                 "success": False,
@@ -165,7 +247,7 @@ def get_video_status(video_id: str) -> Dict[str, Any]:
             }
             
     except Exception as e:
-        error_msg = f"获取视频状态异常: {str(e)}"
+        error_msg = f"Exception getting video status: {str(e)}"
         logger.exception(error_msg)
         return {
             "success": False,
@@ -177,20 +259,42 @@ def get_video_status(video_id: str) -> Dict[str, Any]:
         }
 
 if __name__ == "__main__":
-    # 测试示例
-    test_text = "比特币价格突破7万美元，创历史新高！加密货币市场持续走强，以太坊也突破4000美元关口。"
+    # Validate configuration
+    print("\n=== Checking D-ID API Configuration ===\n")
+    config = check_api_configuration()
+    print(f"Configuration status: {json.dumps(config, ensure_ascii=False, indent=2)}")
     
-    # 步骤1: 创建视频
+    if not config["valid"]:
+        print(f"\nError: {config['error']}")
+        print("Please add the correct TEXT2VIDEO_API_KEY to your .env file\n")
+        exit(1)
+    
+    # Test example
+    print("\n=== Testing Video Creation ===\n")
+    test_text = "Bitcoin price breaks through $70,000, reaching an all-time high! The cryptocurrency market continues to strengthen, with Ethereum also breaking through the $4,000 mark."
+    
+    # Step 1: Create video
     create_result = create_video(test_text)
-    print(f"创建视频结果: {json.dumps(create_result, ensure_ascii=False, indent=2)}")
+    print(f"Video creation result: {json.dumps(create_result, ensure_ascii=False, indent=2)}")
     
     if create_result["success"]:
         video_id = create_result["video_id"]
         
-        # 步骤2: 查询视频状态 (实际应用中可能需要轮询)
+        # Step 2: Query video status (polling may be needed in actual applications)
         import time
-        print("等待5秒后查询视频状态...")
+        print("\nWaiting 5 seconds before querying video status...")
         time.sleep(5)
         
         status_result = get_video_status(video_id)
-        print(f"视频状态: {json.dumps(status_result, ensure_ascii=False, indent=2)}")
+        print(f"Video status: {json.dumps(status_result, ensure_ascii=False, indent=2)}")
+        
+        if status_result["success"] and status_result["status"] == "done":
+            print(f"\nVideo generation successful! View at: {status_result.get('result_url')}")
+        elif status_result["success"] and status_result["status"] == "processing":
+            print("\nVideo is processing, please check status later")
+        else:
+            print(f"\nVideo generation failed: {status_result.get('error')}")
+    else:
+        print(f"\nUnable to create video: {create_result.get('error')}")
+    
+    print("\n=== Test Completed ===\n")

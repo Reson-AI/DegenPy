@@ -12,34 +12,34 @@ from datetime import datetime, timedelta
 import os
 from pathlib import Path
 
-# 配置日志
+# Configure logging
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger("timeline_task")
 
-# 导入数据库连接器
+# Import database connectors
 from warehouse.api import get_data_by_uids
 from warehouse.storage.mongodb.connector import mongodb_connector
 from warehouse.utils.uid_tracker import uid_tracker
 
-# 导入视频生成服务
+# Import video generation service
 from server.actions.text2v import create_video
 
-# 导入推文转新闻功能
+# Import tweet to news conversion functionality
 from server.actions.tweet2news import generate_news_from_tweet
 
 class TimelineTask:
-    """时间线任务执行器，负责定期获取内容，生成汇总视频"""
+    """Timeline task executor, responsible for periodically retrieving content and generating summary videos"""
     
     def __init__(self, task_config, agent_config):
         """
-        初始化任务执行器
+        Initialize task executor
         
         Args:
-            task_config: 任务配置
-            agent_config: Agent配置
+            task_config: Task configuration
+            agent_config: Agent configuration
         """
         self.task_config = task_config
         self.agent_config = agent_config
@@ -47,29 +47,29 @@ class TimelineTask:
         self.running = False
         self.poll_thread = None
         
-        # 加载组件
+        # Load components
         self.components = task_config.get('components', [])
-        logger.info(f"时间线任务 {self.task_id} 使用组件: {', '.join(self.components)}")
+        logger.info(f"Timeline task {self.task_id} using components: {', '.join(self.components)}")
         
-        # 获取批量大小配置
+        # Get batch size configuration
         data_source = self.task_config.get('data_source', {})
         self.batch_size = data_source.get('batch_size', 10)
-        self.time_window = data_source.get('time_window', 1800)  # 默认30分钟
+        self.time_window = data_source.get('time_window', 1800)  # Default 30 minutes
         
-        logger.info(f"时间线任务 {self.task_id} 初始化完成，批量大小: {self.batch_size}, 时间窗口: {self.time_window}秒")
+        logger.info(f"Timeline task {self.task_id} initialization complete, batch size: {self.batch_size}, time window: {self.time_window} seconds")
     
     def start(self):
-        """启动任务"""
+        """Start the task"""
         if self.running:
             return
             
         self.running = True
-        logger.info(f"启动时间线任务: {self.task_id}")
+        logger.info(f"Starting timeline task: {self.task_id}")
         
-        # 获取轮询配置
+        # Get polling configuration
         poll_config = self.task_config.get('schedule', {})
         if isinstance(poll_config, str) or not poll_config:
-            # 简化配置，默认每30分钟执行一次
+            # Simplified configuration, default execution every 30 minutes
             poll_config = {
                 'type': 'interval',
                 'minutes': 30
@@ -79,30 +79,30 @@ class TimelineTask:
         self._start_polling(poll_config)
     
     def _start_polling(self, poll_config: Dict[str, Any]):
-        """启动轮询线程
+        """Start polling thread
         
         Args:
-            poll_config: 轮询配置，包含type和时间间隔
+            poll_config: Polling configuration, including type and time interval
         """
         poll_type = poll_config.get('type', 'interval')
         
         if poll_type == 'interval':
-            # 计算间隔秒数
+            # Calculate interval in seconds
             seconds = poll_config.get('seconds', 0)
             minutes = poll_config.get('minutes', 0)
             hours = poll_config.get('hours', 0)
             
             interval_seconds = seconds + minutes * 60 + hours * 3600
             if interval_seconds <= 0:
-                interval_seconds = 300  # 默认5分钟
+                interval_seconds = 300  # Default 5 minutes
             
-            logger.info(f"时间线任务 {self.task_id} 启动轮询，间隔 {interval_seconds} 秒")
+            logger.info(f"Timeline task {self.task_id} starting polling, interval {interval_seconds} seconds")
             
-            # 启动轮询线程
+            # Start polling thread
             def poll_thread_func():
-                logger.info(f"时间线任务 {self.task_id} 轮询线程启动")
+                logger.info(f"Timeline task {self.task_id} polling thread started")
                 
-                # 立即执行一次
+                # Execute immediately once
                 self._execute_and_handle_exceptions()
                 
                 while self.running:
@@ -112,7 +112,7 @@ class TimelineTask:
                     
                     self._execute_and_handle_exceptions()
                 
-                logger.info(f"时间线任务 {self.task_id} 轮询线程停止")
+                logger.info(f"Timeline task {self.task_id} polling thread stopped")
             
             self.poll_thread = threading.Thread(
                 target=poll_thread_func,
@@ -121,86 +121,86 @@ class TimelineTask:
             )
             self.poll_thread.start()
         else:
-            logger.error(f"不支持的轮询类型: {poll_type}")
+            logger.error(f"Unsupported polling type: {poll_type}")
     
     def _execute_and_handle_exceptions(self):
-        """执行任务并处理异常"""
+        """Execute task and handle exceptions"""
         try:
-            # 检查新数据并执行任务
+            # Check for new data and execute task
             asyncio.run(self.check_and_execute())
         except Exception as e:
-            logger.error(f"时间线任务 {self.task_id} 执行出错: {str(e)}", exc_info=True)
+            logger.error(f"Timeline task {self.task_id} execution error: {str(e)}", exc_info=True)
             
     async def check_and_execute(self):
-        """检查是否有新数据并执行任务"""
-        logger.info(f"检查时间线任务新数据: {self.task_id}")
+        """Check if there is new data and execute the task"""
+        logger.info(f"Checking timeline task for new data: {self.task_id}")
         
-        # 获取最近时间窗口内的新数据
+        # Get new data within the recent time window
         data = await self._get_new_data()
         if not data:
-            logger.info(f"没有新的时间线数据: {self.task_id}")
+            logger.info(f"No new timeline data: {self.task_id}")
             return
         
-        # 执行任务处理
+        # Execute task processing
         self.execute(data)
     
     def execute(self, data=None):
         """
-        执行任务
+        Execute task
         
         Args:
-            data: 待处理的数据
+            data: Data to be processed
         """
-        logger.info(f"执行时间线任务: {self.task_id}")
+        logger.info(f"Executing timeline task: {self.task_id}")
         
         if not data:
-            logger.warning(f"没有数据可处理: {self.task_id}")
+            logger.warning(f"No data to process: {self.task_id}")
             return
             
-        # 确保数据是列表形式
+        # Ensure data is in list form
         items_list = data if isinstance(data, list) else [data]
         
-        # 如果没有数据，直接返回
+        # If there is no data, return directly
         if not items_list:
-            logger.warning(f"没有可处理的数据项: {self.task_id}")
+            logger.warning(f"No data items to process: {self.task_id}")
             return
             
-        # 直接使用原始数据项列表
+        # Use the original data items list directly
         raw_items = items_list
         
-        # 如果没有原始数据，直接跳过内容处理和视频生成
+        # If there is no raw data, skip content processing and video generation
         if not raw_items:
-            logger.info("没有要处理的数据，跳过内容处理和视频生成")
+            logger.info("No data to process, skipping content processing and video generation")
             return
             
-        # 内容处理和汇总生成
+        # Content processing and summary generation
         summary_content = None
         if "content_processor" in self.components:
-            # 直接将整个字典列表传递给处理方法
+            # Pass the entire dictionary list directly to the processing method
             summary_content = self._process_all_items(raw_items)
         
-        # 只有在成功生成新闻内容后，才生成视频
+        # Only generate video after successfully generating news content
         if summary_content and "video_generator" in self.components:
-            logger.info("新闻内容生成成功，开始生成视频")
-            self._generate_video(summary_content)  # 只传递一条汇总内容
+            logger.info("News content generated successfully, starting video generation")
+            self._generate_video(summary_content)  # Only pass one summary content
         
     async def _get_new_data(self):
         """
-        获取新数据
+        Get new data
         
         Returns:
-            新的数据列表
+            List of new data
         """
         try:
-            # 获取时间窗口配置
+            # Get time window configuration
             time_threshold = datetime.now() - timedelta(seconds=self.time_window)
             
-            # 查询最近时间窗口内的数据
+            # Query data within the recent time window
             query = {
                 "createdAt": {"$gte": time_threshold}
             }
             
-            # 获取MongoDB中的实际集合名称
+            # Get the actual collection name in MongoDB
             collection_name = os.getenv('MONGODB_COLLECTION', 'twitterTweets')
             
             # 从MongoDB中查询数据，按创建时间降序排序
@@ -209,54 +209,54 @@ class TimelineTask:
             if not recent_data:
                 return None
             
-            # 提取UID列表
+            # Extract UID list
             uids = [item.get("_id") for item in recent_data if "_id" in item]
             
-            # 使用UID跟踪器过滤出未处理的UID
+            # Use UID tracker to filter out unprocessed UIDs
             unprocessed_uids = uid_tracker.get_unprocessed(uids, self.task_id)
             
             if not unprocessed_uids:
                 return None
             
-            # 获取未处理数据的完整内容
+            # Get the complete content of unprocessed data
             unprocessed_data = get_data_by_uids(unprocessed_uids)
             
-            # 标记为已处理
+            # Mark as processed
             for uid in unprocessed_uids:
                 uid_tracker.add_uid(uid, self.task_id)
             
             return unprocessed_data
             
         except Exception as e:
-            logger.error(f"获取新数据失败: {str(e)}", exc_info=True)
+            logger.error(f"Failed to get new data: {str(e)}", exc_info=True)
             return None
             
     def _process_all_items(self, raw_items):
         """
-        一次性处理所有数据项
+        Process all data items at once
         
         Args:
-            raw_items: 原始数据项列表（字典格式）
+            raw_items: List of raw data items (dictionary format)
             
         Returns:
-            处理后的汇总内容
+            Processed summary content
         """
         if not raw_items:
             return ""
             
         try:
-            # 准备提示词
-            task_name = self.task_config.get('name', '时间线汇总')
+            # Prepare prompt
+            task_name = self.task_config.get('name', 'Timeline Summary')
             
-            # 为每个项目添加ID（如果没有）
+            # Add ID for each item (if not present)
             for i, item in enumerate(raw_items):
                 if "id" not in item:
                     item["id"] = i + 1
                 
-            # 将字典列表转换为JSON字符串
+            # Convert dictionary list to JSON string
             content_json = json.dumps(raw_items, ensure_ascii=False, indent=2)
             
-            # 准备社交媒体汇总风格的提示词
+            # Prepare social media summary style prompt
             prompt = f"""Summarize the following tweet content into a social media hot topic summary, highlighting key viewpoints and public reactions：
 
                     {content_json}
@@ -264,41 +264,41 @@ class TimelineTask:
                     Please directly output the news report content without any prefix explanation.The generated content should be approximately 100 words,in the style of a news manuscript,to be used for broadcast news.
                     """
             
-            # 调用AI接口，生成新闻
-            logger.info(f"开始为时间线任务生成新闻: {self.task_id}")
+            # Call AI interface to generate news
+            logger.info(f"Starting to generate news for timeline task: {self.task_id}")
             news_content = generate_news_from_tweet(prompt)
             return news_content
                 
         except Exception as e:
-            logger.error(f"AI生成汇总异常: {str(e)}")
-            # 如果发生异常，尝试返回原始数据的JSON字符串
+            logger.error(f"AI summary generation exception: {str(e)}")
+            # If an exception occurs, try to return the JSON string of the original data
             try:
                 return json.dumps(raw_items, ensure_ascii=False, indent=2)
             except:
-                return "处理数据时发生错误"
+                return "Error occurred while processing data"
             
     def _generate_video(self, content):
-        """生成视频
+        """Generate video
         
         Args:
-            content: 用于生成视频的内容
+            content: Content used to generate the video
             
         Returns:
-            视频生成结果
+            Video generation result
         """
         try:
-            # 调用D-ID API生成视频
-            logger.info(f"开始为时间线任务生成视频: {self.task_id}")
+            # Call D-ID API to generate video
+            logger.info(f"Starting to generate video for timeline task: {self.task_id}")
             video_result = create_video(content)
             
-            # 处理视频生成结果
+            # Process video generation result
             if video_result and video_result.get('success'):
-                # 提取关键信息
+                # Extract key information
                 d_id_video_id = video_result.get('video_id')
                 status = video_result.get('status', 'created')
                 created_at = video_result.get('created_at')
                 
-                # 保存视频信息到任务记录
+                # Save video information to task record
                 video_info = {
                     "task_id": self.task_id,
                     "d_id_video_id": d_id_video_id,
@@ -306,7 +306,7 @@ class TimelineTask:
                     "created_at": created_at
                 }
                 
-                # 将视频信息保存到MongoDB，使用d_id_video_id作为唯一标识符
+                # Save video information to MongoDB, using d_id_video_id as a unique identifier
                 try:
                     collection = mongodb_connector.db['video_tasks']
                     collection.update_one(
@@ -314,31 +314,31 @@ class TimelineTask:
                         {"$set": video_info},
                         upsert=True
                     )
-                    logger.info(f"视频信息已保存到数据库: task_id={self.task_id}, d_id_video_id={d_id_video_id}")
+                    logger.info(f"Video information saved to database: task_id={self.task_id}, d_id_video_id={d_id_video_id}")
                 except Exception as db_err:
-                    logger.error(f"保存视频信息到数据库失败: {str(db_err)}")
+                    logger.error(f"Failed to save video information to database: {str(db_err)}")
                 
-                logger.info(f"时间线视频生成成功: task_id={self.task_id}, d_id_video_id={d_id_video_id}, status={status}")
+                logger.info(f"Timeline video generated successfully: task_id={self.task_id}, d_id_video_id={d_id_video_id}, status={status}")
                 
-                # 返回视频信息
+                # Return video information
                 return {
                     "task_id": self.task_id,
                     "d_id_video_id": d_id_video_id,
                     "status": status,
-                    "message": "视频生成任务已提交"
+                    "message": "Video generation task submitted"
                 }
             else:
                 # 记录失败信息
-                error_msg = video_result.get('error', '未知错误') if video_result else '无返回结果'
-                logger.warning(f"时间线视频生成失败: {error_msg}")
+                error_msg = video_result.get('error', 'Unknown error') if video_result else 'No result returned'
+                logger.warning(f"Timeline video generation failed: {error_msg}")
                 
-                # 记录失败信息到数据库
+                # Record failure information to database
                 try:
-                    # 注意：这里需要mongodb_connector，而不是self.db
+                    # Note: mongodb_connector is needed here, not self.db
                     collection = mongodb_connector.db['video_tasks']
                     
-                    # 如果无法获取d_id_video_id（失败的情况），则生成一个唯一标识
-                    # 这样可以保证错误记录也不会覆盖现有记录
+                    # If d_id_video_id cannot be obtained (failure case), generate a unique identifier
+                    # This ensures that error records will not overwrite existing records
                     error_record_id = str(uuid.uuid4())
                     
                     collection.update_one(
@@ -352,32 +352,32 @@ class TimelineTask:
                         upsert=True
                     )
                 except Exception as db_err:
-                    logger.error(f"保存视频错误信息到数据库失败: {str(db_err)}")
+                    logger.error(f"Failed to save video error information to database: {str(db_err)}")
                 
-                # 失败时返回错误信息
+                # Return error information on failure
                 return {
                     "task_id": self.task_id,
                     "status": "error",
                     "error": error_msg,
-                    "message": "视频生成失败"
+                    "message": "Video generation failed"
                 }
         except Exception as e:
-            logger.error(f"生成视频异常: {str(e)}")
+            logger.error(f"Video generation exception: {str(e)}")
             return {
                 "task_id": self.task_id,
                 "status": "error",
                 "error": str(e),
-                "message": "视频生成异常"
+                "message": "Video generation exception"
             }
     
     def stop(self):
-        """停止任务"""
+        """Stop the task"""
         if not self.running:
             return
             
-        logger.info(f"停止时间线任务: {self.task_id}")
+        logger.info(f"Stopping timeline task: {self.task_id}")
         self.running = False
         
-        # 等待轮询线程结束
+        # Wait for polling thread to end
         if self.poll_thread and self.poll_thread.is_alive():
             self.poll_thread.join(timeout=1.0)

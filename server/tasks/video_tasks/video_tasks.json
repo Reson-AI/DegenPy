@@ -6,7 +6,7 @@
     "executor": "server.tasks.video_tasks.video_tasks.VideoTaskMonitor",
     "schedule": {
         "type": "interval",
-        "seconds": 30
+        "seconds": 10
     },
     "max_retry": 3,
     "timeout": 300,

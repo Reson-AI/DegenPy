@@ -6,7 +6,7 @@ import logging
 from dotenv import load_dotenv, set_key
 from warehouse.storage.mongodb.connector import MongoDBConnector
 
-# 配置日志
+# Configure logging
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
@@ -14,33 +14,33 @@ logging.basicConfig(
 logger = logging.getLogger("db_init")
 
 def init_db_env():
-    """初始化数据库环境变量"""
-    # 加载当前环境变量，强制覆盖现有环境变量
+    """Initialize database environment variables"""
+    # Load current environment variables, force override existing environment variables
     load_dotenv(override=True)
     
-    # 确保 .env 文件存在
+    # Ensure .env file exists
     env_file = ".env"
     if not os.path.exists(env_file):
         with open(env_file, "w") as f:
             pass
     
-    # 设置数据库类型
+    # Set database type
     set_key(env_file, "DB_TYPE", "mongodb")
-    logger.info("已设置数据库类型为: mongodb")
+    logger.info("Database type set to: mongodb")
     
-    # 从根目录下的.env文件读取MongoDB环境变量
-    # 不再设置默认值，完全依赖.env文件中的配置
-    logger.info("从.env文件读取MongoDB配置")
+    # Read MongoDB environment variables from .env file in the root directory
+    # No longer set default values, completely rely on the configuration in the .env file
+    logger.info("Reading MongoDB configuration from .env file")
     
-    # 检查必要的环境变量是否存在
+    # Check if necessary environment variables exist
     if not os.getenv("MONGODB_CONNECTION_STRING"):
-        logger.warning("未设置MONGODB_CONNECTION_STRING环境变量，请在.env文件中配置")
+        logger.warning("MONGODB_CONNECTION_STRING environment variable not set, please configure in .env file")
     if not os.getenv("MONGODB_DATABASE"):
-        logger.warning("未设置MONGODB_DATABASE环境变量，请在.env文件中配置")
+        logger.warning("MONGODB_DATABASE environment variable not set, please configure in .env file")
     if not os.getenv("MONGODB_COLLECTION"):
-        logger.warning("未设置MONGODB_COLLECTION环境变量，请在.env文件中配置")
+        logger.warning("MONGODB_COLLECTION environment variable not set, please configure in .env file")
         
-    logger.info("已设置 MongoDB 环境变量")
+    logger.info("MongoDB environment variables set")
 
 def initialize_db():
     connector = MongoDBConnector()
@@ -52,8 +52,8 @@ def initialize_db():
 if __name__ == "__main__":
     import sys
     
-    # 初始化数据库环境
+    # Initialize database environment
     init_db_env()
     
-    # 初始化数据库
+    # Initialize database
     initialize_db()
