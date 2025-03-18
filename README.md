@@ -1,235 +1,221 @@
 # DegenPy
 
-An automated content generation and publishing system for cryptocurrency and financial news.
+DegenPy is an advanced automated content generation and publishing platform designed for cryptocurrency and financial news. The system leverages AI to process data from various sources, generate engaging video content, and publish it to social media platforms like TikTok and Twitter.
 
-## Project Structure
+## 🌟 Key Features
+
+- **AI-Powered Content Generation**: Transform financial data into engaging narratives using customizable AI agents
+- **Automated Video Creation**: Convert text content to high-quality videos using D-ID's API
+- **Multi-Platform Publishing**: Seamlessly publish content to TikTok, Twitter, and other platforms
+- **Flexible Database Integration**: Support for MongoDB, MySQL, and PostgreSQL
+- **Modular Architecture**: Easily extendable with new data sources, AI models, and publishing platforms
+- **Real-time Processing**: Handle both scheduled and real-time data processing workflows
+
+## 📂 Project Structure
 
 ```
 DegenPy/
-├── warehouse/             # 数据仓库组件
-│   ├── api.py             # 仓库 API 实现
-│   ├── storage/           # 数据库连接器
-│   │   ├── mongodb/       # MongoDB 连接器
-│   │   └── init_db.py     # 数据库初始化脚本
-│   └── text_data/         # 文本数据存储 (运行时创建)
-├── server/                # 服务器组件
-│   ├── agents/            # 代理配置
-│   │   ├── trump-xbt.json # 特朗普风格加密货币代理
-│   │   ├── tiktok-agent.json # TikTok优化代理
-│   │   └── engine.py      # 代理引擎实现
-│   ├── tasks/             # 任务定义
-│   │   ├── timeline_task.json      # 处理时间线数据（每30分钟）
-│   │   ├── special_attention_task.json  # 处理特别关注数据（实时）
-│   │   ├── combined_task.json      # 综合处理任务
-│   │   └── task_executor.py        # 任务执行器
-│   ├── actions/           # 动作实现
-│   │   ├── text2v.py      # 文本到视频生成
-│   │   ├── webhook.py     # Webhook通知
-│   │   ├── tiktok.py      # TikTok发布
-│   │   └── twitter.py     # Twitter发布
-│   ├── services/          # 服务层组件
-│   │   ├── text2video.py  # 文本到视频服务
-│   │   ├── video_pool.py  # 视频池管理服务
-│   │   └── action_dispatcher.py # 动作调度服务
-│   ├── models/            # AI模型连接器
-│   │   └── openrouter.py  # OpenRouter API客户端
-│   └── api.py             # 服务器API
-├── plugins/               # 插件系统目录
-│   ├── example/           # 示例插件
-│   └── README.md          # 插件开发指南
-├── video_pool/            # 视频池存储目录 (运行时创建)
-├── run.py                 # 主应用程序运行器
-├── test_warehouse.py      # 仓库API测试脚本
-├── .env                   # 环境变量
-└── requirements.txt       # Python依赖
+├── warehouse/                # Data warehouse components
+│   ├── api.py                # Warehouse API implementation
+│   ├── storage/              # Database connectors
+│   │   ├── mongodb/          # MongoDB connector
+│   │   ├── mysql/            # MySQL connector
+│   │   ├── pgsql/            # PostgreSQL connector
+│   │   └── init_db.py        # Database initialization script
+│   └── utils/                # Utility functions and classes
+├── server/                   # Server components
+│   ├── agents/               # Agent configurations
+│   │   ├── trump-xbt.json    # Trump-style crypto agent
+│   │   ├── tiktok-agent.json # TikTok-optimized agent
+│   │   └── engine.py         # Agent engine implementation
+│   ├── tasks/                # Task definitions
+│   │   ├── timeline_task/    # Timeline data processing (every 30 min)
+│   │   ├── special_attention_task/ # Special attention data (real-time)
+│   │   └── task_executor.py  # Task executor
+│   ├── actions/              # Action implementations
+│   │   ├── text2v.py         # Text-to-video generation
+│   │   ├── webhook.py        # Webhook notifications
+│   │   ├── tiktok.py         # TikTok publishing
+│   │   └── twitter.py        # Twitter publishing
+│   └── api.py                # Server API
+├── examples/                 # Example scripts and usage demos
+├── plugins/                  # Plugin system directory
+├── run.py                    # Main application runner
+├── .env.example              # Example environment variables
+└── requirements.txt          # Python dependencies
 ```
 
-## 系统架构
+## 🏗️ System Architecture
 
-1. **数据仓库** (`warehouse/api.py`): 接收并存储来自外部源的数据，使用MongoDB作为主要存储后端:
-   - MongoDB: 主要数据库存储，支持文档型数据和灵活的数据模型
-   - 支持通过UID跟踪器管理数据处理状态
+### Core Components
 
-2. **代理引擎** (`server/agents/engine.py`): 管理AI代理的行为和交互:
-   - 加载和管理代理配置
-   - 处理代理与任务的关联
-   - 根据代理的个性和偏好生成内容
+1. **Data Warehouse** (`warehouse/api.py`)
+   - Centralized data storage and retrieval system
+   - Supports multiple database backends (MongoDB, MySQL, PostgreSQL)
+   - Simplified data structure with uid, content (dict), and tags (dict)
+   - Provides unified interface for data operations
 
-3. **任务执行器** (`server/tasks/task_executor.py`):
-   - 根据数据来源自动选择处理方式
-   - 使用UID跟踪器管理数据处理状态
-   - 处理特别关注和时间线数据并生成内容
+2. **Agent Engine** (`server/agents/engine.py`)
+   - Manages AI agent behaviors and interactions
+   - Loads and configures agent personalities
+   - Processes data according to agent preferences
+   - Generates content with consistent tone and style
 
-4. **服务组件** (`server/services/`):
-   - **Text2Video服务**: 管理从文本内容生成视频
-   - **视频池服务**: 管理视频任务及其元数据
-   - **动作调度器**: 处理视频生成后的动作执行
+3. **Task Executor** (`server/tasks/task_executor.py`)
+   - Orchestrates task execution workflows
+   - Manages timeline and special attention data processing
+   - Uses UID tracker to monitor processing status
+   - Handles both scheduled and real-time tasks
 
-6. **动作模块** (`server/actions/`):
-   - 各种动作的实现，如视频生成、社交媒体发布等
+4. **Action Modules** (`server/actions/`)
+   - **text2v.py**: Text-to-video generation using D-ID API
+   - **tiktok.py**: TikTok publishing and token management
+   - **twitter.py**: Twitter content publishing
+   - **webhook.py**: External notification system
 
-## 异步文生视频流程
+### Data Processing Workflows
 
-1. 触发器被激活并获取数据。
-2. AI 使用代理的个性处理数据。
-3. 文生视频请求被发送到 `text2video` 服务，主流程结束。
-4. 视频异步生成，结果存储在视频池中。
-5. 视频生成完成后，通过 Redis 发送通知。
-6. 动作调度服务接收通知，根据任务配置执行后续动作（如发布到社交媒体）。
+#### Timeline Task Workflow
+- Scheduled execution (every 30 minutes)
+- Processes general news and updates
+- Direct video generation without additional verification
+- Suitable for regular content updates
 
-## 数据处理流程
+#### Special Attention Task Workflow
+- Real-time execution for high-priority data
+- Enhanced verification and AI processing
+- Generates breaking news videos
+- Suitable for important events requiring immediate attention
 
-系统实现了两种不同的数据处理流程：
+### Text-to-Video Pipeline
 
-1. **时间线数据处理**（`timeline_task.json`）：
-   - 每30分钟执行一次
-   - 从Redis列表中获取时间线数据的UUID
-   - 直接生成视频，不需要额外的真实性验证
-   - 适用于一般新闻和信息更新
+1. Task is triggered and retrieves data from the warehouse
+2. AI agent processes the data and generates narrative content
+3. Text-to-video request is sent to D-ID API
+4. Video is generated and status is monitored
+5. Upon completion, video is published to configured platforms
+6. Webhook notifications are sent to external systems
 
-2. **特别关注数据处理**（`special_attention_task.json`）：
-   - 实时执行，监听消息队列
-   - 从消息队列获取特别关注数据的UUID
-   - 进行真实性验证和AI处理
-   - 生成高优先级的突发新闻视频
-   - 适用于重要新闻和紧急事件
+## 🗄️ Database Integration
 
-3. **综合处理任务**（`combined_task.json`）：
-   - 同时支持实时监听和定时生成
-   - 可以处理多种数据源
-   - 提供灵活的配置选项
+### Flexible Database Support
 
-### 数据标签系统
+The system provides a unified interface for different database backends:
 
-系统使用标签区分不同类型的数据：
+- **MongoDB**: Document-based storage with flexible schema
+- **MySQL**: Relational database for structured data
+- **PostgreSQL**: Advanced relational database with JSON support
 
-- **标签1（时间线）**：
-  - 源类型为 `other` 的数据
-  - UUID被发送到Redis列表
-  - 定时处理，不需要额外验证
+The active database is selected through the `DB_TYPE` environment variable.
 
-- **标签2（特别关注）**：
-  - 源类型为 `followed` 或 `trending` 的数据
-  - UUID被发送到消息队列
-  - 实时处理，需要真实性验证和AI处理
+### Database Connector Interface
 
-### 数据存储集成
+All database connectors implement the following methods:
 
-- **MongoDB**：存储所有类型的数据内容
-- **Redis**：存储时间线数据的UUID列表
-- **RabbitMQ**：用于特别关注数据的消息队列
+- `store_data`: Store data with optional tags
+- `get_data_by_uid`: Retrieve data by a single UID
+- `get_recent_data`: Get recently added data
+- `get_data_by_uids`: Retrieve data by multiple UIDs
+- `execute_query`: Run custom database queries
 
-### 数据接收API
+### UID Tracking System
 
-- `POST /data`：接收并存储数据
-  - 参数：`content`（内容）, `author_id`（作者ID）, `source_type`（来源类型）, `metadata`（元数据）
-  - 返回：生成的内容ID
+The `RecentUIDTracker` class maintains a record of recently added UIDs:
 
-- `GET /content/{content_id}`：获取指定ID的内容
-  - 返回：内容详情
+- Categorizes UIDs by source type
+- Provides retrieval and clearing operations
+- Facilitates efficient data processing workflows
 
-- `GET /recent-content`：获取最近的内容
-  - 参数：`source_type`（可选，筛选来源类型）, `limit`（限制返回数量）
-  - 返回：内容列表
+## 🔌 API Endpoints
 
-## 数据库集成
+### Data Management
 
-系统使用多种数据存储技术来满足不同的需求：
+- `POST /warehouse/data`: Store new data
+  - Parameters: `content` (dict), `tags` (optional dict)
+  - Returns: Generated UID
 
-### MongoDB 主要存储
-- 系统的主要数据存储后端
-- 存储所有类型的数据内容，包括时间线和特别关注数据
-- 提供灵活的文档型数据模型和高效的查询能力
-- 存储的文档包含完整的元数据，如作者ID、来源类型、标签和创建时间
+- `GET /warehouse/data/{uid}`: Retrieve data by UID
+  - Returns: Complete data object
 
-### Redis 集成
-- 用于存储时间线数据的UUID列表
-- 提供高性能的列表操作，支持快速的数据检索
-- 通过环境变量配置（REDIS_HOST、REDIS_PORT、REDIS_DB）
-- 使用REDIS_TIMELINE_KEY环境变量配置时间线数据的键名
+- `GET /warehouse/recent`: Get recent data entries
+  - Parameters: `limit` (optional, default=10)
+  - Returns: List of recent data objects
 
-### RabbitMQ 消息队列
-- 用于特别关注数据的实时处理
-- 提供可靠的消息传递和分发机制
-- 支持多个消费者订阅同一频道
-- 通过环境变量配置连接参数
+### Video Generation
 
-## 数据存储接口
+- `POST /server/generate-video`: Create a new video
+  - Parameters: `text`, `presenter`, `voice` (optional)
+  - Returns: Video task ID
 
-数据仓库提供统一的接口来存储和检索数据：
+- `GET /server/video-status/{task_id}`: Check video generation status
+  - Returns: Status and result URL when complete
 
-1. **数据存储接口**：
-   - `store_data`: 存储数据到MongoDB，并根据标签将UUID发送到Redis或消息队列
-   - 自动根据源类型确定标签：`followed`和`trending`为标签2，`other`为标签1
+## 🚀 Getting Started
 
-2. **数据检索接口**：
-   - `get_data_by_uids`: 根据多个UID获取数据
-   - `execute_query`: 执行自定义查询
+### Installation
 
-3. **UUID跟踪器**：
-   - `RecentUIDTracker`: 跟踪最近添加的UUID
-   - 按源类型分类存储，支持检索和清除操作
+```bash
+# Clone the repository
+git clone https://github.com/your-org/DegenPy.git
+cd DegenPy
 
-## 触发器流程
+# Install dependencies
+pip install -r requirements.txt
+```
 
-1. 触发器根据其计划激活。
-2. 从指定源获取数据（API、数据库或来自仓库的最近 UID）。
-3. AI 使用代理的个性处理数据。
-4. 内容转换为视频。
-5. 内容发布到社交媒体平台。
-6. 发送 Webhook 通知。
+### Configuration
 
-## 设置说明
-
-1. 安装依赖：
-   ```
-   pip install -r requirements.txt
+1. Create your environment file:
+   ```bash
+   cp .env.example .env
    ```
 
-2. 配置环境变量：
-   - 复制 `.env.example` 到 `.env`（如果提供）
-   - 设置 API 密钥和数据库凭据
+2. Edit the `.env` file with your API keys and database credentials
 
-3. 初始化数据库环境：
-   ```
+3. Initialize the database:
+   ```bash
    python -m warehouse.storage.init_db [mongodb|mysql|pgsql]
    ```
 
-4. 启动应用程序：
-   ```
-   python run.py
-   ```
+### Running the Application
 
-5. 测试数据仓库 API：
-   ```
-   python test_warehouse.py
-   ```
+```bash
+python run.py
+```
 
-## API 端点
+### Example Usage
 
-### 数据仓库 API
+Check the `examples/` directory for sample scripts demonstrating how to:
 
-- `GET /`: 健康检查
-- `POST /data`: 存储数据
-  - 参数：`content`, `author_id`, `source_type`, `uid`(可选)
-- `GET /content/{uid}`: 获取特定 UID 的数据
-- `GET /recent-content`: 获取最近存储的项目
-  - 参数：`source_type`(可选), `limit`(默认30)
-- `GET /content-by-uids`: 获取特定 UID 列表的数据
-  - 参数：`uids`(逗号分隔的 UID 列表)
-- `GET /recent-uids`: 获取最近添加的 UID 列表
-  - 参数：`source_type`(可选)
+- Configure the environment variables
+- Generate videos using the D-ID API
+- Publish content to TikTok
+- Implement custom data processing workflows
 
-### 服务器 API
+## Additional API Endpoints
 
-- `GET /agents`: 列出所有代理
-- `GET /agents/{agent_id}`: 获取代理详情
-- `GET /tasks`: 列出所有可用任务
-- `GET /tasks/{task_id}`: 获取特定任务的详情
-- `POST /run-task/{task_id}`: 手动运行特定任务
-- `GET /conditions`: 列出所有可用条件
-- `GET /conditions/{condition_id}`: 获取特定条件的详情
+### Warehouse API
 
-## 许可证
+- `POST /data`: Store data
+  - Parameters: `content`, `author_id`, `source_type`, `uid` (optional)
+- `GET /content/{uid}`: Get data for a specific UID
+- `GET /recent-content`: Get recently stored items
+  - Parameters: `source_type` (optional), `limit` (default 30)
+- `GET /content-by-uids`: Get data for a list of UIDs
+  - Parameters: `uids` (comma-separated list of UIDs)
+- `GET /recent-uids`: Get list of recently added UIDs
+  - Parameters: `source_type` (optional)
+
+### Server API
+
+- `GET /agents`: List all agents
+- `GET /agents/{agent_id}`: Get agent details
+- `GET /tasks`: List all available tasks
+- `GET /tasks/{task_id}`: Get details for a specific task
+- `POST /run-task/{task_id}`: Manually run a specific task
+- `GET /conditions`: List all available conditions
+- `GET /conditions/{condition_id}`: Get details for a specific condition
+
+## License
 
 [MIT License](LICENSE)
