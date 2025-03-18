@@ -127,7 +127,7 @@ def create_video(text: str, avatar_url: str = None) -> Dict[str, Any]:
         headers = {
             "accept": "application/json",
             "content-type": "application/json",
-            "authorization": f"Basic eXVhbi53QGhpZ2hicm93dGVjaC51cw:SYKEflQYIKVjgi1C6Ja8W"
+            "authorization": f"Basic {API_KEY}"
         }
         
         # Send request to create video
@@ -201,7 +201,7 @@ def get_video_status(video_id: str) -> Dict[str, Any]:
         # Prepare request headers
         headers = {
             "accept": "application/json",
-            "authorization": f"Basic eXVhbi53QGhpZ2hicm93dGVjaC51cw:SYKEflQYIKVjgi1C6Ja8W"
+            "authorization": f"Basic {API_KEY}"
         }
         
         # Send request to get status
