@@ -358,7 +358,7 @@ class SpecialAttentionTask:
                 
                 # 将视频信息保存到MongoDB
                 try:
-                    collection = self.db['video_tasks']
+                    collection = mongodb_connector.db['video_tasks']
                     collection.update_one(
                         {"task_id": self.task_id},
                         {"$set": video_info},
